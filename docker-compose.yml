@@ -1,9 +1,19 @@
-version: '3.6'
+version: '3.7'
 services:
-  app:
-    container_name: app
+  api:
+    container_name: covid_api
     env_file: .env
-    build: ./app
+    environment:
+      - PORT=$API_PORT
+    build: ./api
     ports:
-      - $APP_PORT:$APP_PORT
+      - $API_PORT:$API_PORT
     restart: always
+  client:
+    container_name: covid_client
+    env_file: .env
+    build: ./client
+    ports:
+      - $CLIENT_PORT:$CLIENT_PORT
+    restart: always
+    tty: true
