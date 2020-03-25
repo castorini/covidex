@@ -1,9 +1,9 @@
 import React from 'react';
 
-function App() {
+const App = () => {
   return (
     <div>
-      COVID-19 Search
+      COVID-19 Search ???
     </div>
   );
 }
