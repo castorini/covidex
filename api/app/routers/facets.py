@@ -1,7 +1,8 @@
 from typing import List
 
-from app.models import Facet
 from fastapi import APIRouter
+
+from app.models import Facet
 
 router = APIRouter()
 

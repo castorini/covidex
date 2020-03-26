@@ -2,4 +2,9 @@
 *.pyc
 __pycache__
 
+# Anserini index
 lucene-index-covid*/
+
+# TensorFlow SavedModel
+*.pb
+variables/
