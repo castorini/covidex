@@ -9,5 +9,4 @@ RUN apt install openjdk-11-jdk -y
 COPY requirements.txt /app
 RUN pip install -r requirements.txt
 
-COPY $INDEX_PATH /app
 COPY ./app /app
