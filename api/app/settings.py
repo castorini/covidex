@@ -1,12 +1,9 @@
 from pydantic import BaseSettings
 
 
-class APISettings(BaseSettings):
-    cors: str = ""
+class Settings(BaseSettings):
+    cors: str = ''
 
-    class Config:
-        env_file = '.env'
-class AnseriniSettings(BaseSettings):
     # Anserini searcher settings
     index_path: str = 'lucene-index-covid-paragraph'
     max_docs: int = 96
@@ -17,5 +14,11 @@ class AnseriniSettings(BaseSettings):
     rm3_fb_docs: int = 10
     rm3_original_query_weight: float = 0.5
 
+    # T5 model settings
+    t5_model_path: str
+    t5_batch_size: int = 96
+
     class Config:
         env_file = '.env'
+
+settings = Settings()

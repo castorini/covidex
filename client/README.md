@@ -14,3 +14,5 @@ Start the server
 ```
 yarn start
 ```
+
+The client will be running at [localhost:3000](http://localhost:3000)

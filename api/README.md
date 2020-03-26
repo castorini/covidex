@@ -42,5 +42,7 @@ pip install -r requirements.txt
 Run the server
 
 ```
-uvicorn app.main:app --reload
+uvicorn app.main:app --reload --port=8000
 ```
+
+The server wil be running at [localhost:8000](http://localhost:8000)

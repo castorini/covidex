@@ -8,3 +8,6 @@ lucene-index-covid*/
 # TensorFlow SavedModel
 *.pb
 variables/
+
+
+*.log
