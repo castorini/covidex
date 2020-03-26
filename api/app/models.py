@@ -4,27 +4,18 @@ from pydantic import BaseModel
 
 
 class Article(BaseModel):
-    id: int
+    id: str
     title: str
     doi: str
-    authors: str
+    source: str
+    url: str
+    score: float
+    authors: List[str] = []
     abstract: str = None
     journal: str = None
-    url: str = None
-    full_text_paragraphs: List[str] = []
+    year: str = None
+    publish_time: str = None
 
-class Facet(BaseModel):
-    name: str
-    page: int
-    values: List[str] = []
-
-class FacetQuery(BaseModel):
+class QueryFacet(BaseModel):
     name: str
     values: List[str]
-
-class SearchResultArticle(BaseModel):
-    title: str
-    doi: str
-    authors: str
-    abstract: str = None
-    journal: str = None

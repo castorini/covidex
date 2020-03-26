@@ -45,4 +45,4 @@ Run the server
 uvicorn app.main:app --reload --port=8000
 ```
 
-The server wil be running at [localhost:8000](http://localhost:8000)
+The server wil be running at [localhost:8000](http://localhost:8000) with API documentation at [/docs](http://localhost:8000/docs)
