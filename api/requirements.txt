@@ -1,0 +1,2 @@
+fastapi[all]==0.52.0
+pyserini==0.8.1
