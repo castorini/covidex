@@ -22,10 +22,10 @@ Set up environment variables by copying over the defaults and modifying as neede
 cp .env.sample .env
 ```
 
-Creating an Anaconda environment for Python 3.7 is highly recommended
+Creating an Anaconda environment for Python 3.6 is highly recommended
 
 ```
-conda create -n covid-search python=3.7
+conda create -n covid-search python=3.6
 ```
 
 Activate the Anaconda environment
@@ -36,6 +36,8 @@ conda activate covid-search
 Install Python dependencies
 
 ```
+conda install -c conda-forge httptools
+conda install -c conda-forge jsonnet
 pip install -r requirements.txt
 ```
 
