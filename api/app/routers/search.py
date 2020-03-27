@@ -4,7 +4,10 @@ from typing import Dict, List
 import dateparser
 import httpx
 import numpy as np
-import tensorflow as tf
+import t5  # This is needed to import the model  # noqa: F401
+import os
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
+import tensorflow.compat.v1 as tf
 import torch
 from fastapi import APIRouter
 
@@ -13,6 +16,13 @@ from app.services.searcher import searcher
 from app.settings import settings
 
 router = APIRouter()
+
+tf.reset_default_graph()
+session = tf.Session()
+meta_graph_def = tf.saved_model.loader.load(
+    session, ["serve"], settings.t5_model_dir)
+signature_def = meta_graph_def.signature_def["serving_default"]
+
 
 @router.get('/search', response_model=List[Article])
 async def get_search(query: str, facets: List[QueryFacet] = []):
@@ -41,10 +51,12 @@ async def get_search(query: str, facets: List[QueryFacet] = []):
     return deduped_results
 
 async def predict_t5(input):
-    async with httpx.AsyncClient() as client:
-        response = await client.post('http://localhost:8501/v1/models/t5_model:predict', data=json.dumps({'inputs': input}))
-    predictions = np.asarray(json.loads(response.content)['outputs']['scores'])[:, [6136, 1176]]
-    log_probs = torch.nn.functional.log_softmax(torch.from_numpy(predictions), dim=1)
+    scores = session.run(
+        fetches=signature_def.outputs["scores"].name,
+        feed_dict={signature_def.inputs["input"].name: input})
+    scores = scores[:, [6136, 1176]]
+    log_probs = torch.nn.functional.log_softmax(
+        torch.from_numpy(scores), dim=1)
     return log_probs[:len(input), 1].tolist()
 
 def build_article(hit, score):
