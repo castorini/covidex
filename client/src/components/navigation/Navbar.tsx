@@ -10,7 +10,7 @@ const Navbar = ({ history }: RouteComponentProps) => {
     <NavbarWrapper>
       <PageContent>
         <NavbarLogo onClick={() => history.push(HOME_ROUTE)}>
-          Covidex &nbsp;
+          Neural Covidex
         </NavbarLogo>
       </PageContent>
     </NavbarWrapper>

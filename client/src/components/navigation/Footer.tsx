@@ -5,6 +5,7 @@ import NYU from '../../img/nyu.png';
 import UWaterloo from '../../img/uwaterloo.png';
 
 import { Link, PageContent } from '../../shared/Styles';
+import { TABLET_BREAKPOINT } from '../../shared/Constants';
 
 const Footer = () => {
   return (
@@ -40,6 +41,10 @@ const FooterWrapper = styled.div`
   display: flex;
   position: relative;
   flex-direction: column;
+
+  @media only screen and (max-width: ${TABLET_BREAKPOINT}px) {
+    padding: 24px;
+  }
 `;
 
 const Images = styled.div`

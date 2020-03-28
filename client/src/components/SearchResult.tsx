@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import {Collapse} from 'react-collapse';
 
-import { Link, Heading2 } from '../shared/Styles';
+import { Link, Heading3, LinkStyle, BodySmall } from '../shared/Styles';
+import { ChevronsDown } from 'react-feather';
 
 interface Article extends Object {
   id: string
@@ -15,13 +17,18 @@ interface Article extends Object {
   journal: string
   year: Number
   publish_time: string
+  paragraphs: Array<String>
+  highlighted: Array<Array<[Number, Number]>>
 }
 
 interface SearchResultProps {
-  article: Article
+  article: Article,
+  number: Number
 }
 
-const SearchResult = ({ article }: SearchResultProps) => {
+const SearchResult = ({ article, number }: SearchResultProps) => {
+  const [collapsed, setCollapsed] = useState<Boolean>(true);
+
   let authorString = '';
   if (article.authors.length > 0) {
     article.authors.forEach((author, idx) => {
@@ -33,23 +40,29 @@ const SearchResult = ({ article }: SearchResultProps) => {
 
   return (
     <SearchResultWrapper>
-      <Title href={article.url} target="_blank" rel="noopener noreferrer">
-        {article.title}
+      <Title>
+        {number}.&nbsp;
+        <Link href={article.url} target="_blank" rel="noopener noreferrer">
+          {article.title}
+        </Link>
       </Title>
       <Subtitle>
-        {authorString && (<Authors>
-          {authorString}
-        </Authors>)}
-        {article.journal && (<Journal>
-          {article.journal}
-        </Journal>)}
-        {article.publish_time && (<PublishTime>
-          ({article.publish_time})
-        </PublishTime>)}
+        {authorString && <Authors>{authorString}</Authors>}
+        {article.journal && <Journal>{article.journal}</Journal>}
+        {article.publish_time && <PublishTime>({article.publish_time})</PublishTime>}
       </Subtitle>
-      <Abstract>
+      <Collapse isOpened={!collapsed} initialStyle={{height: 24, overflow: 'hidden'}}>
+        <Paragraph>
           {article.abstract}
-      </Abstract>
+        </Paragraph>
+        {article.paragraphs.map(paragraph => <Paragraph>{paragraph}</Paragraph>)}
+      </Collapse>
+      {(article.abstract || article.paragraphs.length > 0 ) && (
+        <ShowTextLink collapsed={collapsed} onClick={() => setCollapsed(!collapsed)}>
+          {collapsed ? 'Show highlighted paragraphs' : 'Show less'}
+          <Chevron collapsed={collapsed} />
+        </ShowTextLink>
+      )}
     </SearchResultWrapper>
   );
 }
@@ -62,12 +75,12 @@ const SearchResultWrapper = styled.div`
   width: 100%;
   margin: auto;
   padding: 24px;
-  border-bottom: 2px solid ${({ theme }) => theme.lightGrey};
+  border-bottom: 1px dotted ${({ theme }) => theme.lightGrey};
   margin-bottom: 8px;
 `;
 
-const Title = styled(Link)`
-  ${Heading2}
+const Title = styled.div`
+  ${Heading3}
   margin-bottom: 16px;
 `;
 
@@ -88,7 +101,23 @@ const Journal = styled.span`
 
 const PublishTime = styled.span``;
 
-const Abstract = styled.div`
-  color: ${({ theme }) => theme.secondary};
+const Paragraph = styled.div`
+  ${BodySmall}
+  color: ${({ theme }) => theme.darkGrey};
 `;
 
+const ShowTextLink = styled.div<{collapsed?: Boolean}>`
+  ${BodySmall}
+  ${LinkStyle}
+  max-width: fit-content;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+`;
+
+const Chevron = styled(ChevronsDown)<{collapsed?: Boolean}>`
+  height: 14px;
+  width: 14px;
+  transform: rotate(${({ collapsed }) => collapsed ? 0 : 180}deg);
+  transition: 550ms transform;
+`;
