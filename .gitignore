@@ -11,3 +11,4 @@ variables/
 
 
 *.log
+.vscode

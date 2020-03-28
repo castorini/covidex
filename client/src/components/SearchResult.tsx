@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, ReactNode } from 'react';
 import styled from 'styled-components';
 import {Collapse} from 'react-collapse';
 
@@ -11,19 +11,33 @@ interface Article extends Object {
   doi: string
   source: string
   url: string
-  score: Number
-  authors: Array<String>
+  score: number
+  authors: Array<string>
   abstract: string
   journal: string
-  year: Number
+  year: number
   publish_time: string
-  paragraphs: Array<String>
-  highlighted: Array<Array<[Number, Number]>>
+  paragraphs: Array<string>
+  highlights: Array<Array<[number, number]>>
 }
 
 interface SearchResultProps {
   article: Article,
-  number: Number
+  number: number
+}
+
+const highlightText = (text: string, highlights: Array<[number, number]>): Array<string|ReactNode> => {
+  let highlighted: Array<string|ReactNode> = [];
+
+  let prevEnd = -1;
+  highlights.forEach(highlight => {
+    const [start, end] = highlight;
+    highlighted.push(text.substr(prevEnd + 1, start - prevEnd - 1));
+    highlighted.push(<Highlight className="highlight">{text.substr(start, end - start + 1)}</Highlight>);
+    prevEnd = end;
+  });
+
+  return highlighted;
 }
 
 const SearchResult = ({ article, number }: SearchResultProps) => {
@@ -52,10 +66,14 @@ const SearchResult = ({ article, number }: SearchResultProps) => {
         {article.publish_time && <PublishTime>({article.publish_time})</PublishTime>}
       </Subtitle>
       <Collapse isOpened={!collapsed} initialStyle={{height: 24, overflow: 'hidden'}}>
-        <Paragraph>
-          {article.abstract}
-        </Paragraph>
-        {article.paragraphs.map(paragraph => <Paragraph>{paragraph}</Paragraph>)}
+        <FullText onClick={() => setCollapsed(!collapsed)}>
+          <Paragraph>{article.abstract}</Paragraph>
+          {article.paragraphs.map((paragraph, i) => (
+            <Paragraph marginTop={16}>
+              {highlightText(paragraph, article.highlights[i])}
+            </Paragraph>
+          ))}
+        </FullText>
       </Collapse>
       {(article.abstract || article.paragraphs.length > 0 ) && (
         <ShowTextLink collapsed={collapsed} onClick={() => setCollapsed(!collapsed)}>
@@ -101,9 +119,17 @@ const Journal = styled.span`
 
 const PublishTime = styled.span``;
 
-const Paragraph = styled.div`
+const FullText = styled.div``;
+
+const Paragraph = styled.div<{marginTop?: number}>`
   ${BodySmall}
   color: ${({ theme }) => theme.darkGrey};
+  margin-top: ${({ marginTop }) => marginTop ? marginTop : 0}px;
+  cursor: pointer;
+
+  &:hover > .highlight:after {
+    height: calc(100% + 4px);
+  }
 `;
 
 const ShowTextLink = styled.div<{collapsed?: Boolean}>`
@@ -120,4 +146,20 @@ const Chevron = styled(ChevronsDown)<{collapsed?: Boolean}>`
   width: 14px;
   transform: rotate(${({ collapsed }) => collapsed ? 0 : 180}deg);
   transition: 550ms transform;
+`;
+
+const Highlight = styled.span`
+  position: relative;
+
+  &:after {
+    position: absolute;
+    content: '';
+    height: 2px;
+    bottom: -2px;
+    left: -2px;
+    z-index: -1;
+    width: calc(100% + 4px);
+    background: ${({ theme }) => theme.yellow};
+    transition: height 0.2s ease-in-out;
+  }
 `;
