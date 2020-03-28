@@ -1482,6 +1482,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-fade-in@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@types/react-fade-in/-/react-fade-in-0.1.0.tgz#281367aa13b970762d4020cd4e69b52cfc3bdb3f"
+  integrity sha512-rUbU6MiO2I6itt4RLPeIs83C2J+/KD2p3XKXk816pXdw09DxDlm3U/HeHqjQUUjBS5AaIz1zPmg/0JuZkOCn/w==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-native@*":
   version "0.61.23"
   resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.61.23.tgz#bff4e0311c229a5203eb37aacd4febf59f3e2980"
@@ -8629,6 +8636,11 @@ react-error-overlay@^6.0.7:
   version "6.0.7"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.7.tgz#1dcfb459ab671d53f660a991513cb2f0a0553108"
   integrity sha512-TAv1KJFh3RhqxNvhzxj6LeT5NWklP6rDr2a0jaTfsZ5wSZWHOGeqQyejUp3xxLfPt2UpyJEcVQB/zyPcmonNFA==
+
+react-fade-in@^0.1.8:
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/react-fade-in/-/react-fade-in-0.1.8.tgz#f7289b4a26b0ee91768521d408a0fca59cfcab3f"
+  integrity sha512-kHQ3gez6Cplh0KsZq0YAaYGaF3tEePMT/jxe8DDPiFAtJCrSe9K62WC3ODTza2RYH+OcNL/equmCKdqw+ype8g==
 
 react-feather@^2.0.3:
   version "2.0.3"

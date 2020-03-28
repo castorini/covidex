@@ -5,9 +5,11 @@ import { useLocation, withRouter, RouteComponentProps } from 'react-router';
 import { Button } from 'reakit';
 
 import { PageWrapper, PageContent } from '../../shared/Styles';
+import { HOME_ROUTE, API_BASE, SEARCH_ENDPOINT } from '../../shared/Constants';
 
-import Loading from '../Loading';
-import { HOME_ROUTE } from '../../shared/Constants';
+import Loading from '../common/Loading';
+import SearchResult from '../SearchResult';
+import HomeText from '../HomeText';
 
 const HomePage = ({ history }: RouteComponentProps) => {
   const urlParams = new URLSearchParams(useLocation().search);
@@ -26,7 +28,7 @@ const HomePage = ({ history }: RouteComponentProps) => {
       try {
         setLoading(true);
         setSearchResults(null);
-        let response = await fetch(`http://localhost:8000/search?query=${encodeURI(query)}`)
+        let response = await fetch(`${API_BASE}${SEARCH_ENDPOINT}?query=${encodeURI(query)}`)
         setLoading(false);
         let data = await response.json();
         setSearchResults(data);
@@ -68,9 +70,10 @@ const HomePage = ({ history }: RouteComponentProps) => {
         </SearchBarWrapper>
         {loading && <Loading />}
         <SearchResults>
-          {searchResults !== null && (searchResults.length === 0
+          {!query && <HomeText />}
+          {query && searchResults !== null && (searchResults.length === 0
             ? <NoResults>No results found</NoResults>
-            : searchResults.map(result => <div>test</div>))}
+            : searchResults.map(article => <SearchResult article={article} key={article.id} />))}
         </SearchResults>
       </PageContent>
     </PageWrapper>
@@ -83,7 +86,7 @@ const SearchBarWrapper = styled.div`
   position: relative;
   margin: auto;
   display: flex;
-  margin-bottom: 48px;
+  margin-bottom: 24px;
   width: 800px;
   max-width: 100%;
 `;
@@ -103,19 +106,20 @@ const SearchBar = styled.input`
   border: none;
   font-size: 20px;
   outline: none;
-  border-radius: 8px;
-  border: 2px solid ${({ theme }) => theme.primary};
+  border-radius: 4px;
+  border: 2px solid ${({ theme }) => theme.red};
 `;
 
 const SearchButton = styled(Button)`
-  margin-left: 8px;
-  background: ${({ theme }) => theme.primary};
+  margin-left: 4px;
+  background: ${({ theme }) => theme.red};
   border: none;
   padding: 8px 16px;
   cursor: pointer;
   color: ${({ theme }) => theme.white};
-  border-radius: 8px;
+  border-radius: 4px;
   outline: none;
+  font-weight: 600;
 
   &:hover, &:focus {
     filter: brightness(90%);

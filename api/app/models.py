@@ -11,9 +11,10 @@ class Article(BaseModel):
     url: str
     score: float
     authors: List[str] = []
+    paragraphs: List[str] = []
     abstract: str = None
     journal: str = None
-    year: str = None
+    year: int = None
     publish_time: str = None
 
 class QueryFacet(BaseModel):

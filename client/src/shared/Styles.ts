@@ -8,12 +8,28 @@ export const INTER_FONT = css`
     sans-serif;
 `;
 
+export const Heading1 = css`
+  font-size: 24px;
+  font-weight: 600;
+`;
+
+export const Heading2 = css`
+  font-size: 18px;
+  font-weight: 600;
+`;
+
+export const Body = css`
+  ${INTER_FONT}
+  font-size: 14px;
+  font-weight: 400;
+`;
+
 export const Link = styled.a`
   text-decoration: none;
   color: ${({ theme }) => theme.primary};
   
   &:hover {
-    filter: brightness(90%);     
+    filter: brightness(80%);     
   }
 `;
 
@@ -32,5 +48,7 @@ export const PageWrapper = styled.div`
 export const PageContent = styled.div`
   display: flex;
   flex-direction: column;
-  max-width: ${CONTENT_WIDTH}px;
+  max-width: 100%;
+  width: ${CONTENT_WIDTH}px;
+  margin: auto;
 `;
