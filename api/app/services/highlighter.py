@@ -1,4 +1,5 @@
 import numpy as np
+import spacy
 import time
 import torch
 import transformers
@@ -17,6 +18,12 @@ class Highlighter:
         self.model = transformers.AutoModel.from_pretrained(
             'monologg/biobert_v1.1_pubmed')
 
+        print('Loading sentence tokenizer...')
+        self.nlp = spacy.blank("en")
+        self.nlp.add_pipe(self.nlp.create_pipe("sentencizer"))
+
+        self.highlight_token = '[HIGHLIGHT]'
+
     def text_to_vectors(self, text: str):
         """Converts a text to a sequence of vectors, one for each subword."""
         text_ids = torch.tensor(
@@ -28,7 +35,7 @@ class Highlighter:
         for ci in range(n_chunks):
             text_ids_ = text_ids[1 + ci * 512:1 + (ci + 1) * 512]
             text_ids_ = torch.cat([text_ids[0].unsqueeze(0), text_ids_])
-           
+
             if text_ids_[-1] != text_ids[-1]:
                 text_ids_ = torch.cat(
                     [text_ids_, text_ids[-1].unsqueeze(0)])
@@ -64,55 +71,38 @@ class Highlighter:
         # Select the two highest scoring words in the sim_matrix.
         _, word_positions = torch.topk(
             sim_matrix.max(0)[0], k=2, largest=True, sorted=False)
-        word_positions = sorted(word_positions.tolist())
+        word_positions = word_positions.tolist()
 
-        sents_offsets = []
-        previous_word = ''
-        word2char = {}
-        total_length = 0
+        tagged_para_words = []
         for kk, word in enumerate(para_words):
-            word2char[kk] = total_length
+            if kk in word_positions:
+                tagged_para_words.append(self.highlight_token)
+            tagged_para_words.append(word)
+        tagged_paragraph = self.tokenizer.convert_tokens_to_string(
+            tagged_para_words)
 
-            if previous_word == '.' and (
-                    word.istitle() or word.startswith('[')):
-                sents_offsets.append(kk)
+        for special_char in ['.', ',', ':', ';', '?', '!', '[', ']', '(', ')',
+                             '{', '}']:
+            tagged_paragraph = tagged_paragraph.replace(
+                ' ' + special_char, '.')
 
-            total_length += len(word) + 1
-            if word.startswith('##'):
-                total_length -= 3
-            elif word in ['.', ',', ';', ':', '!', '?']:
-                total_length -= 1
-
-            previous_word = word
-
-        word2char[len(para_words)] = total_length + 1
-        sents_offsets.append(len(para_words))
+        tagged_sentences = [
+            sent.string.strip()
+            for sent in self.nlp(tagged_paragraph[:10000]).sents]
 
         highlights = []
-        last_sent_offset = 0
-        for jj in word_positions:
-            for sent_offset in sents_offsets:   
-                if jj >= last_sent_offset and jj < sent_offset:
-                    highlights.append((last_sent_offset, sent_offset))
-                last_sent_offset = sent_offset
+        last_pos = 0
+        for sent in tagged_sentences:
+            pos = last_pos + len(sent)
+            if self.highlight_token in sent:
+                pos -= (len(self.highlight_token) + 1)
+                highlights.append((last_pos, pos))
+            last_pos = pos + 1
 
-        # Remove duplicates.
-        dedup_highlights = []
-        seen_highlights = set()
-        for highlight in highlights:
-            if highlight not in seen_highlights:
-               dedup_highlights.append(highlight)
-            seen_highlights.add(highlight)
+        return highlights
 
-        # Convert highlights to character positions.
-        char_highlights = [
-            (word2char[start], word2char[end] - 1)
-            for start, end in dedup_highlights]
-
-        return char_highlights
-
-    def highlight(self, query: str,
-                  paragraphs: List[str]) -> List[List[Tuple[int]]]:
+    def highlight_paragraphs(self, query: str,
+                             paragraphs: List[str]) -> List[List[Tuple[int]]]:
         """Highlight sentences in a list of paragraph based on their
         similarity to the query.
 
@@ -149,8 +139,3 @@ class Highlighter:
 
 
 highlighter = Highlighter()
-for query in ['Car', 'house', 'home', 'person', 'man']:
-    print(query)
-    highlighter.highlight(
-        query=query,
-        paragraphs=['Car automobile. Hospital house. People person.'])

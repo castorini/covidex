@@ -1,29 +1,15 @@
-import json
-from typing import Dict, List
+from typing import List
 
 import dateparser
-import httpx
-import numpy as np
-import t5  # This is needed to import the model  # noqa: F401
-import time
-import os
-os.environ["CUDA_VISIBLE_DEVICES"]="0"
-import tensorflow.compat.v1 as tf
-import torch
 from fastapi import APIRouter
 
 from app.models import Article, QueryFacet
 from app.services.highlighter import highlighter
+from app.services.ranker import ranker
 from app.services.searcher import searcher
 from app.settings import settings
 
 router = APIRouter()
-
-tf.reset_default_graph()
-session = tf.Session()
-meta_graph_def = tf.saved_model.loader.load(
-    session, ["serve"], settings.t5_model_dir)
-signature_def = meta_graph_def.signature_def["serving_default"]
 
 
 @router.get('/search', response_model=List[Article])
@@ -33,22 +19,17 @@ async def get_search(query: str, facets: List[QueryFacet] = []):
         f'Query: {query} Document: {hit.contents[:5000]} Relevant:'
         for hit in searcher_hits]
 
-    highlights = highlighter.highlight(query=query, hits=searcher_hits)
+    # Get predictions from T5.
+    t5_scores = ranker.predict_t5(t5_inputs)
 
-    # get predictions from T5
-    t5_scores = []
-    for i in range(0, len(t5_inputs), settings.t5_batch_size):
-        pred = await predict_t5(t5_inputs[i:i + settings.t5_batch_size])
-        t5_scores.extend(pred)
-
-    # build results and sort by T5 score
+    # Build results and sort by T5 score.
     results = [
         build_article(hit, score)
         for (hit, score) in zip(searcher_hits, t5_scores)]
 
     results.sort(key=lambda x: x.score, reverse=True)
 
-    # remove paragraphs from same document
+    # Remove paragraphs from same document.
     seen_docid = set()
     deduped_results = []
     for result in results:
@@ -60,21 +41,12 @@ async def get_search(query: str, facets: List[QueryFacet] = []):
     # Highlights the paragraphs.
     paragraphs = [
         result.contents
-        for result in dedup_results[:setting.highlight_max]]
+        for result in deduped_results[:settings.highlight_max]]
 
-    highlights = highlighter.highlight(query=query, paragraphs=paragraphs)
+    highlights = highlighter.highlight_paragraphs(
+        query=query, paragraphs=paragraphs)
 
-    return deduped_results
-
-
-async def predict_t5(input):
-    scores = session.run(
-        fetches=signature_def.outputs["scores"].name,
-        feed_dict={signature_def.inputs["input"].name: input})
-    scores = scores[:, [6136, 1176]]
-    log_probs = torch.nn.functional.log_softmax(
-        torch.from_numpy(scores), dim=1)
-    return log_probs[:len(input), 1].tolist()
+    return {'results': deduped_results, 'highlights': highlights}
 
 
 def build_article(hit, score):
@@ -94,6 +66,7 @@ def build_article(hit, score):
                    journal=doc.get('journal'), year=year,
                    publish_time=publish_time, url=url, score=score)
 
+
 def build_url(doc):
     doi_url = ' https://doi.org/'
     pmc_url = 'https://www.ncbi.nlm.nih.gov/pmc/articles/'
@@ -101,12 +74,12 @@ def build_url(doc):
     s2_url = 'https://www.semanticscholar.org/paper/'
 
     if doc.get('doi'):
-      return doi_url + doc.get('doi')
+        return doi_url + doc.get('doi')
     elif doc.get('pmcid'):
-      return pmc_url + doc.get('pmcid')
+        return pmc_url + doc.get('pmcid')
     elif doc.get('pubmed_id'):
-      return pmc_url + doc.get('pubmed_id')
+        return pubmed_url + doc.get('pubmed_id')
     elif doc.get('sha'):
-      return s2_url + doc.get('sha').split(';')[-1].strip()
+        return s2_url + doc.get('sha').split(';')[-1].strip()
     else:
-      return s2_url
+        return s2_url
