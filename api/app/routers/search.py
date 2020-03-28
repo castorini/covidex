@@ -5,6 +5,7 @@ import dateparser
 import httpx
 import numpy as np
 import t5  # This is needed to import the model  # noqa: F401
+import time
 import os
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
 import tensorflow.compat.v1 as tf
@@ -12,6 +13,7 @@ import torch
 from fastapi import APIRouter
 
 from app.models import Article, QueryFacet
+from app.services.highlighter import highlighter
 from app.services.searcher import searcher
 from app.settings import settings
 
@@ -27,7 +29,11 @@ signature_def = meta_graph_def.signature_def["serving_default"]
 @router.get('/search', response_model=List[Article])
 async def get_search(query: str, facets: List[QueryFacet] = []):
     searcher_hits = searcher.search(query)
-    t5_inputs = [f'Query: {query} Document: {hit.contents[:5000]} Relevant:' for hit in searcher_hits]
+    t5_inputs = [
+        f'Query: {query} Document: {hit.contents[:5000]} Relevant:'
+        for hit in searcher_hits]
+
+    highlights = highlighter.highlight(query=query, hits=searcher_hits)
 
     # get predictions from T5
     t5_scores = []
@@ -36,7 +42,10 @@ async def get_search(query: str, facets: List[QueryFacet] = []):
         t5_scores.extend(pred)
 
     # build results and sort by T5 score
-    results = [build_article(hit, score) for (hit, score) in zip(searcher_hits, t5_scores)]
+    results = [
+        build_article(hit, score)
+        for (hit, score) in zip(searcher_hits, t5_scores)]
+
     results.sort(key=lambda x: x.score, reverse=True)
 
     # remove paragraphs from same document
@@ -48,7 +57,15 @@ async def get_search(query: str, facets: List[QueryFacet] = []):
             deduped_results.append(result)
         seen_docid.add(original_docid)
 
+    # Highlights the paragraphs.
+    paragraphs = [
+        result.contents
+        for result in dedup_results[:setting.highlight_max]]
+
+    highlights = highlighter.highlight(query=query, paragraphs=paragraphs)
+
     return deduped_results
+
 
 async def predict_t5(input):
     scores = session.run(
@@ -58,6 +75,7 @@ async def predict_t5(input):
     log_probs = torch.nn.functional.log_softmax(
         torch.from_numpy(scores), dim=1)
     return log_probs[:len(input), 1].tolist()
+
 
 def build_article(hit, score):
     doc = hit.lucene_document
