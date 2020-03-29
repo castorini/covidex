@@ -76,31 +76,33 @@ class Highlighter:
             sim_matrix.max(0)[0], k=2, largest=True, sorted=False)
         word_positions = word_positions.tolist()
 
-        tagged_para_words = []
-        for kk, word in enumerate(para_words):
-            if kk in word_positions:
-                tagged_para_words.append(self.highlight_token)
-            tagged_para_words.append(word)
-        tagged_paragraph = self.tokenizer.convert_tokens_to_string(
-            tagged_para_words)
+        # Append a special highlight token to top-scoring words.
+        for kk in word_positions:
+            para_words[kk] += self.highlight_token
 
-        for special_char in ['.', ',', ':', ';', '?', '!', '[', ']', '(', ')',
-                             '{', '}']:
-            tagged_paragraph = tagged_paragraph.replace(
-                ' ' + special_char, '.')
+        tagged_paragraph = self.tokenizer.convert_tokens_to_string(
+            para_words)
+
+        # Clean up a list of simple English tokenization artifacts like spaces
+        # before punctuations and abreviated forms.
+        tagged_paragraph = self.tokenizer.clean_up_tokenization(
+            tagged_paragraph)
 
         tagged_sentences = [
             sent.string.strip()
             for sent in self.nlp(tagged_paragraph[:10000]).sents]
+
+        new_paragraph = []
         highlights = []
         last_pos = 0
         for sent in tagged_sentences:
-            pos = last_pos + len(sent)
             if self.highlight_token in sent:
-                pos -= (len(self.highlight_token) + 1)
-                highlights.append((last_pos, pos))
-            last_pos = pos + 1
-        return highlights
+                sent = sent.replace(self.highlight_token, '')
+                highlights.append((last_pos, last_pos + len(sent)))
+
+            new_paragraph.append(sent)
+            last_pos += len(sent) + 1
+        return ' '.join(new_paragraph), highlights
 
     def highlight_paragraphs(self, query: str,
                              paragraphs: List[str]) -> List[List[Tuple[int]]]:
@@ -112,23 +114,27 @@ class Highlighter:
             paragraphs: A list of paragraphs
 
         Returns:
-            A list of lists of tuples, where the elements of the tuple denote
-                the start and end positions of the segments to be highlighted.
+            new_paragraphs: A list of newly formatted paragraphs.
+            all_highlights: A list of lists of tuples, where the elements of
+                the tuple denote the start and end positions of the segments
+                to be highlighted.
         """
 
         query_words, query_state = self.text_to_vectors(text=query)
 
-        # Compute the cosine similarity matrix between the query and each
-        # paragraph.
-        paragraphs_highlights = []
+        new_paragraphs = []
+        all_highlights = []
         for paragraph in paragraphs:
 
             para_words, para_state = self.text_to_vectors(text=paragraph)
-            highlights = self.highlight_paragraph(query_state=query_state,
-                                                  para_state=para_state,
-                                                  para_words=para_words)
-            paragraphs_highlights.append(highlights)
-        return paragraphs_highlights
+            new_paragraph, highlights = self.highlight_paragraph(
+                query_state=query_state,
+                para_state=para_state,
+                para_words=para_words)
+            all_highlights.append(highlights)
+            new_paragraphs.append(new_paragraph)
+
+        return new_paragraphs, all_highlights
 
 
 highlighter = Highlighter()

@@ -23,6 +23,8 @@ class Article(BaseModel):
     def highlights_(cls, v, values):
         assert len(v) == len(values['paragraphs'])
         return v
+
+
 class QueryFacet(BaseModel):
     name: str
     values: List[str]
