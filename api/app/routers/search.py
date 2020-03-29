@@ -55,7 +55,7 @@ async def get_search(query: str, facets: List[QueryFacet] = []):
             result.paragraphs = [new_paragraph]
             result.highlights = [highlights]
 
-    print(f'Time to highlight: {time.time() - highlight_time}')
+        print(f'Time to highlight: {time.time() - highlight_time}')
 
     return deduped_results
 
