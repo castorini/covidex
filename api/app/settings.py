@@ -19,9 +19,11 @@ class Settings(BaseSettings):
     t5_batch_size: int = 96
 
     # Paragraph highlighting
-    highlight_max:str = 10  # Maximum number of paragraphs to highlight.
+    highlight_max: int = 10  # Maximum number of paragraphs to highlight.
+    highlight_device: str = 'cuda:1'
 
     class Config:
         env_file = '.env'
+
 
 settings = Settings()

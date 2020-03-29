@@ -1,6 +1,4 @@
-import numpy as np
 import spacy
-import time
 import torch
 import transformers
 
@@ -11,12 +9,16 @@ from typing import Tuple
 
 class Highlighter:
     def __init__(self):
+
+        self.device = torch.device(settings.highlight_device)
+
         print('Loading tokenizer...')
         self.tokenizer = transformers.AutoTokenizer.from_pretrained(
             'monologg/biobert_v1.1_pubmed', do_lower_case=False)
         print('Loading model...')
         self.model = transformers.AutoModel.from_pretrained(
             'monologg/biobert_v1.1_pubmed')
+        self.model.to(self.device)
 
         print('Loading sentence tokenizer...')
         self.nlp = spacy.blank("en")
@@ -28,12 +30,13 @@ class Highlighter:
         """Converts a text to a sequence of vectors, one for each subword."""
         text_ids = torch.tensor(
             self.tokenizer.encode(text, add_special_tokens=True))
+        text_ids = text_ids.to(self.device)
+
         text_words = self.tokenizer.convert_ids_to_tokens(text_ids)[1:-1]
 
-        n_chunks = int(np.ceil(text_ids.size(0) / 512))
         states = []
-        for ci in range(n_chunks):
-            text_ids_ = text_ids[1 + ci * 512:1 + (ci + 1) * 512]
+        for i in range(1, text_ids.size(0), 510):
+            text_ids_ = text_ids[i: i + 510]
             text_ids_ = torch.cat([text_ids[0].unsqueeze(0), text_ids_])
 
             if text_ids_[-1] != text_ids[-1]:
@@ -115,26 +118,18 @@ class Highlighter:
                 the start and end positions of the segments to be highlighted.
         """
 
-        start_time = time.time()
         query_words, query_state = self.text_to_vectors(text=query)
-        print(f'time query vectors: {time.time() - start_time}')
 
         # Compute the cosine similarity matrix between the query and each
         # paragraph.
         paragraphs_highlights = []
         for paragraph in paragraphs:
-            start_time = time.time()
 
             para_words, para_state = self.text_to_vectors(text=paragraph)
-            print(f'time para vectors: {time.time() - start_time}')
-            start_time = time.time()
             highlights = self.highlight_paragraph(query_state=query_state,
                                                   para_state=para_state,
                                                   para_words=para_words)
-            for start, end in highlights:
-                print(f'"{paragraph[start:end]}"')
             paragraphs_highlights.append(highlights)
-            print(f'Time highlight: {time.time() - start_time}')
         return paragraphs_highlights
 
 

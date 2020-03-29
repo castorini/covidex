@@ -33,7 +33,7 @@ class Ranker:
             batch_log_probs = torch.nn.functional.log_softmax(
                 torch.from_numpy(batch_scores), dim=1)
             batch_log_probs = batch_log_probs[:len(batch_inputs), 1].tolist()
-            log_probs.append(batch_log_probs)
+            log_probs.extend(batch_log_probs)
 
         return log_probs
 

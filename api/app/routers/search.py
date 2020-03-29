@@ -1,13 +1,14 @@
-from typing import List
-
 import dateparser
-from fastapi import APIRouter
+import time
 
+from fastapi import APIRouter
 from app.models import Article, QueryFacet
 from app.services.highlighter import highlighter
 from app.services.ranker import ranker
 from app.services.searcher import searcher
 from app.settings import settings
+from typing import List
+
 
 router = APIRouter()
 
@@ -20,13 +21,14 @@ async def get_search(query: str, facets: List[QueryFacet] = []):
         for hit in searcher_hits]
 
     # Get predictions from T5.
-    t5_scores = ranker.predict_t5(t5_inputs)
+    t5_scores = await ranker.predict_t5(t5_inputs)
 
-    # Build results and sort by T5 score.
+    # Build results.
     results = [
         build_article(hit, score)
         for (hit, score) in zip(searcher_hits, t5_scores)]
 
+    # Sort by T5 scores.
     results.sort(key=lambda x: x.score, reverse=True)
 
     # Remove paragraphs from same document.
@@ -39,14 +41,21 @@ async def get_search(query: str, facets: List[QueryFacet] = []):
         seen_docid.add(original_docid)
 
     # Highlights the paragraphs.
+    highlight_time = time.time()
     paragraphs = [
-        result.contents
+        result.paragraphs[0]
         for result in deduped_results[:settings.highlight_max]]
 
-    highlights = highlighter.highlight_paragraphs(
+    all_highlights = highlighter.highlight_paragraphs(
         query=query, paragraphs=paragraphs)
 
-    return {'results': deduped_results, 'highlights': highlights}
+    for result, highlights in zip(deduped_results, all_highlights):
+        # Only one paragraph per document is highlighted for now.
+        result.highlights = [highlights]
+        print('result.highlights', result.highlights)
+    print(f'Time to highlight: {time.time() - highlight_time}')
+
+    return deduped_results
 
 
 def build_article(hit, score):
@@ -61,10 +70,16 @@ def build_article(hit, score):
         year = None
 
     return Article(id=hit.docid, title=doc.get('title'),
-                   doi=doc.get('doi'), source=doc.get('source_x'),
-                   authors=authors, abstract=doc.get('abstract'),
-                   journal=doc.get('journal'), year=year,
-                   publish_time=publish_time, url=url, score=score)
+                   doi=doc.get('doi'),
+                   source=doc.get('source_x'),
+                   authors=authors,
+                   abstract=doc.get('abstract'),
+                   journal=doc.get('journal'),
+                   year=year,
+                   publish_time=publish_time,
+                   url=url,
+                   score=score,
+                   paragraphs=[hit.contents])
 
 
 def build_url(doc):
