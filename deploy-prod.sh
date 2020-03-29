@@ -12,4 +12,4 @@ mv $STATIC_PATH/static/* $STATIC_PATH
 
 # run server without the development flag
 export DEVELOPMENT=False
-cd api && uvicorn app.main:app --port=${PORT:-8081}
+cd api && uvicorn app.main:app --port=${PORT:-8001} --host 0.0.0.0

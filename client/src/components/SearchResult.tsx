@@ -156,6 +156,5 @@ const TextSpan = styled.span`
 
 const Highlight = styled(TextSpan)`
   position: relative;
-  font-decoration: italic;
   font-weight: 600;
 `;

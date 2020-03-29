@@ -15,8 +15,7 @@ Run the deployment script:
 sh deploy-prod.sh
 ```
 
-*Optional:* set the environment variable `$PORT` to change the server port (defaults to 8081):
+*Optional:* set the environment variable `$PORT` to change the server port (defaults to 8001):
 ```
-export PORT=8081
-sh deploy-prod.sh
+PORT=8001 sh deploy-prod.sh
 ```
