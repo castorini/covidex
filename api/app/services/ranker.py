@@ -1,11 +1,12 @@
-import t5  # This is needed to import the model  # noqa: F401
-import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"  # noqa: E402
-import tensorflow.compat.v1 as tf
-import torch
-
 from app.settings import settings
-from typing import List
+if settings.t5_device.startswith('cuda:'):
+    import os
+    os.environ["CUDA_VISIBLE_DEVICES"] = settings.t5_device.replace('cuda:', '')  # noqa: E501
+import tensorflow.compat.v1 as tf  # noqa: E402
+import tensorflow_text  # Do not remove! It is needed to import the model  # noqa: F401, E501
+import torch  # noqa: E402
+
+from typing import List  # noqa: E402
 
 
 class Ranker:
