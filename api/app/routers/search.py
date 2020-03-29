@@ -80,21 +80,3 @@ def build_article(hit, score):
                    publish_time=doc.get('publish_time'),
                    score=score,
                    paragraphs=[hit.contents])
-
-
-def build_url(doc):
-    doi_url = ' https://doi.org/'
-    pmc_url = 'https://www.ncbi.nlm.nih.gov/pmc/articles/'
-    pubmed_url = 'https://www.ncbi.nlm.nih.gov/pubmed/'
-    s2_url = 'https://www.semanticscholar.org/paper/'
-
-    if doc.get('doi'):
-        return doi_url + doc.get('doi')
-    elif doc.get('pmcid'):
-        return pmc_url + doc.get('pmcid')
-    elif doc.get('pubmed_id'):
-        return pubmed_url + doc.get('pubmed_id')
-    elif doc.get('sha'):
-        return s2_url + doc.get('sha').split(';')[-1].strip()
-    else:
-        return s2_url
