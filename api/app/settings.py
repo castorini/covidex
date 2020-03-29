@@ -15,10 +15,16 @@ class Settings(BaseSettings):
     rm3_original_query_weight: float = 0.5
 
     # T5 model settings
-    t5_model_dir: str = 'gs://neuralresearcher_data/covid/data/model_exp304/export/1585070383'
+    t5_model_dir: str = 'gs://neural-covidex/data/t5_base/export/1585070383'
     t5_batch_size: int = 96
+
+    # Paragraph highlighting
+    highlight = False
+    highlight_max: int = 10  # Maximum number of paragraphs to highlight.
+    highlight_device: str = 'cuda:1'
 
     class Config:
         env_file = '.env'
+
 
 settings = Settings()
