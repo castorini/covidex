@@ -1,9 +1,8 @@
 export default {
-  primary: '#503bff',
-  secondary: '#4C5B5C',
-  green: '#BCED09',
-  yellow: '#F9CB40',
-  red: '#FF715B',
+  primary: '#1857b6',
+  secondary: '#0f3875',
+  yellow: '#F4D35E',
+  red: '#f7605f',
 
   black: '#000000',
   white: '#FFFFFF',

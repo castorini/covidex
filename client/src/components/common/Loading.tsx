@@ -1,11 +1,7 @@
 import React from 'react';
 import styled, { withTheme } from 'styled-components';
 
-interface Props {
-  theme: any;
-}
-
-const Loading = ({ theme }: Props) => {
+const Loading = ({ theme }: any) => {
   return (
     <LoadingWrapper>
       <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" stroke={theme.secondary}>

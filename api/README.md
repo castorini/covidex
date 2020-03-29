@@ -5,11 +5,12 @@
 
 #### Local Deployment
 
-Download the latest Anserini index for the COVID-19 dataset and rename the index as `lucene-index-covid-paragraph/`
+Download the [latest Anserini index](https://github.com/castorini/anserini/blob/master/docs/experiments-covid.md)
+for the COVID-19 dataset and rename the index as `lucene-index-covid-paragraph/`
 
 ```
-INDEX_NAME=lucene-index-covid-paragraph-2020-03-20
-INDEX_URL=https://www.dropbox.com/s/evnhj2ylo02m03f/lucene-index-covid-paragraph-2020-03-20.tar.gz
+INDEX_NAME=lucene-index-covid-paragraph-2020-03-27
+INDEX_URL=https://www.dropbox.com/s/o95pehyzem0yalp/lucene-index-covid-paragraph-2020-03-27.tar.gz
 
 wget ${INDEX_URL}
 tar xvfz ${INDEX_NAME}.tar.gz && rm ${INDEX_NAME}.tar.gz
