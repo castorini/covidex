@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     # T5 model settings
     t5_model_dir: str = 'gs://neural-covidex/data/t5_base/export/1585070383'
     t5_batch_size: int = 96
+    t5_device: str = 'cuda:0'
 
     # Paragraph highlighting
     highlight = False
