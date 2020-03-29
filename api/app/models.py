@@ -22,7 +22,8 @@ class Article(BaseModel):
 
     @validator('highlights')
     def highlights_(cls, v, values):
-        assert len(v) == len(values['paragraphs'])
+        if v:
+            assert len(v) == len(values['paragraphs'])
         return v
 
 
