@@ -27,12 +27,16 @@ interface SearchResultProps {
 }
 
 const highlightText = (text: string, highlights: Array<[number, number]>): Array<string|ReactNode> => {
-  let highlighted: Array<string|ReactNode> = [];
+  if (!highlights) {
+    return [text];
+  }
 
+  let highlighted: Array<string|ReactNode> = [];
   let prevEnd = -1;
+
   highlights.forEach(highlight => {
     const [start, end] = highlight;
-    highlighted.push(text.substr(prevEnd + 1, start - prevEnd - 1));
+    highlighted.push(<TextSpan>{text.substr(prevEnd + 1, start - prevEnd - 1)}</TextSpan>);
     highlighted.push(<Highlight className="highlight">{text.substr(start, end - start + 1)}</Highlight>);
     prevEnd = end;
   });
@@ -65,11 +69,11 @@ const SearchResult = ({ article, number }: SearchResultProps) => {
         {article.journal && <Journal>{article.journal}</Journal>}
         {article.publish_time && <PublishTime>({article.publish_time})</PublishTime>}
       </Subtitle>
-      <Collapse isOpened={!collapsed} initialStyle={{height: 24, overflow: 'hidden'}}>
+      <Collapse isOpened={!collapsed} initialStyle={{height: 32, overflow: 'hidden'}}>
         <FullText onClick={() => setCollapsed(!collapsed)}>
-          <Paragraph>{article.abstract}</Paragraph>
+          {/* <Paragraph>{article.abstract}</Paragraph> */}
           {article.paragraphs.map((paragraph, i) => (
-            <Paragraph marginTop={16}>
+            <Paragraph marginTop={i === 0 ? 0 : 16}>
               {highlightText(paragraph, article.highlights[i])}
             </Paragraph>
           ))}
@@ -126,19 +130,18 @@ const Paragraph = styled.div<{marginTop?: number}>`
   color: ${({ theme }) => theme.darkGrey};
   margin-top: ${({ marginTop }) => marginTop ? marginTop : 0}px;
   cursor: pointer;
-
-  &:hover > .highlight:after {
-    height: calc(100% + 4px);
-  }
 `;
 
-const ShowTextLink = styled.div<{collapsed?: Boolean}>`
+const ShowTextLink = styled.button<{collapsed?: Boolean}>`
   ${BodySmall}
   ${LinkStyle}
   max-width: fit-content;
   margin-top: 8px;
   display: flex;
   align-items: center;
+  background: none;
+  padding: 0;
+  border: none;
 `;
 
 const Chevron = styled(ChevronsDown)<{collapsed?: Boolean}>`
@@ -148,18 +151,11 @@ const Chevron = styled(ChevronsDown)<{collapsed?: Boolean}>`
   transition: 550ms transform;
 `;
 
-const Highlight = styled.span`
-  position: relative;
+const TextSpan = styled.span`
+`;
 
-  &:after {
-    position: absolute;
-    content: '';
-    height: 2px;
-    bottom: -2px;
-    left: -2px;
-    z-index: -1;
-    width: calc(100% + 4px);
-    background: ${({ theme }) => theme.yellow};
-    transition: height 0.2s ease-in-out;
-  }
+const Highlight = styled(TextSpan)`
+  position: relative;
+  font-decoration: italic;
+  font-weight: 600;
 `;

@@ -11,7 +11,7 @@ import Loading from '../common/Loading';
 import SearchResult from '../SearchResult';
 import HomeText from '../HomeText';
 
-const HomePage = ({ history }: RouteComponentProps) => {
+const HomePage = ({ history, location }: RouteComponentProps) => {
   const urlParams = new URLSearchParams(useLocation().search);
   const query = urlParams.get('query')?.toLowerCase() || '';
 
@@ -22,9 +22,11 @@ const HomePage = ({ history }: RouteComponentProps) => {
   useEffect(() => {
     const fetchData = async () => {
       if (query === null || query === '') {
+        setLoading(false);
         setSearchResults([]);
         return;
       }
+
       try {
         setLoading(true);
         setSearchResults(null);

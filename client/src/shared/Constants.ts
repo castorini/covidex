@@ -10,6 +10,5 @@ export const TABLET_BREAKPOINT = 800;
 export const CONTENT_WIDTH = 1100;
 
 /* API */
-export const API_BASE = (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') ?
-    'http://11a1a65c.ngrok.io/api/' : '/api/';
+export const API_BASE = '/api/';
 export const SEARCH_ENDPOINT = 'search';
