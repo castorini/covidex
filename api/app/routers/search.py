@@ -47,12 +47,15 @@ async def get_search(query: str, facets: List[QueryFacet] = []):
             result.paragraphs[0]
             for result in deduped_results[:settings.highlight_max]]
 
-        all_highlights = highlighter.highlight_paragraphs(
+        new_paragraphs, all_highlights = highlighter.highlight_paragraphs(
             query=query, paragraphs=paragraphs)
-        for result, highlights in zip(deduped_results, all_highlights):
+        for result, new_paragraph, highlights in zip(
+                deduped_results, new_paragraphs, all_highlights):
             # Only one paragraph per document is highlighted for now.
+            result.paragraphs = [new_paragraph]
             result.highlights = [highlights]
-    print(f'Time to highlight: {time.time() - highlight_time}')
+
+        print(f'Time to highlight: {time.time() - highlight_time}')
 
     return deduped_results
 
@@ -72,8 +75,8 @@ def build_article(hit, score):
                    authors=authors,
                    abstract=doc.get('abstract'),
                    journal=doc.get('journal'),
+                   year=year,
                    url=doc.get('url') if doc.get('url') else 'https://www.semanticscholar.org/',
                    publish_time=doc.get('publish_time'),
-                   year=year, 
                    score=score,
                    paragraphs=[hit.contents])
