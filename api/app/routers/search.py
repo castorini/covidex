@@ -63,23 +63,21 @@ async def get_search(query: str, facets: List[QueryFacet] = []):
 def build_article(hit, score):
     doc = hit.lucene_document
     authors = [field.stringValue() for field in doc.getFields('authors')]
-    url = build_url(doc)
-
-    publish_time = doc.get('publish_time')
     try:
-        year = dateparser.parse(publish_time).year
+        year = dateparser.parse(doc.get('publish_time')).year
     except:
         year = None
 
-    return Article(id=hit.docid, title=doc.get('title'),
+    return Article(id=hit.docid,
+                   title=doc.get('title'),
                    doi=doc.get('doi'),
                    source=doc.get('source_x'),
                    authors=authors,
                    abstract=doc.get('abstract'),
                    journal=doc.get('journal'),
                    year=year,
-                   publish_time=publish_time,
-                   url=url,
+                   url=doc.get('url') if doc.get('url') else 'https://www.semanticscholar.org/',
+                   publish_time=doc.get('publish_time'),
                    score=score,
                    paragraphs=[hit.contents])
 

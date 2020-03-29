@@ -1475,10 +1475,24 @@
   resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.2.tgz#690a1475b84f2a884fd07cd797c00f5f31356ea8"
   integrity sha512-ce5d3q03Ex0sy4R14722Rmt6MT07Ua+k4FwDfdcToYJcMKNtRVQvJ6JCAPdAmAnbRb6CsX6aYb9m96NGod9uTw==
 
+"@types/react-collapse@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@types/react-collapse/-/react-collapse-5.0.0.tgz#ffe6173db457b4b147319e1bd522b5b9d3d68fac"
+  integrity sha512-iM5QPtS0JVbL5TWm8vilaG4iYiQIFSSqXDHcRUA50qBLSgC0GURk7VZYmgo6u4YF0LnpvKBQYRhPv1ut9DukIg==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-dom@*", "@types/react-dom@^16.9.0":
   version "16.9.5"
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.9.5.tgz#5de610b04a35d07ffd8f44edad93a71032d9aaa7"
   integrity sha512-BX6RQ8s9D+2/gDhxrj8OW+YD4R+8hj7FEM/OJHGNR0KipE1h1mSsf39YeyC81qafkq+N3rU3h3RFbLSwE5VqUg==
+  dependencies:
+    "@types/react" "*"
+
+"@types/react-fade-in@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@types/react-fade-in/-/react-fade-in-0.1.0.tgz#281367aa13b970762d4020cd4e69b52cfc3bdb3f"
+  integrity sha512-rUbU6MiO2I6itt4RLPeIs83C2J+/KD2p3XKXk816pXdw09DxDlm3U/HeHqjQUUjBS5AaIz1zPmg/0JuZkOCn/w==
   dependencies:
     "@types/react" "*"
 
@@ -8585,6 +8599,11 @@ react-app-polyfill@^1.0.6:
     regenerator-runtime "^0.13.3"
     whatwg-fetch "^3.0.0"
 
+react-collapse@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/react-collapse/-/react-collapse-5.0.1.tgz#f763b7207aee73baa1ff778b2d0b4ffb49d900a0"
+  integrity sha512-cN2tkxBWizhPQ2JHfe0aUSJtmMthKA17NZkTElpiQ2snQAAi1hssXZ2fv88rAPNNvG5ss4t0PbOZT0TIl9Lk3Q==
+
 react-dev-utils@^10.2.1:
   version "10.2.1"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-10.2.1.tgz#f6de325ae25fa4d546d09df4bb1befdc6dd19c19"
@@ -8629,6 +8648,11 @@ react-error-overlay@^6.0.7:
   version "6.0.7"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.7.tgz#1dcfb459ab671d53f660a991513cb2f0a0553108"
   integrity sha512-TAv1KJFh3RhqxNvhzxj6LeT5NWklP6rDr2a0jaTfsZ5wSZWHOGeqQyejUp3xxLfPt2UpyJEcVQB/zyPcmonNFA==
+
+react-fade-in@^0.1.8:
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/react-fade-in/-/react-fade-in-0.1.8.tgz#f7289b4a26b0ee91768521d408a0fca59cfcab3f"
+  integrity sha512-kHQ3gez6Cplh0KsZq0YAaYGaF3tEePMT/jxe8DDPiFAtJCrSe9K62WC3ODTza2RYH+OcNL/equmCKdqw+ype8g==
 
 react-feather@^2.0.3:
   version "2.0.3"

@@ -3,14 +3,14 @@ import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router';
 
 import { TABLET_BREAKPOINT, HOME_ROUTE } from '../../shared/Constants';
-import { PageContent } from '../../shared/Styles';
+import { PageContent, Heading1 } from '../../shared/Styles';
 
 const Navbar = ({ history }: RouteComponentProps) => {
   return (
     <NavbarWrapper>
       <PageContent>
         <NavbarLogo onClick={() => history.push(HOME_ROUTE)}>
-          COVID-19 Search &nbsp;
+          Neural Covidex
         </NavbarLogo>
       </PageContent>
     </NavbarWrapper>
@@ -31,8 +31,8 @@ const NavbarWrapper = styled.div`
 `;
 
 const NavbarLogo = styled.div`
+  ${Heading1}
   position: relative;
-  font-size: 24px;
   font-weight: 800;
   cursor: pointer;
 
@@ -43,7 +43,7 @@ const NavbarLogo = styled.div`
     bottom: -8px; 
 
     left: 0;
-    width: 25%;
+    width: 32px;
     background: ${({ theme }) => theme.primary};
   }
 `;
