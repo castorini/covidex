@@ -2,7 +2,7 @@ from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
-    cors: str = ''
+    development: bool = True
 
     # Anserini searcher settings
     index_path: str = 'lucene-index-covid-paragraph'
