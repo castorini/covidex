@@ -40,19 +40,18 @@ async def get_search(query: str, facets: List[QueryFacet] = []):
             deduped_results.append(result)
         seen_docid.add(original_docid)
 
-    # Highlights the paragraphs.
-    highlight_time = time.time()
-    paragraphs = [
-        result.paragraphs[0]
-        for result in deduped_results[:settings.highlight_max]]
+    if settings.highlight:
+        # Highlights the paragraphs.
+        highlight_time = time.time()
+        paragraphs = [
+            result.paragraphs[0]
+            for result in deduped_results[:settings.highlight_max]]
 
-    all_highlights = highlighter.highlight_paragraphs(
-        query=query, paragraphs=paragraphs)
-
-    for result, highlights in zip(deduped_results, all_highlights):
-        # Only one paragraph per document is highlighted for now.
-        result.highlights = [highlights]
-        print('result.highlights', result.highlights)
+        all_highlights = highlighter.highlight_paragraphs(
+            query=query, paragraphs=paragraphs)
+        for result, highlights in zip(deduped_results, all_highlights):
+            # Only one paragraph per document is highlighted for now.
+            result.highlights = [highlights]
     print(f'Time to highlight: {time.time() - highlight_time}')
 
     return deduped_results

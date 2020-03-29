@@ -92,7 +92,6 @@ class Highlighter:
         tagged_sentences = [
             sent.string.strip()
             for sent in self.nlp(tagged_paragraph[:10000]).sents]
-
         highlights = []
         last_pos = 0
         for sent in tagged_sentences:
@@ -101,7 +100,6 @@ class Highlighter:
                 pos -= (len(self.highlight_token) + 1)
                 highlights.append((last_pos, pos))
             last_pos = pos + 1
-
         return highlights
 
     def highlight_paragraphs(self, query: str,
