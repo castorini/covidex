@@ -54,7 +54,10 @@ const highlightText = (
     );
     highlighted.push(
       <TextSpan key={`${i}-1`} className="text">
-        {highlightMatches(queryTokens, text.substr(prevEnd + 1, start - prevEnd - 1))}
+        {highlightMatches(
+          queryTokens,
+          text.substr(prevEnd + 1, start - prevEnd - 1),
+        )}
       </TextSpan>,
     );
     highlighted.push(
@@ -132,7 +135,9 @@ const SearchResult = ({ article, number, queryTokens }: SearchResultProps) => {
         {article.paragraphs.map((paragraph, i) => (
           <Paragraph marginTop={i === 0 ? 0 : 16} key={i} collapsed={collapsed}>
             {highlightText(paragraph, article.highlights[i], queryTokens)}
-            {i === article.paragraphs.length - 1 && <Ellipsis className="ellipsis">...</Ellipsis>}
+            {i === article.paragraphs.length - 1 && (
+              <Ellipsis className="ellipsis">...</Ellipsis>
+            )}
           </Paragraph>
         ))}
       </FullText>
