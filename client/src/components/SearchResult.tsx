@@ -1,9 +1,8 @@
 import React, { useState, ReactNode, useRef } from 'react';
-import styled from 'styled-components';
-import {Collapse} from 'react-collapse';
+import styled, { css } from 'styled-components';
 import { ChevronsDown } from 'react-feather';
 
-import { Link, Heading3, LinkStyle, BodySmall } from '../shared/Styles';
+import { Link, Heading3, LinkStyle, BodySmall, FadeInText } from '../shared/Styles';
 
 interface Article extends Object {
   id: string
@@ -37,17 +36,33 @@ const highlightText = (text: string, highlights: Array<[number, number]>): Array
 
   highlights.forEach((highlight, i) => {
     const [start, end] = highlight;
-    highlighted.push(<TextSpan key={`${i}-1`}>{text.substr(prevEnd + 1, start - prevEnd - 1)}</TextSpan>);
-    highlighted.push(<Highlight className="highlight" key={`${i}-2`}>{text.substr(start, end - start + 1)}</Highlight>);
+    highlighted.push(<Ellipsis key={`${i}-ellipsis-1`} className="ellipsis">...</Ellipsis>);
+    highlighted.push(<TextSpan key={`${i}-1`} className="text">
+      {text.substr(prevEnd + 1, start - prevEnd - 1)}
+    </TextSpan>);
+    highlighted.push(<Highlight className="highlight" key={`${i}-2`}>
+      {text.substr(start, end - start + 1)}
+    </Highlight>);
+
     prevEnd = end;
   });
+
+  // add last part of text
+  if (prevEnd < text.length) {
+    if (prevEnd !== -1) {
+      highlighted.push(<Ellipsis key={`ellipsis-last`} className="ellipsis">...</Ellipsis>);
+    }
+    highlighted.push(<TextSpan key="last" className="text">
+      {text.substr(prevEnd + 1, text.length - prevEnd - 1)}
+    </TextSpan>);
+  } 
 
   return highlighted;
 }
 
 const SearchResult = ({ article, number }: SearchResultProps) => {
   const fullTextRef = useRef(null);
-  const [collapsed, setCollapsed] = useState<Boolean>(true);
+  const [collapsed, setCollapsed] = useState<boolean>(true);
 
   let authorString = '';
   if (article.authors.length > 0) {
@@ -71,23 +86,25 @@ const SearchResult = ({ article, number }: SearchResultProps) => {
         {article.journal && <Journal>{article.journal}</Journal>}
         {article.publish_time && <PublishTime>({article.publish_time})</PublishTime>}
       </Subtitle>
-      <Collapse isOpened={!collapsed} initialStyle={{height: 32, overflow: 'hidden'}}>
-        <FullText onClick={() => setCollapsed(!collapsed)} ref={fullTextRef}>
-          {article.highlighted_abstract === false && article.abstract && (
-            <Paragraph marginBottom={16}>
-              {article.abstract}
-            </Paragraph>
-          )}
-          {article.paragraphs.map((paragraph, i) => (
-            <Paragraph marginTop={i === 0 ? 0 : 16} key={i}>
-              {highlightText(paragraph, article.highlights[i])}
-            </Paragraph>
-          ))}
-        </FullText>
-      </Collapse>
+      <FullText ref={fullTextRef}>
+        {article.highlighted_abstract === false && article.abstract && (
+          <Paragraph marginBottom={16} collapsed={collapsed}>
+            {highlightText(article.abstract, [])}
+          </Paragraph>
+        )}
+        {article.paragraphs.map((paragraph, i) => (
+          <Paragraph marginTop={i === 0 ? 0 : 16} key={i} collapsed={collapsed}>
+            {highlightText(paragraph, article.highlights[i])}
+          </Paragraph>
+        ))}
+      </FullText>
       {(article.abstract || article.paragraphs.length > 0) && (
-        <ShowTextLink collapsed={collapsed} onClick={() => setCollapsed(!collapsed)}>
-          {collapsed ? 'Show relevant text' : 'Show less'}
+        <ShowTextLink
+          collapsed={collapsed}
+          onClick={() => setCollapsed(!collapsed)}
+          onMouseDown={e => e.preventDefault()}
+        >
+          {collapsed ? 'Show full text' : 'Show less'}
           <Chevron collapsed={collapsed} />
         </ShowTextLink>
       )}
@@ -131,15 +148,28 @@ const PublishTime = styled.span``;
 
 const FullText = styled.div``;
 
-const Paragraph = styled.div<{marginTop?: number, marginBottom?: number}>`
+const fadeInAnimation = css`animation ${FadeInText} 0.5s ease-in-out;`;
+
+const Paragraph = styled.div<{marginTop?: number, marginBottom?: number, collapsed: boolean}>`
   ${BodySmall}
   color: ${({ theme }) => theme.darkGrey};
   margin-top: ${({ marginTop }) => marginTop ? marginTop : 0}px;
   margin-bottom: ${({ marginBottom }) => marginBottom ? marginBottom : 0}px;
-  cursor: pointer;
+
+  & > .ellipsis {
+    opacity: ${({ collapsed }) => collapsed ? 1 : 0};
+    display: ${({ collapsed }) => collapsed ? 'inline' : 'none'};
+    ${({ collapsed }) => collapsed ? fadeInAnimation : ''}
+  }
+
+  & > .text {
+    opacity: ${({ collapsed }) => collapsed ? 0 : 1};
+    display: ${({ collapsed }) => collapsed ? 'none' : 'inline'};
+    ${({ collapsed }) => collapsed ? '' : fadeInAnimation}
+  }
 `;
 
-const ShowTextLink = styled.button<{collapsed?: Boolean}>`
+const ShowTextLink = styled.button<{collapsed: boolean}>`
   ${BodySmall}
   ${LinkStyle}
   max-width: fit-content;
@@ -151,7 +181,7 @@ const ShowTextLink = styled.button<{collapsed?: Boolean}>`
   border: none;
 `;
 
-const Chevron = styled(ChevronsDown)<{collapsed?: Boolean}>`
+const Chevron = styled(ChevronsDown)<{collapsed: boolean}>`
   height: 14px;
   width: 14px;
   transform: rotate(${({ collapsed }) => collapsed ? 0 : 180}deg);
@@ -159,9 +189,17 @@ const Chevron = styled(ChevronsDown)<{collapsed?: Boolean}>`
 `;
 
 const TextSpan = styled.span`
+  transition: all 0.3s;
+`;
+
+const Ellipsis = styled(TextSpan)`
+  letter-spacing: 1px;
+  margin: 0 2px;
 `;
 
 const Highlight = styled(TextSpan)`
   position: relative;
-  font-weight: 600;
+  font-weight: 400;
+  color: ${({ theme }) => theme.darkGrey};
+  background: ${({ theme }) => theme.paleYellow};
 `;

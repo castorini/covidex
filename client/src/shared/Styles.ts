@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 
 import { TABLET_BREAKPOINT, CONTENT_WIDTH } from './Constants';
 
@@ -76,3 +76,20 @@ export const PageContent = styled.div`
   width: ${CONTENT_WIDTH}px;
   margin: auto;
 `;
+
+export const FadeInText = keyframes`
+  0% {
+    display: none;
+    opacity: 0;
+  }
+
+  1% {
+    display: inline;
+    opacity: 0;
+  }
+
+  100% {
+    display: inline;
+    opacity: 1;
+  }`
+;

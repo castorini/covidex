@@ -27,7 +27,12 @@ const HomeText = () => {
           search reranking pipeline using the&nbsp;
           <Link href="https://github.com/google-research/text-to-text-transfer-transformer" target="_blank" rel="noopener noreferrer">
             T5
-          </Link> model on top of an Anserini index.
+          </Link>
+          &nbsp;model on top of an&nbsp;
+          <Link href="http://anserini.io/" target="_blank" rel="noopener noreferrer">
+            Anserini
+          </Link>
+          &nbsp;index.
         </ListItem>
         <ListItem>
           Our basic keyword search interface at&nbsp;
@@ -45,7 +50,7 @@ const HomeText = () => {
           <Link href="http://anserini.io/" target="_blank" rel="noopener noreferrer">
             Anserini
           </Link>
-          &nbsp;IR toolkit and (Solrini, which is Anserini's Solr adaptor).
+          &nbsp;IR toolkit (via Solrini, which is Anserini's Solr adaptor).
         </ListItem>
         <ListItem>Backend components (code as well as pre-built indexes) for
           directly searching and manipulating the collection via&nbsp;
