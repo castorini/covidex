@@ -121,7 +121,7 @@ const SearchResult = ({ article, number, queryTokens }: SearchResultProps) => {
           onClick={() => setCollapsed(!collapsed)}
           onMouseDown={(e) => e.preventDefault()}
         >
-          {collapsed ? 'Show full text' : 'Show less'}
+          {collapsed ? 'Show more' : 'Show less'}
           <Chevron collapsed={collapsed} />
         </ShowTextLink>
       )}
