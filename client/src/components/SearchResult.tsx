@@ -1,9 +1,9 @@
-import React, { useState, ReactNode } from 'react';
+import React, { useState, ReactNode, useRef } from 'react';
 import styled from 'styled-components';
 import {Collapse} from 'react-collapse';
+import { ChevronsDown } from 'react-feather';
 
 import { Link, Heading3, LinkStyle, BodySmall } from '../shared/Styles';
-import { ChevronsDown } from 'react-feather';
 
 interface Article extends Object {
   id: string
@@ -19,6 +19,7 @@ interface Article extends Object {
   publish_time: string
   paragraphs: Array<string>
   highlights: Array<Array<[number, number]>>
+  highlighted_abstract: boolean
 }
 
 interface SearchResultProps {
@@ -34,10 +35,10 @@ const highlightText = (text: string, highlights: Array<[number, number]>): Array
   let highlighted: Array<string|ReactNode> = [];
   let prevEnd = -1;
 
-  highlights.forEach(highlight => {
+  highlights.forEach((highlight, i) => {
     const [start, end] = highlight;
-    highlighted.push(<TextSpan>{text.substr(prevEnd + 1, start - prevEnd - 1)}</TextSpan>);
-    highlighted.push(<Highlight className="highlight">{text.substr(start, end - start + 1)}</Highlight>);
+    highlighted.push(<TextSpan key={`${i}-1`}>{text.substr(prevEnd + 1, start - prevEnd - 1)}</TextSpan>);
+    highlighted.push(<Highlight className="highlight" key={`${i}-2`}>{text.substr(start, end - start + 1)}</Highlight>);
     prevEnd = end;
   });
 
@@ -45,6 +46,7 @@ const highlightText = (text: string, highlights: Array<[number, number]>): Array
 }
 
 const SearchResult = ({ article, number }: SearchResultProps) => {
+  const fullTextRef = useRef(null);
   const [collapsed, setCollapsed] = useState<Boolean>(true);
 
   let authorString = '';
@@ -70,18 +72,22 @@ const SearchResult = ({ article, number }: SearchResultProps) => {
         {article.publish_time && <PublishTime>({article.publish_time})</PublishTime>}
       </Subtitle>
       <Collapse isOpened={!collapsed} initialStyle={{height: 32, overflow: 'hidden'}}>
-        <FullText onClick={() => setCollapsed(!collapsed)}>
-          {/* <Paragraph>{article.abstract}</Paragraph> */}
+        <FullText onClick={() => setCollapsed(!collapsed)} ref={fullTextRef}>
+          {article.highlighted_abstract === false && article.abstract && (
+            <Paragraph marginBottom={16}>
+              {article.abstract}
+            </Paragraph>
+          )}
           {article.paragraphs.map((paragraph, i) => (
-            <Paragraph marginTop={i === 0 ? 0 : 16}>
+            <Paragraph marginTop={i === 0 ? 0 : 16} key={i}>
               {highlightText(paragraph, article.highlights[i])}
             </Paragraph>
           ))}
         </FullText>
       </Collapse>
-      {(article.abstract || article.paragraphs.length > 0 ) && (
+      {(article.abstract || article.paragraphs.length > 0) && (
         <ShowTextLink collapsed={collapsed} onClick={() => setCollapsed(!collapsed)}>
-          {collapsed ? 'Show highlighted paragraphs' : 'Show less'}
+          {collapsed ? 'Show relevant text' : 'Show less'}
           <Chevron collapsed={collapsed} />
         </ShowTextLink>
       )}
@@ -125,10 +131,11 @@ const PublishTime = styled.span``;
 
 const FullText = styled.div``;
 
-const Paragraph = styled.div<{marginTop?: number}>`
+const Paragraph = styled.div<{marginTop?: number, marginBottom?: number}>`
   ${BodySmall}
   color: ${({ theme }) => theme.darkGrey};
   margin-top: ${({ marginTop }) => marginTop ? marginTop : 0}px;
+  margin-bottom: ${({ marginBottom }) => marginBottom ? marginBottom : 0}px;
   cursor: pointer;
 `;
 
