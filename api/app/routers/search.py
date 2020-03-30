@@ -17,9 +17,11 @@ router = APIRouter()
 @router.get('/search', response_model=List[Article])
 async def get_search(query: str):
     searcher_hits = searcher.search(query)
+
+    # Only rerank based on paragraph or abstract if original document was retrieved.
+    ranked_paragraphs = [hit.contents.split('\n')[-1][:5000] for hit in searcher_hits]
     t5_inputs = [
-        f'Query: {query} Document: {hit.contents[:5000]} Relevant:'
-        for hit in searcher_hits]
+        f'Query: {query} Document: {p} Relevant:' for p in ranked_paragraphs]
 
     # Get predictions from T5.
     t5_scores = await ranker.predict_t5(t5_inputs)
@@ -38,7 +40,7 @@ async def get_search(query: str):
             # Append paragraph until we reach the configured maximum.
             grouped_results[base_docid].append(result)
 
-    # Take top N paragraphs from each result to highlight.
+    # Take top N paragraphs from each result to highlight and build article object.
     ranked_results = []
     for base_docid, doc_results in grouped_results.items():
         top_hit, top_score = doc_results[0]
@@ -46,7 +48,7 @@ async def get_search(query: str):
         highlighted_abstract = False
 
         for (hit, score) in doc_results:
-            paragraph_number = hit.docid.split('.')[-1] if hit.docid != base_docid else -1
+            paragraph_number = int(hit.docid.split('.')[-1]) if hit.docid != base_docid else -1
             if paragraph_number == -1:
                 highlighted_abstract = True
             paragraphs.append((hit.contents.split('\n')[-1], paragraph_number))
