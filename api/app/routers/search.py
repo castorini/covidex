@@ -1,4 +1,5 @@
 import time
+from collections import OrderedDict
 from typing import List
 
 import dateparser
@@ -23,46 +24,71 @@ async def get_search(query: str):
     # Get predictions from T5.
     t5_scores = await ranker.predict_t5(t5_inputs)
 
-    # Build results.
-    results = [
-        build_base_article(hit, score)
-        for (hit, score) in zip(searcher_hits, t5_scores)]
+    # Sort results by T5 scores.
+    results = list(zip(searcher_hits, t5_scores))
+    results.sort(key=lambda x: x[1], reverse=True)
 
-    # Sort by T5 scores.
-    results.sort(key=lambda x: x.score, reverse=True)
-
-    # Remove paragraphs from same document.
-    seen_docid = set()
-    deduped_results = []
+    # Group paragraphs from same document by id in sorted order.
+    grouped_results = OrderedDict()
     for result in results:
-        original_docid = result.id.split('.')[0]
-        if original_docid not in seen_docid:
-            deduped_results.append(result)
-        seen_docid.add(original_docid)
+        base_docid = result[0].docid.split('.')[0]
+        if base_docid not in grouped_results:
+            grouped_results[base_docid] = [result]
+        elif len(grouped_results[base_docid]) < settings.max_paragraphs_per_doc:
+            # Append paragraph until we reach the configured maximum.
+            grouped_results[base_docid].append(result)
+
+    # Take top N paragraphs from each result to highlight.
+    ranked_results = []
+    for base_docid, doc_results in grouped_results.items():
+        top_hit, top_score = doc_results[0]
+        paragraphs = []
+        highlighted_abstract = False
+
+        for (hit, score) in doc_results:
+            paragraph_number = hit.docid.split('.')[-1] if hit.docid != base_docid else -1
+            if paragraph_number == -1:
+                highlighted_abstract = True
+            paragraphs.append((hit.contents.split('\n')[-1], paragraph_number))
+
+        # Sort top paragraphs by order of appearance in actual text.
+        paragraphs.sort(key=lambda x: x[1])
+        paragraphs = [text for (text, _) in paragraphs]
+
+        # Build article
+        article = build_article(top_hit, base_docid, top_score, paragraphs, highlighted_abstract)
+        ranked_results.append(article)
 
     if settings.highlight:
         # Highlights the paragraphs.
         highlight_time = time.time()
-        paragraphs = [
-            result.paragraphs[0]
-            for result in deduped_results[:settings.highlight_max_paragraphs]]
+        paragraphs = []
+        for result in ranked_results:
+            paragraphs.extend(result.paragraphs)
+        paragraphs = paragraphs[:settings.highlight_max_paragraphs]
 
-        new_paragraphs, all_highlights = highlighter.highlight_paragraphs(
-            query=query, paragraphs=paragraphs)
-        for result, new_paragraph, highlights in zip(
-                deduped_results, new_paragraphs, all_highlights):
-            # Only one paragraph per document is highlighted for now.
-            result.paragraphs = [new_paragraph]
-            result.highlights = [highlights]
+        new_paragraphs, all_highlights = highlighter.highlight_paragraphs(query=query, paragraphs=paragraphs)
+        highlighted_paragraphs = list(zip(new_paragraphs, all_highlights))
+
+        # Update ranked results with highlighted paragraphs.
+        highlight_idx = 0
+        for result in ranked_results:
+            num_paragraphs = len(result.paragraphs)
+            highlighted = highlighted_paragraphs[highlight_idx:highlight_idx+num_paragraphs]
+            result.paragraphs = [h[0] for h in highlighted]
+            result.highlights = [h[1] for h in highlighted]
+            highlight_idx += num_paragraphs
+
+            if highlight_idx >= len(highlighted_paragraphs):
+                break
 
         print(f'Time to highlight: {time.time() - highlight_time}')
 
-    return deduped_results
+    return ranked_results
 
-def build_base_article(hit, score):
+def build_article(hit, id: str, score: float, paragraphs: List[str], highlighted_abstract: bool):
     doc = hit.lucene_document
-    contents = hit.contents.split('\n')[-1]
-    return Article(id=hit.docid,
+    return Article(id=id,
                    title=doc.get('title'),
                    doi=doc.get('doi'),
                    source=doc.get('source_x'),
@@ -73,5 +99,5 @@ def build_base_article(hit, score):
                    url=doc.get('url') if doc.get('url') else 'https://www.semanticscholar.org/',
                    publish_time=doc.get('publish_time'),
                    score=score,
-                   paragraphs=[contents[-1]],
-                   highlighted_abstract=contents[-1] == doc.get('abstract'))
+                   paragraphs=paragraphs,
+                   highlighted_abstract=highlighted_abstract)

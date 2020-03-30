@@ -133,7 +133,6 @@ class Highlighter:
                 para_words=para_words)
             all_highlights.append(highlights)
             new_paragraphs.append(new_paragraph)
-
         return new_paragraphs, all_highlights
 
 

@@ -10,5 +10,5 @@ export const TABLET_BREAKPOINT = 800;
 export const CONTENT_WIDTH = 1100;
 
 /* API */
-export const API_BASE = 'http://23.251.153.91:8001/api/';
+export const API_BASE = '/api/';
 export const SEARCH_ENDPOINT = 'search';

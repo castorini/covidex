@@ -189,6 +189,7 @@ const Chevron = styled(ChevronsDown)<{collapsed: boolean}>`
 `;
 
 const TextSpan = styled.span`
+  line-height: 1.4;
   transition: all 0.3s;
 `;
 
