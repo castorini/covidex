@@ -3,9 +3,8 @@ import styled, { css, keyframes } from 'styled-components';
 import { TABLET_BREAKPOINT, CONTENT_WIDTH } from './Constants';
 
 export const ROBOTO_FONT = css`
-  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 `;
 
 export const ROBOTO_SLAB_FONT = css`

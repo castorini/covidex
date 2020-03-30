@@ -12,18 +12,10 @@ const Footer = () => {
     <FooterWrapper>
       <PageContent>
         <Images>
-          <Link
-            href="https://uwaterloo.ca/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <Link href="https://uwaterloo.ca/" target="_blank" rel="noopener noreferrer">
             <SchoolImage src={UWaterloo} alt="University of Waterloo Logo" />
           </Link>
-          <Link
-            href="https://www.nyu.edu/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <Link href="https://www.nyu.edu/" target="_blank" rel="noopener noreferrer">
             <SchoolImage src={NYU} alt="NYU Logo" />
           </Link>
         </Images>

@@ -9,9 +9,7 @@ const Navbar = ({ history }: RouteComponentProps) => {
   return (
     <NavbarWrapper>
       <PageContent>
-        <NavbarLogo onClick={() => history.push(HOME_ROUTE)}>
-          Neural Covidex
-        </NavbarLogo>
+        <NavbarLogo onClick={() => history.push(HOME_ROUTE)}>Neural Covidex</NavbarLogo>
       </PageContent>
     </NavbarWrapper>
   );
@@ -24,10 +22,7 @@ const NavbarWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   position: relative;
-  background: linear-gradient(
-    90deg,
-    ${({ theme }) => `${theme.primary}, ${theme.secondary}`}
-  );
+  background: linear-gradient(90deg, ${({ theme }) => `${theme.primary}, ${theme.secondary}`});
 
   @media only screen and (max-width: ${TABLET_BREAKPOINT}px) {
     padding: 24px 16px;
