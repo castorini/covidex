@@ -10,6 +10,7 @@ export default {
   white: '#FFFFFF',
 
   grey: '#A5A5A5',
+  slate: '#616161',
   lightGrey: '#E8E8E8',
   darkGrey: '#555555',
 };

@@ -33,7 +33,7 @@ const highlightText = (
   queryTokens: Array<string>,
 ): Array<string | ReactNode> => {
   if (!highlights) {
-    return [text];
+    return [<TextSpan className="hideCollapsed" key={0}>{text}</TextSpan>];
   }
 
   let highlighted: Array<string | ReactNode> = [];
@@ -42,12 +42,12 @@ const highlightText = (
   highlights.forEach((highlight, i) => {
     const [start, end] = highlight;
     highlighted.push(
-      <Ellipsis key={`${i}-ellipsis-1`} className="ellipsis">
+      <Ellipsis key={`${i}-ellipsis-1`} className="showCollapsed">
         ...
       </Ellipsis>,
     );
     highlighted.push(
-      <TextSpan key={`${i}-1`} className="text">
+      <TextSpan key={`${i}-1`} className="hideCollapsed">
         {highlightMatches(queryTokens, text.substr(prevEnd + 1, start - prevEnd - 1))}
       </TextSpan>,
     );
@@ -63,7 +63,7 @@ const highlightText = (
   // add last part of text
   if (prevEnd < text.length) {
     highlighted.push(
-      <TextSpan key="last" className="text">
+      <TextSpan key="last" className="hideCollapsed">
         {highlightMatches(queryTokens, text.substr(prevEnd + 1, text.length - prevEnd - 1))}
       </TextSpan>,
     );
@@ -73,8 +73,20 @@ const highlightText = (
 };
 
 const highlightMatches = (queryTokens: Array<string>, text: string): ReactNode => {
-  return <Highlighter searchWords={queryTokens} textToHighlight={text} highlightTag={Match} />;
+  return (
+    <Highlighter
+      searchWords={queryTokens}
+      textToHighlight={text}
+      highlightTag={Match}
+      highlightClassName="match"
+    />
+  );
 };
+
+// Remove "abstract" string from beginning of abstract
+const parseAbstract = (abstract: string): string => {
+  return abstract.replace(/^\s*abstract\s*/ig, '');
+}
 
 const SearchResult = ({ article, number, queryTokens }: SearchResultProps) => {
   const fullTextRef = useRef(null);
@@ -89,6 +101,15 @@ const SearchResult = ({ article, number, queryTokens }: SearchResultProps) => {
     });
   }
 
+  // Indicate if medRxiv or bioRxiv is the source
+  const source = ["medrxiv", "biorxiv"].includes(article.source.toLowerCase()) ?
+    article.source.replace('r', 'R') : '';
+
+  // Separate abstract from other paragraphs if it was highlighted
+  const abstract = article.abstract ? parseAbstract(article.abstract) : null;
+  const abstractHighlights =  article.highlighted_abstract ? article.highlights[0] : [];
+  const paragraphs = article.highlighted_abstract ? article.paragraphs.slice(1) : article.paragraphs;
+
   return (
     <SearchResultWrapper>
       <Title>
@@ -100,22 +121,39 @@ const SearchResult = ({ article, number, queryTokens }: SearchResultProps) => {
       <Subtitle>
         {authorString && <Authors>{authorString}</Authors>}
         {article.journal && <Journal>{article.journal}</Journal>}
+        {source && <Journal>{source}</Journal>}
         {article.publish_time && <PublishTime>({article.publish_time})</PublishTime>}
       </Subtitle>
-      <FullText ref={fullTextRef}>
-        {article.highlighted_abstract === false && article.abstract && (
+      <div ref={fullTextRef}>
+        {article.abstract && (
+          <ResultText collapsed={collapsed} marginBottom={4}>
+            <SectionTitle className="hideCollapsed">Abstract</SectionTitle>
+          </ResultText>
+        )}
+        {/* Display abstract if not highlighted */}
+        {abstract && (
           <Paragraph marginBottom={16} collapsed={collapsed}>
-            {highlightText(article.abstract, [], queryTokens)}
+            {highlightText(abstract, abstractHighlights, queryTokens)}
           </Paragraph>
         )}
-        {article.paragraphs.map((paragraph, i) => (
-          <Paragraph marginTop={i === 0 ? 0 : 16} key={i} collapsed={collapsed}>
+        {/* Display paragraphs */}
+        <ResultText collapsed={collapsed} marginTop={20} marginBottom={4}>
+          <SectionTitle className="hideCollapsed">Full-Text Excerpt</SectionTitle>
+        </ResultText>
+        {paragraphs.map((paragraph, i) => (
+          <Paragraph
+            marginTop={i === 0 ? 0 : 16}
+            key={i}
+            collapsed={collapsed}
+          >
             {highlightText(paragraph, article.highlights[i], queryTokens)}
-            {i === article.paragraphs.length - 1 && <Ellipsis className="ellipsis">...</Ellipsis>}
+            {i === article.paragraphs.length - 1 && article.highlights[i] && (
+              <Ellipsis className="showCollapsed">...</Ellipsis>
+            )}
           </Paragraph>
         ))}
-      </FullText>
-      {(article.abstract || article.paragraphs.length > 0) && (
+      </div>
+      {(abstract || paragraphs.length > 0) && (
         <ShowTextLink
           collapsed={collapsed}
           onClick={() => setCollapsed(!collapsed)}
@@ -163,11 +201,9 @@ const Journal = styled.span`
 
 const PublishTime = styled.span``;
 
-const FullText = styled.div``;
-
 const fadeInAnimation = css`animation ${FadeInText} 0.5s ease-in-out;`;
 
-const Paragraph = styled.div<{
+const ResultText = styled.div<{
   marginTop?: number;
   marginBottom?: number;
   collapsed: boolean;
@@ -179,13 +215,13 @@ const Paragraph = styled.div<{
     marginBottom && !collapsed ? marginBottom : 0}px;
   display: ${({ collapsed }) => (collapsed ? 'inline' : 'block')};
 
-  & > .ellipsis {
+  & > .showCollapsed {
     opacity: ${({ collapsed }) => (collapsed ? 1 : 0)};
     display: ${({ collapsed }) => (collapsed ? 'inline' : 'none')};
     ${({ collapsed }) => (collapsed ? fadeInAnimation : '')}
   }
 
-  & > .text {
+  & > .hideCollapsed {
     opacity: ${({ collapsed }) => (collapsed ? 0 : 1)};
     display: ${({ collapsed }) => (collapsed ? 'none' : 'inline')};
     ${({ collapsed }) => (collapsed ? '' : fadeInAnimation)}
@@ -194,6 +230,16 @@ const Paragraph = styled.div<{
   & > .highlight {
     background: ${({ theme, collapsed }) => (collapsed ? 'none' : theme.paleYellow)};
   }
+`;
+
+const Paragraph = styled(ResultText)`
+  ${({ theme, collapsed }) =>
+    collapsed
+      ? ''
+      : `
+    padding-left: 8px;
+    border-left: 1px solid ${theme.lightGrey};
+  `}
 `;
 
 const ShowTextLink = styled.button<{ collapsed: boolean }>`
@@ -228,9 +274,19 @@ const Ellipsis = styled(TextSpan)`
 const Highlight = styled(TextSpan)`
   position: relative;
   font-weight: 400;
+
+  & > span > .match {
+    font-weight: 600;
+  }
 `;
 
 const Match = styled(TextSpan)`
   position: relative;
+  font-weight: 500;
+`;
+
+const SectionTitle = styled.div`
+  ${BodySmall}
+  color: ${({ theme }) => theme.slate};
   font-weight: 600;
 `;
