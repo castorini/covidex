@@ -31,9 +31,7 @@ const HomePage = ({ history, location }: RouteComponentProps) => {
       try {
         setLoading(true);
         setSearchResults(null);
-        let response = await fetch(
-          `${API_BASE}${SEARCH_ENDPOINT}?query=${query.toLowerCase()}`,
-        );
+        let response = await fetch(`${API_BASE}${SEARCH_ENDPOINT}?query=${query.toLowerCase()}`);
         setLoading(false);
         let data = await response.json();
         setSearchResults(data);
@@ -48,8 +46,7 @@ const HomePage = ({ history, location }: RouteComponentProps) => {
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) =>
     setQueryInputText(event.target.value);
 
-  const submitQuery = () =>
-    history.push(`${HOME_ROUTE}?query=${encodeURI(queryInputText)}`);
+  const submitQuery = () => history.push(`${HOME_ROUTE}?query=${encodeURI(queryInputText)}`);
 
   const handleEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
@@ -89,12 +86,7 @@ const HomePage = ({ history, location }: RouteComponentProps) => {
               <NoResults>No results found</NoResults>
             ) : (
               searchResults.map((article, i) => (
-                <SearchResult
-                  article={article}
-                  key={i}
-                  number={i + 1}
-                  queryTokens={queryTokens}
-                />
+                <SearchResult article={article} key={i} number={i + 1} queryTokens={queryTokens} />
               ))
             ))}
         </SearchResults>

@@ -3,13 +3,7 @@ import styled, { css } from 'styled-components';
 import { ChevronsDown } from 'react-feather';
 import Highlighter from 'react-highlight-words';
 
-import {
-  Link,
-  Heading3,
-  LinkStyle,
-  BodySmall,
-  FadeInText,
-} from '../shared/Styles';
+import { Link, Heading3, LinkStyle, BodySmall, FadeInText } from '../shared/Styles';
 
 interface Article extends Object {
   id: string;
@@ -54,10 +48,7 @@ const highlightText = (
     );
     highlighted.push(
       <TextSpan key={`${i}-1`} className="text">
-        {highlightMatches(
-          queryTokens,
-          text.substr(prevEnd + 1, start - prevEnd - 1),
-        )}
+        {highlightMatches(queryTokens, text.substr(prevEnd + 1, start - prevEnd - 1))}
       </TextSpan>,
     );
     highlighted.push(
@@ -73,10 +64,7 @@ const highlightText = (
   if (prevEnd < text.length) {
     highlighted.push(
       <TextSpan key="last" className="text">
-        {highlightMatches(
-          queryTokens,
-          text.substr(prevEnd + 1, text.length - prevEnd - 1),
-        )}
+        {highlightMatches(queryTokens, text.substr(prevEnd + 1, text.length - prevEnd - 1))}
       </TextSpan>,
     );
   }
@@ -84,17 +72,8 @@ const highlightText = (
   return highlighted;
 };
 
-const highlightMatches = (
-  queryTokens: Array<string>,
-  text: string,
-): ReactNode => {
-  return (
-    <Highlighter
-      searchWords={queryTokens}
-      textToHighlight={text}
-      highlightTag={Match}
-    />
-  );
+const highlightMatches = (queryTokens: Array<string>, text: string): ReactNode => {
+  return <Highlighter searchWords={queryTokens} textToHighlight={text} highlightTag={Match} />;
 };
 
 const SearchResult = ({ article, number, queryTokens }: SearchResultProps) => {
@@ -105,8 +84,7 @@ const SearchResult = ({ article, number, queryTokens }: SearchResultProps) => {
   if (article.authors.length > 0) {
     article.authors.forEach((author, idx) => {
       if (author !== '') {
-        authorString +=
-          idx === article.authors.length - 1 ? `${author}.` : `${author}, `;
+        authorString += idx === article.authors.length - 1 ? `${author}.` : `${author}, `;
       }
     });
   }
@@ -122,9 +100,7 @@ const SearchResult = ({ article, number, queryTokens }: SearchResultProps) => {
       <Subtitle>
         {authorString && <Authors>{authorString}</Authors>}
         {article.journal && <Journal>{article.journal}</Journal>}
-        {article.publish_time && (
-          <PublishTime>({article.publish_time})</PublishTime>
-        )}
+        {article.publish_time && <PublishTime>({article.publish_time})</PublishTime>}
       </Subtitle>
       <FullText ref={fullTextRef}>
         {article.highlighted_abstract === false && article.abstract && (
@@ -135,9 +111,7 @@ const SearchResult = ({ article, number, queryTokens }: SearchResultProps) => {
         {article.paragraphs.map((paragraph, i) => (
           <Paragraph marginTop={i === 0 ? 0 : 16} key={i} collapsed={collapsed}>
             {highlightText(paragraph, article.highlights[i], queryTokens)}
-            {i === article.paragraphs.length - 1 && (
-              <Ellipsis className="ellipsis">...</Ellipsis>
-            )}
+            {i === article.paragraphs.length - 1 && <Ellipsis className="ellipsis">...</Ellipsis>}
           </Paragraph>
         ))}
       </FullText>
@@ -200,8 +174,7 @@ const Paragraph = styled.div<{
 }>`
   ${BodySmall}
   color: ${({ theme }) => theme.darkGrey};
-  margin-top: ${({ marginTop, collapsed }) =>
-    marginTop && !collapsed ? marginTop : 0}px;
+  margin-top: ${({ marginTop, collapsed }) => (marginTop && !collapsed ? marginTop : 0)}px;
   margin-bottom: ${({ marginBottom, collapsed }) =>
     marginBottom && !collapsed ? marginBottom : 0}px;
   display: ${({ collapsed }) => (collapsed ? 'inline' : 'block')};
@@ -219,8 +192,7 @@ const Paragraph = styled.div<{
   }
 
   & > .highlight {
-    background: ${({ theme, collapsed }) =>
-      collapsed ? 'none' : theme.paleYellow};
+    background: ${({ theme, collapsed }) => (collapsed ? 'none' : theme.paleYellow)};
   }
 `;
 
