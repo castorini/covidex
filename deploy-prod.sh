@@ -11,5 +11,7 @@ mv $BUILD_PATH $STATIC_PATH
 mv $STATIC_PATH/static/* $STATIC_PATH
 
 # run server without the development flag
+cd api
+pip install -r requirements.txt
 export DEVELOPMENT=False
-cd api && uvicorn app.main:app --port=${PORT:-8001} --host 0.0.0.0
+uvicorn app.main:app --port=${PORT:-8001} --host 0.0.0.0

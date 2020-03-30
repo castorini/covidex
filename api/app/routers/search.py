@@ -1,20 +1,20 @@
-import dateparser
 import time
+from typing import List
 
+import dateparser
 from fastapi import APIRouter
-from app.models import Article, QueryFacet
+
+from app.models import Article
 from app.services.highlighter import highlighter
 from app.services.ranker import ranker
 from app.services.searcher import searcher
 from app.settings import settings
-from typing import List
-
 
 router = APIRouter()
 
 
 @router.get('/search', response_model=List[Article])
-async def get_search(query: str, facets: List[QueryFacet] = []):
+async def get_search(query: str):
     searcher_hits = searcher.search(query)
     t5_inputs = [
         f'Query: {query} Document: {hit.contents[:5000]} Relevant:'
@@ -25,7 +25,7 @@ async def get_search(query: str, facets: List[QueryFacet] = []):
 
     # Build results.
     results = [
-        build_article(hit, score)
+        build_base_article(hit, score)
         for (hit, score) in zip(searcher_hits, t5_scores)]
 
     # Sort by T5 scores.
@@ -45,7 +45,7 @@ async def get_search(query: str, facets: List[QueryFacet] = []):
         highlight_time = time.time()
         paragraphs = [
             result.paragraphs[0]
-            for result in deduped_results[:settings.highlight_max]]
+            for result in deduped_results[:settings.highlight_max_paragraphs]]
 
         new_paragraphs, all_highlights = highlighter.highlight_paragraphs(
             query=query, paragraphs=paragraphs)
@@ -59,24 +59,19 @@ async def get_search(query: str, facets: List[QueryFacet] = []):
 
     return deduped_results
 
-
-def build_article(hit, score):
+def build_base_article(hit, score):
     doc = hit.lucene_document
-    authors = [field.stringValue() for field in doc.getFields('authors')]
-    try:
-        year = dateparser.parse(doc.get('publish_time')).year
-    except:
-        year = None
-
+    contents = hit.contents.split('\n')[-1]
     return Article(id=hit.docid,
                    title=doc.get('title'),
                    doi=doc.get('doi'),
                    source=doc.get('source_x'),
-                   authors=authors,
+                   authors=[field.stringValue() for field in doc.getFields('authors')],
                    abstract=doc.get('abstract'),
                    journal=doc.get('journal'),
-                   year=year,
+                   year=dateparser.parse(doc.get('publish_time')).year if doc.get('year') else None,
                    url=doc.get('url') if doc.get('url') else 'https://www.semanticscholar.org/',
                    publish_time=doc.get('publish_time'),
                    score=score,
-                   paragraphs=[hit.contents])
+                   paragraphs=[contents[-1]],
+                   highlighted_abstract=contents[-1] == doc.get('abstract'))

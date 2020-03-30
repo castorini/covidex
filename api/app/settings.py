@@ -20,9 +20,12 @@ class Settings(BaseSettings):
     t5_device: str = 'cuda:0'
 
     # Paragraph highlighting
-    highlight = False
-    highlight_max: int = 10  # Maximum number of paragraphs to highlight.
+    highlight = True
+    highlight_max_paragraphs: int = 20
     highlight_device: str = 'cuda:1'
+
+    # Response settings
+    max_paragraphs_per_doc = 3
 
     class Config:
         env_file = '.env'

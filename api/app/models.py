@@ -19,14 +19,10 @@ class Article(BaseModel):
     publish_time: str = None
     paragraphs: List[str] = []
     highlights: List[List[tuple]] = []
+    highlighted_abstract: bool = False
 
     @validator('highlights')
     def highlights_(cls, v, values):
         if v:
             assert len(v) == len(values['paragraphs'])
         return v
-
-
-class QueryFacet(BaseModel):
-    name: str
-    values: List[str]
