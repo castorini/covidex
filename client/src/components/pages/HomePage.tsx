@@ -10,6 +10,7 @@ import { HOME_ROUTE, API_BASE, SEARCH_ENDPOINT } from '../../shared/Constants';
 import Loading from '../common/Loading';
 import SearchResult from '../SearchResult';
 import HomeText from '../HomeText';
+import { tokenize } from '../../shared/Util';
 
 const HomePage = ({ history, location }: RouteComponentProps) => {
   const urlParams = new URLSearchParams(useLocation().search);
@@ -17,7 +18,7 @@ const HomePage = ({ history, location }: RouteComponentProps) => {
 
   const [loading, setLoading] = useState<Boolean>(false);
   const [queryInputText, setQueryInputText] = useState<string>(query || '');
-  const [searchResults, setSearchResults] = useState<Array<any>|null>(null);
+  const [searchResults, setSearchResults] = useState<Array<any> | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,7 +31,9 @@ const HomePage = ({ history, location }: RouteComponentProps) => {
       try {
         setLoading(true);
         setSearchResults(null);
-        let response = await fetch(`${API_BASE}${SEARCH_ENDPOINT}?query=${query.toLowerCase()}`)
+        let response = await fetch(
+          `${API_BASE}${SEARCH_ENDPOINT}?query=${query.toLowerCase()}`,
+        );
         setLoading(false);
         let data = await response.json();
         setSearchResults(data);
@@ -38,17 +41,23 @@ const HomePage = ({ history, location }: RouteComponentProps) => {
         setLoading(false);
         setSearchResults([]);
       }
-    }
+    };
     fetchData();
   }, [query]);
 
-  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => setQueryInputText(event.target.value);
-  const submitQuery = () => history.push(`${HOME_ROUTE}?query=${encodeURI(queryInputText)}`);
+  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setQueryInputText(event.target.value);
+
+  const submitQuery = () =>
+    history.push(`${HOME_ROUTE}?query=${encodeURI(queryInputText)}`);
+
   const handleEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       submitQuery();
     }
-  }
+  };
+
+  const queryTokens = tokenize(query);
 
   return (
     <PageWrapper>
@@ -65,7 +74,7 @@ const HomePage = ({ history, location }: RouteComponentProps) => {
             type="submit"
             onSubmit={submitQuery}
             onClick={submitQuery}
-            onMouseDown={e => e.preventDefault()}
+            onMouseDown={(e) => e.preventDefault()}
           >
             <SearchIcon />
             Search
@@ -74,15 +83,25 @@ const HomePage = ({ history, location }: RouteComponentProps) => {
         {loading && <Loading />}
         <SearchResults>
           {!query && <HomeText />}
-          {query && searchResults !== null && (searchResults.length === 0
-            ? <NoResults>No results found</NoResults>
-            : searchResults.map((article, i) =>
-              <SearchResult article={article} key={i} number={i + 1} />))}
+          {query &&
+            searchResults !== null &&
+            (searchResults.length === 0 ? (
+              <NoResults>No results found</NoResults>
+            ) : (
+              searchResults.map((article, i) => (
+                <SearchResult
+                  article={article}
+                  key={i}
+                  number={i + 1}
+                  queryTokens={queryTokens}
+                />
+              ))
+            ))}
         </SearchResults>
       </PageContent>
     </PageWrapper>
   );
-}
+};
 
 export default withRouter(HomePage);
 
@@ -123,7 +142,8 @@ const SearchButton = styled(Button)`
   outline: none;
   transition: background 0.1s;
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     background: ${({ theme }) => theme.secondary};
   }
 `;

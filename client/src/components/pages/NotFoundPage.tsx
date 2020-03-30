@@ -6,11 +6,14 @@ const NotFoundPage = () => {
     <PageWrapper>
       <PageContent>
         <div>
-          Not found <span role="img" aria-label="sad face">😞</span>
+          Not found{' '}
+          <span role="img" aria-label="sad face">
+            😞
+          </span>
         </div>
       </PageContent>
     </PageWrapper>
   );
-}
+};
 
 export default NotFoundPage;

@@ -7,16 +7,15 @@ export const useResize = (ref: RefObject<any>) => {
   const handleResize = () => {
     setWidth(ref.current.offsetWidth);
     setHeight(ref.current.offsetHeight);
-  }
+  };
 
   useEffect(() => {
     const current = ref.current;
     current && current.addEventListener('resize', handleResize);
     return () => {
       current.removeEventListener('resize', handleResize);
-    }
+    };
   });
 
   return [width, height];
-}
-  
+};

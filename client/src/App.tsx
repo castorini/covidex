@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
 
 import Navbar from './components/navigation/Navbar';
@@ -13,7 +9,6 @@ import NotFoundPage from './components/pages/NotFoundPage';
 
 import { HOME_ROUTE } from './shared/Constants';
 import Theme from './shared/Theme';
-
 
 const App = () => {
   return (
@@ -34,7 +29,7 @@ const App = () => {
       </Router>
     </ThemeProvider>
   );
-}
+};
 
 export default App;
 

@@ -49,7 +49,7 @@ export const LinkStyle = css`
 
   &:hover {
     color: ${({ theme }) => theme.secondary};
-    text-decoration: underline;  
+    text-decoration: underline;
   }
 `;
 
@@ -61,11 +61,11 @@ export const PageWrapper = styled.div`
   height: 100%;
   width: 100%;
   margin: auto;
-  margin-top: 32px;
+  margin-top: 16px;
   padding: 24px 48px;
 
   @media only screen and (max-width: ${TABLET_BREAKPOINT}px) {
-    padding: 24px;
+    padding: 24px 16px;
   }
 `;
 
@@ -91,5 +91,4 @@ export const FadeInText = keyframes`
   100% {
     display: inline;
     opacity: 1;
-  }`
-;
+  }`;

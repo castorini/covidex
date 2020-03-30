@@ -15,7 +15,7 @@ const Navbar = ({ history }: RouteComponentProps) => {
       </PageContent>
     </NavbarWrapper>
   );
-}
+};
 
 export default withRouter(Navbar);
 
@@ -24,9 +24,13 @@ const NavbarWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   position: relative;
+  background: linear-gradient(
+    90deg,
+    ${({ theme }) => `${theme.primary}, ${theme.secondary}`}
+  );
 
   @media only screen and (max-width: ${TABLET_BREAKPOINT}px) {
-    padding: 24px;
+    padding: 24px 16px;
   }
 `;
 
@@ -35,15 +39,5 @@ const NavbarLogo = styled.div`
   position: relative;
   font-weight: 800;
   cursor: pointer;
-
-  &:after {
-    position: absolute;
-    content: '';
-    height: 4px;
-    bottom: -8px; 
-
-    left: 0;
-    width: 32px;
-    background: ${({ theme }) => theme.primary};
-  }
+  color: ${({ theme }) => theme.white};
 `;

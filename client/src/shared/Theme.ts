@@ -13,4 +13,3 @@ export default {
   lightGrey: '#E8E8E8',
   darkGrey: '#555555',
 };
-  
