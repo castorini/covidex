@@ -168,9 +168,11 @@ const SearchResult = ({ article, number, queryTokens }: SearchResultProps) => {
           </>
         )}
         {/* Display paragraphs */}
-        <ResultText collapsed={collapsed} marginTop={20} marginBottom={4}>
-          <SectionTitle className="hideCollapsed">Full-Text Excerpt</SectionTitle>
-        </ResultText>
+        {paragraphs && paragraphs.length > 0 && (
+          <ResultText collapsed={collapsed} marginTop={20} marginBottom={4}>
+            <SectionTitle className="hideCollapsed">Full-Text Excerpt</SectionTitle>
+          </ResultText>
+        )}
         {paragraphs.map((paragraph, i) => (
           <Paragraph marginTop={i === 0 ? 0 : 16} key={i} collapsed={collapsed}>
             {highlightText(paragraph, highlights[i], queryTokens)}
