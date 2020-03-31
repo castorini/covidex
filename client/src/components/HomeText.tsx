@@ -55,10 +55,7 @@ const HomeText = () => {
         <Link href="https://github.com/nikhilro" target="_blank" rel="noopener noreferrer">
           Nikhil Gupta
         </Link>
-        .
-      </Paragraph>
-      <Paragraph>
-        Special thanks to&nbsp;
+        . Special thanks to&nbsp;
         <Link href="https://colinraffel.com/  " target="_blank" rel="noopener noreferrer">
           Colin Raffel
         </Link>
