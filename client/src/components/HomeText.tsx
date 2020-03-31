@@ -57,6 +57,13 @@ const HomeText = () => {
         </Link>
         .
       </Paragraph>
+      <Paragraph>
+        Special thanks to&nbsp;
+        <Link href="https://colinraffel.com/  " target="_blank" rel="noopener noreferrer">
+          Colin Raffel
+        </Link>
+        &nbsp;for his help in pretraining T5 models for the biomedical domain.
+      </Paragraph>
     </div>
   );
 };

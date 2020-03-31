@@ -97,6 +97,10 @@ const adjustHighlights = (
   highlights: Array<[number, number]>,
   adjustment: number,
 ): Array<[number, number]> => {
+  if (!highlights) {
+    return [];
+  }
+
   return highlights.map((highlight) => [highlight[0] + adjustment, highlight[1] + adjustment]);
 };
 
@@ -119,10 +123,17 @@ const SearchResult = ({ article, number, queryTokens }: SearchResultProps) => {
     : '';
 
   // Separate abstract from other paragraphs if it was highlighted
-  const abstract = article.abstract ? parseAbstract(article.abstract) : '';
+  const originalAbstract = article.highlighted_abstract
+    ? article.paragraphs[0]
+    : article.abstract
+    ? article.abstract
+    : '';
+
+  const abstract = parseAbstract(originalAbstract);
   const abstractHighlights = article.highlighted_abstract
-    ? adjustHighlights(article.highlights[0], abstract.length - article.abstract.length)
+    ? adjustHighlights(article.highlights[0], originalAbstract.length - abstract.length)
     : [];
+
   const paragraphs = article.highlighted_abstract
     ? article.paragraphs.slice(1)
     : article.paragraphs;
