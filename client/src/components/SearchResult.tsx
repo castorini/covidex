@@ -33,7 +33,11 @@ const highlightText = (
   queryTokens: Array<string>,
 ): Array<string | ReactNode> => {
   if (!highlights) {
-    return [<TextSpan className="hideCollapsed" key={0}>{text}</TextSpan>];
+    return [
+      <TextSpan className="hideCollapsed" key={0}>
+        {text}
+      </TextSpan>,
+    ];
   }
 
   let highlighted: Array<string | ReactNode> = [];
@@ -85,8 +89,16 @@ const highlightMatches = (queryTokens: Array<string>, text: string): ReactNode =
 
 // Remove "abstract" string from beginning of abstract
 const parseAbstract = (abstract: string): string => {
-  return abstract.replace(/^\s*abstract\s*/ig, '');
-}
+  return abstract.replace(/^\s*abstract\s*/gi, '');
+};
+
+// adjust highlights based on difference
+const adjustHighlights = (
+  highlights: Array<[number, number]>,
+  adjustment: number,
+): Array<[number, number]> => {
+  return highlights.map((highlight) => [highlight[0] + adjustment, highlight[1] + adjustment]);
+};
 
 const SearchResult = ({ article, number, queryTokens }: SearchResultProps) => {
   const fullTextRef = useRef(null);
@@ -102,13 +114,21 @@ const SearchResult = ({ article, number, queryTokens }: SearchResultProps) => {
   }
 
   // Indicate if medRxiv or bioRxiv is the source
-  const source = ["medrxiv", "biorxiv"].includes(article.source.toLowerCase()) ?
-    article.source.replace('r', 'R') : '';
+  const source = ['medrxiv', 'biorxiv'].includes(article.source.toLowerCase())
+    ? article.source.replace('r', 'R')
+    : '';
 
   // Separate abstract from other paragraphs if it was highlighted
-  const abstract = article.abstract ? parseAbstract(article.abstract) : null;
-  const abstractHighlights =  article.highlighted_abstract ? article.highlights[0] : [];
-  const paragraphs = article.highlighted_abstract ? article.paragraphs.slice(1) : article.paragraphs;
+  const abstract = article.abstract ? parseAbstract(article.abstract) : '';
+  const abstractHighlights = article.highlighted_abstract
+    ? adjustHighlights(article.highlights[0], abstract.length - article.abstract.length)
+    : [];
+  const paragraphs = article.highlighted_abstract
+    ? article.paragraphs.slice(1)
+    : article.paragraphs;
+  const highlights = article.highlighted_abstract
+    ? article.highlights.slice(1)
+    : article.highlights;
 
   return (
     <SearchResultWrapper>
@@ -125,29 +145,25 @@ const SearchResult = ({ article, number, queryTokens }: SearchResultProps) => {
         {article.publish_time && <PublishTime>({article.publish_time})</PublishTime>}
       </Subtitle>
       <div ref={fullTextRef}>
-        {article.abstract && (
-          <ResultText collapsed={collapsed} marginBottom={4}>
-            <SectionTitle className="hideCollapsed">Abstract</SectionTitle>
-          </ResultText>
-        )}
-        {/* Display abstract if not highlighted */}
+        {/* Display abstract */}
         {abstract && (
-          <Paragraph marginBottom={16} collapsed={collapsed}>
-            {highlightText(abstract, abstractHighlights, queryTokens)}
-          </Paragraph>
+          <>
+            <ResultText collapsed={collapsed} marginBottom={4}>
+              <SectionTitle className="hideCollapsed">Abstract</SectionTitle>
+            </ResultText>
+            <Paragraph marginBottom={16} collapsed={collapsed}>
+              {highlightText(abstract, abstractHighlights, queryTokens)}
+            </Paragraph>
+          </>
         )}
         {/* Display paragraphs */}
         <ResultText collapsed={collapsed} marginTop={20} marginBottom={4}>
           <SectionTitle className="hideCollapsed">Full-Text Excerpt</SectionTitle>
         </ResultText>
         {paragraphs.map((paragraph, i) => (
-          <Paragraph
-            marginTop={i === 0 ? 0 : 16}
-            key={i}
-            collapsed={collapsed}
-          >
-            {highlightText(paragraph, article.highlights[i], queryTokens)}
-            {i === article.paragraphs.length - 1 && article.highlights[i] && (
+          <Paragraph marginTop={i === 0 ? 0 : 16} key={i} collapsed={collapsed}>
+            {highlightText(paragraph, highlights[i], queryTokens)}
+            {i === paragraphs.length - 1 && highlights[i] && (
               <Ellipsis className="showCollapsed">...</Ellipsis>
             )}
           </Paragraph>
