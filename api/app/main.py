@@ -1,7 +1,7 @@
 import pkg_resources
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
+from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
 from app.routers import search
@@ -30,6 +30,10 @@ if not settings.development:
     app.mount("/static",
               StaticFiles(directory=pkg_resources.resource_filename(__name__, 'static')),
               name="static")
+    app.mount("/manifest.json", FileResponse('static/manifest.json'))
+    app.mount("/favicon.ico", FileResponse('static/favicon.ico', media_type="image/png"))
+    app.mount("/logo192.png", FileResponse('static/logo192.png', media_type="image/png"))
+    app.mount("/logo512.png", FileResponse('static/logo512.png', media_type="image/png"))
 
     @app.get("/.*", include_in_schema=False)
     def root():
