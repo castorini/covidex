@@ -14,4 +14,4 @@ mv $STATIC_PATH/static/* $STATIC_PATH
 cd api
 pip install -r requirements.txt
 export DEVELOPMENT=False
-uvicorn app.main:app --port=${PORT:-8080} --host 0.0.0.0
+uvicorn app.main:app --port=${PORT:-80} --host 0.0.0.0
