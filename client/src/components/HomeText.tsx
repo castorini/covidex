@@ -6,38 +6,72 @@ const HomeText = () => {
   return (
     <div>
       <Paragraph>
-        <Bold>Covidex</Bold> represents an effort to build natural language processing and
-        information retrieval components for exploring the&nbsp;
+        <Bold>Neural Covidex</Bold> applies state-of-the-art neural network models 
+        and artificial intelligence (AI) techniques to answer questions using the&nbsp;
         <Link href="https://pages.semanticscholar.org/coronavirus-research">
           COVID-19 Open Research Dataset (CORD-19)
         </Link>
-        &nbsp;provided by the <Link href="https://allenai.org/">Allen Institute for AI</Link>. We
-        hope that these tools can help researchers generate new insights in support of the fight
-        against the disease.
+        &nbsp;provided by the <Link href="https://allenai.org/">Allen Institute for AI</Link>.
+        We hope that our service can contribute to the fight against this global pandemic 
+        by helping policy makers and clinicians make better-informed decisions and by 
+        helping researchers generate new insights.
       </Paragraph>
       <Paragraph>
-        The <Bold>Neural Covidex</Bold> applies state-of-the-art neural network models to improve
-        the output of our&nbsp;
-        <Link href="http://covidex.io/" target="_blank" rel="noopener noreferrer">
-          basic search interface
-        </Link>
-        &nbsp;that relies on keyword matching. The entire software stack is available open-source
-        on&nbsp;
-        <Link href="https://github.com/castorini/covidex" target="_blank" rel="noopener noreferrer">
-          Github
-        </Link>
-        , which means that in addition to using this search application on the web, individual
-        components such as the searcher, neural reranker, and passage highlighter can be reused
-        elsewhere as well. We'd love other researchers to build on these components!
+        To properly calibrate expectations, our system relies on inference using 
+        computationally-expensive neural models at search time, and thus the 
+        interface is not as responsive as we'd like. We're working hard on making the 
+        system more robust and faster, so please be patient! In terms of answer quality, 
+        the results are better than keyword search overall (at least in our opinion), 
+        but as is often the case with neural networks, sometimes the output can leave 
+        users scratching their heads. We're also working hard on improving the answers!
       </Paragraph>
       <Paragraph>
-        To properly calibrate expectations, our system relies on inference using
-        computational-expensive neural models at search time, and thus the interface is not as
-        responsive as we'd like. We're working hard on making the system more robust and faster, so
-        please be patient! In terms of search quality, results are much better than keyword-only
-        search overall (at least in our opinion), but as is often the case with neural networks,
-        sometimes the output can leave users scratching their heads.
+        Beyond the search application above, our efforts include the following:
       </Paragraph>
+      <List>
+        <ListItem>
+          A&nbsp;<Link href="https://basic.covidex.ai" target="_blank" rel="noopener noreferrer">
+            baseline keyword search interface
+          </Link>&nbsp;that 
+          provides keyword search and faceted browsing capabilities. 
+          Under the covers, the interface is powered by&nbsp;
+          <Link href="https://projectblacklight.org" target="_blank" rel="noopener noreferrer">
+            Blacklight
+          </Link>,&nbsp;
+          <Link href="https://lucene.apache.org/solr" target="_blank" rel="noopener noreferrer">
+            Solr
+          </Link>, and the&nbsp;
+          <Link href="http://anserini.io/" target="_blank" rel="noopener noreferrer">
+            Anserini
+          </Link>&nbsp;IR 
+          toolkit (via Solrini), which is Anserini's Solr adaptor.
+        </ListItem>
+        <ListItem>
+          Backend components (code as well as pre-built indexes) for directly searching
+          and manipulating the collection via&nbsp;
+          <Link href="http://pyserini.io/" target="_blank" rel="noopener noreferrer">
+            Pyserini
+          </Link>&nbsp;(Python 
+          bindings for Anserini), along with sample integration of search with&nbsp;
+          <Link href="https://huggingface.co/transformers" target="_blank" rel="noopener noreferrer">
+            HuggingFace's neural models
+          </Link>.&nbsp;Example 
+          Python notebooks and other resources for getting started can be found&nbsp;
+          <Link href="https://github.com/castorini/anserini/blob/master/docs/experiments-covid.md" target="_blank" rel="noopener noreferrer">
+            here
+          </Link>.
+        </ListItem>
+        <ListItem>
+          The entire software stack behind the Neural Covidex is available open-source on&nbsp;
+          <Link href="https://github.com/castorini/covidex" target="_blank" rel="noopener noreferrer">
+            Github
+          </Link>&nbsp;which 
+          means that in addition to using our search application on the web above, 
+          individual components such as the searcher, neural reranker, and passage 
+          highlighter can be reused elsewhere as well. We'd love other researchers to 
+          build on these components!
+        </ListItem>
+      </List>
       <Paragraph>
         This project is led by&nbsp;
         <Link href="https://cs.uwaterloo.ca/~jimmylin/" target="_blank" rel="noopener noreferrer">
@@ -56,7 +90,7 @@ const HomeText = () => {
           Nikhil Gupta
         </Link>
         . Special thanks to&nbsp;
-        <Link href="https://colinraffel.com/  " target="_blank" rel="noopener noreferrer">
+        <Link href="https://colinraffel.com/" target="_blank" rel="noopener noreferrer">
           Colin Raffel
         </Link>
         &nbsp;for his help in pretraining T5 models for the biomedical domain.
@@ -66,6 +100,14 @@ const HomeText = () => {
 };
 
 export default HomeText;
+
+const List = styled.ul`
+  ${Body}
+`;
+
+const ListItem = styled.li`
+  ${Body}
+`;
 
 const Paragraph = styled.p`
   ${Body}
