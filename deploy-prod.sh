@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# kill running servers
+pkill -9 uvicorn
+
 sh ./deploy-client.sh
 
 # run server without the development flag
