@@ -30,10 +30,22 @@ if not settings.development:
     app.mount("/static",
               StaticFiles(directory=pkg_resources.resource_filename(__name__, 'static')),
               name="static")
-    app.mount("/manifest.json", FileResponse('static/manifest.json'))
-    app.mount("/favicon.ico", FileResponse('static/favicon.ico', media_type="image/png"))
-    app.mount("/logo192.png", FileResponse('static/logo192.png', media_type="image/png"))
-    app.mount("/logo512.png", FileResponse('static/logo512.png', media_type="image/png"))
+
+    @app.get("/manifest.json", include_in_schema=False)
+    def manifest():
+        return FileResponse('static/manifest.json')
+
+    @app.get("/favicon.ico", include_in_schema=False)
+    def favicon():
+        return FileResponse('static/favicon.ico', media_type="image/png")
+
+    @app.get("/logo192.png", include_in_schema=False)
+    def favicon():
+        return FileResponse('static/logo192.png', media_type="image/png")
+
+    @app.get("/logo512.png", include_in_schema=False)
+    def favicon():
+        return FileResponse('static/logo512.png', media_type="image/png")
 
     @app.get("/.*", include_in_schema=False)
     def root():

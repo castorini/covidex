@@ -14,11 +14,15 @@ import { tokenize } from '../../shared/Util';
 
 const HomePage = ({ history, location }: RouteComponentProps) => {
   const urlParams = new URLSearchParams(useLocation().search);
-  const query = urlParams.get('query')?.toLowerCase() || '';
+  const query = urlParams.get('query') || '';
 
   const [loading, setLoading] = useState<Boolean>(false);
   const [queryInputText, setQueryInputText] = useState<string>(query || '');
   const [searchResults, setSearchResults] = useState<Array<any> | null>(null);
+
+  useEffect(() => {
+    setQueryInputText(query);
+  }, [query]);
 
   useEffect(() => {
     const fetchData = async () => {

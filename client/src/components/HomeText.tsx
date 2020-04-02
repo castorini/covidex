@@ -5,7 +5,7 @@ import { Body, Link, LinkStyle } from '../shared/Styles';
 
 const HomeText = () => {
   return (
-    <div>
+    <HomeTextWrapper>
       <Paragraph>
         <Bold>Neural Covidex</Bold> applies state-of-the-art neural network models
         and artificial intelligence (AI) techniques to answer questions using the&nbsp;
@@ -41,8 +41,8 @@ const HomeText = () => {
             </QueryLink>
           </ListItem>
           <ListItem>
-            <QueryLink to={`/?query=Tell%20me%20about%20igg%20and%20igm%20tests%20for%20covid-19.`}>
-              Tell me about igg and igm tests for covid-19.
+            <QueryLink to={`/?query=Tell%20me%20about%20IgG%20and%20IgM%20tests%20for%20covid-19.`}>
+              Tell me about IgG and IgM tests for covid-19.
             </QueryLink>
           </ListItem>
           <ListItem>
@@ -80,7 +80,7 @@ const HomeText = () => {
           <Link href="http://anserini.io/" target="_blank" rel="noopener noreferrer">
             Anserini
           </Link>&nbsp;IR
-          toolkit (via Solrini), which is Anserini's Solr adaptor.
+          toolkit (via Solrini, which is Anserini's Solr adaptor).
         </ListItem>
         <ListItem>
           Backend components (code as well as pre-built indexes) for directly searching
@@ -131,11 +131,15 @@ const HomeText = () => {
         </Link>
         &nbsp;for his help in pretraining T5 models for the biomedical domain.
       </Paragraph>
-    </div>
+    </HomeTextWrapper>
   );
 };
 
 export default HomeText;
+
+const HomeTextWrapper = styled.div`
+  margin-top: 16px;
+`;
 
 const List = styled.ul`
   ${Body}
