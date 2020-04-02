@@ -22,8 +22,11 @@ code {
   box-sizing: border-box;
 }
 
-button, input {
+button, input, textarea {
   font-size: 16px;
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
 }
 
 .ReactCollapse--collapse {
