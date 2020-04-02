@@ -1,15 +1,6 @@
 #!/bin/bash
 
-# build client
-echo "Building client..."
-export BUILD_PATH=./client/build
-export STATIC_PATH=./api/app/static
-
-rm -rf $BUILD_PATH
-rm -rf $STATIC_PATH
-cd client && yarn install --silent && yarn build && cd ..
-mv $BUILD_PATH $STATIC_PATH
-mv $STATIC_PATH/static/* $STATIC_PATH
+sh ./deploy-client.sh
 
 # run server without the development flag
 cd api
@@ -30,4 +21,4 @@ done
 echo "Warming up models..."
 curl http://localhost:$PORT/api/search?query=test > /dev/null
 
-echo "Server started successfully!"
+echo "Server started successfully! Logs are available at api/nohup.out"

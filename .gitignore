@@ -15,3 +15,5 @@ variables/
 # client builds
 build/
 static/
+
+*.out
