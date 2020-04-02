@@ -1,0 +1,202 @@
+<topics task="2019 TREC Precision Medicine">
+  <topic number="1">
+    <disease>melanoma</disease>
+    <gene>BRAF (E586K)</gene>
+    <demographic>64-year-old female</demographic>
+  </topic>
+  <topic number="2">
+    <disease>cholangiocarcinoma</disease>
+    <gene>BRAF (V600E)</gene>
+    <demographic>64-year-old male</demographic>
+  </topic>
+  <topic number="3">
+    <disease>prostate cancer</disease>
+    <gene>ATM deletion</gene>
+    <demographic>50-year-old male</demographic>
+  </topic>
+  <topic number="4">
+    <disease>gastric cancer</disease>
+    <gene>ERBB2 amplification</gene>
+    <demographic>64-year-old male</demographic>
+  </topic>
+  <topic number="5">
+    <disease>cervical cancer</disease>
+    <gene>ERBB2 (S310Y)</gene>
+    <demographic>45-year-old female</demographic>
+  </topic>
+  <topic number="6">
+    <disease>non-small cell lung cancer</disease>
+    <gene>EGFR (D770N)</gene>
+    <demographic>54-year-old female</demographic>
+  </topic>
+  <topic number="7">
+    <disease>non-small cell lung cancer</disease>
+    <gene>EGFR (T790M)</gene>
+    <demographic>50-year-old male</demographic>
+  </topic>
+  <topic number="8">
+    <disease>bladder cancer</disease>
+    <gene>FGFR3 (S249C)</gene>
+    <demographic>64-year-old male</demographic>
+  </topic>
+  <topic number="9">
+    <disease>gastrointestinal stromal tumor</disease>
+    <gene>KIT (exon 9 502_503 duplication)</gene>
+    <demographic>58-year-old male</demographic>
+  </topic>
+  <topic number="10">
+    <disease>mucosal melanoma</disease>
+    <gene>KIT (L576P), KIT amplification</gene>
+    <demographic>62-year-old female</demographic>
+  </topic>
+  <topic number="11">
+    <disease>gastrointestinal stromal tumor</disease>
+    <gene>PDGFRA (D842V)</gene>
+    <demographic>56-year-old female</demographic>
+  </topic>
+  <topic number="12">
+    <disease>inflammatory myofibroblastic tumor</disease>
+    <gene>RANBP2-ALK fusion</gene>
+    <demographic>32-year-old female</demographic>
+  </topic>
+  <topic number="13">
+    <disease>lung adenocarcinoma</disease>
+    <gene>EZR-ROS1 fusion</gene>
+    <demographic>72-year-old male</demographic>
+  </topic>
+  <topic number="14">
+    <disease>colon cancer</disease>
+    <gene>MLH1 methylation suppression (microsatellite instability)</gene>
+    <demographic>68-year-old male</demographic>
+  </topic>
+  <topic number="15">
+    <disease>lung adenocarcinoma</disease>
+    <gene>KRAS (G12V), high tumor mutational burden</gene>
+    <demographic>57-year-old male</demographic>
+  </topic>
+  <topic number="16">
+    <disease>papillary thyroid carcinoma</disease>
+    <gene>BRAF (V600E)</gene>
+    <demographic>51-year-old female</demographic>
+  </topic>
+  <topic number="17">
+    <disease>glioblastoma</disease>
+    <gene>IDH1 (R132H)</gene>
+    <demographic>50-year-old male</demographic>
+  </topic>
+  <topic number="18">
+    <disease>lung adenocarcinoma</disease>
+    <gene>SND1-BRAF fusion</gene>
+    <demographic>54-year-old female</demographic>
+  </topic>
+  <topic number="19">
+    <disease>colon cancer</disease>
+    <gene>ERBB2 amplification</gene>
+    <demographic>45-year-old female</demographic>
+  </topic>
+  <topic number="20">
+    <disease>pancreatic cancer</disease>
+    <gene>BRCA2</gene>
+    <demographic>50-year-old male</demographic>
+  </topic>
+  <topic number="21">
+    <disease>gastrointestinal stromal tumor</disease>
+    <gene>KIT (V654A)</gene>
+    <demographic>70-year-old male</demographic>
+  </topic>
+  <topic number="22">
+    <disease>colon cancer</disease>
+    <gene>PIK3CA (E545K)</gene>
+    <demographic>45-year-old female</demographic>
+  </topic>
+  <topic number="23">
+    <disease>breast cancer</disease>
+    <gene>AURKA amplification</gene>
+    <demographic>70-year-old female</demographic>
+  </topic>
+  <topic number="24">
+    <disease>cholangiocarcinoma</disease>
+    <gene>PIK3CA (1047H)</gene>
+    <demographic>62-year-old male</demographic>
+  </topic>
+  <topic number="25">
+    <disease>melanoma</disease>
+    <gene>NRAS (Q61H)</gene>
+    <demographic>32-year-old male</demographic>
+  </topic>
+  <topic number="26">
+    <disease>squamous cell lung cancer</disease>
+    <gene>FGFR1 amplification</gene>
+    <demographic>65-year-old female</demographic>
+  </topic>
+  <topic number="27">
+    <disease>non-small cell lung cancer</disease>
+    <gene>KRAS (G12C)</gene>
+    <demographic>70-year-old male</demographic>
+  </topic>
+  <topic number="28">
+    <disease>ovarian cancer</disease>
+    <gene>BRCA1</gene>
+    <demographic>64-year-old female</demographic>
+  </topic>
+  <topic number="29">
+    <disease>chondrosarcoma</disease>
+    <gene>IDH1</gene>
+    <demographic>26-year-old female</demographic>
+  </topic>
+  <topic number="30">
+    <disease>endometrial cancer</disease>
+    <gene>PIK3R1</gene>
+    <demographic>58-year-old female</demographic>
+  </topic>
+  <topic number="31">
+    <disease>aortic aneurysm</disease>
+    <gene>ACTA2</gene>
+    <demographic>63-year-old female</demographic>
+  </topic>
+  <topic number="32">
+    <disease>Loeys-Dietz syndrome</disease>
+    <gene>TGFBR2</gene>
+    <demographic>42-year-old male</demographic>
+  </topic>
+  <topic number="33">
+    <disease>long QT syndrome</disease>
+    <gene>KCNQ1</gene>
+    <demographic>15-year-old male</demographic>
+  </topic>
+  <topic number="34">
+    <disease>Brugada syndrome</disease>
+    <gene>SCN5A</gene>
+    <demographic>36-year-old female</demographic>
+  </topic>
+  <topic number="35">
+    <disease>familial hypercholesterolemia</disease>
+    <gene>PCSK9</gene>
+    <demographic>24-year-old female</demographic>
+  </topic>
+  <topic number="36">
+    <disease>Li-Fraumeni syndrome</disease>
+    <gene>TP53</gene>
+    <demographic>14-year-old female</demographic>
+  </topic>
+  <topic number="37">
+    <disease>dilated cardiomyopathy</disease>
+    <gene>LMNA</gene>
+    <demographic>32-year-old male</demographic>
+  </topic>
+  <topic number="38">
+    <disease>Peutz-Jeghers syndrome</disease>
+    <gene>STK11</gene>
+    <demographic>11-year-old male</demographic>
+  </topic>
+  <topic number="39">
+    <disease>long QT syndrome</disease>
+    <gene>KCNH2</gene>
+    <demographic>19-year-old female</demographic>
+  </topic>
+  <topic number="40">
+    <disease>malignant hyperthermia</disease>
+    <gene>RYR1</gene>
+    <demographic>54-year-old male</demographic>
+  </topic>
+</topics>

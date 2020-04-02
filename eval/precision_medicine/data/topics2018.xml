@@ -1,0 +1,252 @@
+<topics task="2018 TREC Precision Medicine">
+  <topic number="1">
+    <disease>melanoma</disease>
+    <gene>BRAF (V600E)</gene>
+    <demographic>64-year-old male</demographic>
+  </topic>
+  <topic number="2">
+    <disease>melanoma</disease>
+    <gene>BRAF (V600K)</gene>
+    <demographic>54-year-old male</demographic>
+  </topic>
+  <topic number="3">
+    <disease>melanoma</disease>
+    <gene>BRAF (V600R)</gene>
+    <demographic>80-year-old male</demographic>
+  </topic>
+  <topic number="4">
+    <disease>melanoma</disease>
+    <gene>BRAF (K601E)</gene>
+    <demographic>38-year-old male</demographic>
+  </topic>
+  <topic number="5">
+    <disease>melanoma</disease>
+    <gene>BRAF (V600E), PTEN loss of function</gene>
+    <demographic>57-year-old male</demographic>
+  </topic>
+  <topic number="6">
+    <disease>melanoma</disease>
+    <gene>BRAF (V600E), NRAS (Q61R)</gene>
+    <demographic>67-year-old male</demographic>
+  </topic>
+  <topic number="7">
+    <disease>melanoma</disease>
+    <gene>BRAF amplification</gene>
+    <demographic>61-year-old male</demographic>
+  </topic>
+  <topic number="8">
+    <disease>melanoma</disease>
+    <gene>NRAS (Q61R)</gene>
+    <demographic>63-year-old female</demographic>
+  </topic>
+  <topic number="9">
+    <disease>melanoma</disease>
+    <gene>NRAS (Q61L)</gene>
+    <demographic>34-year-old female</demographic>
+  </topic>
+  <topic number="10">
+    <disease>melanoma</disease>
+    <gene>KIT (L576P)</gene>
+    <demographic>65-year-old female</demographic>
+  </topic>
+  <topic number="11">
+    <disease>melanoma</disease>
+    <gene>KIT (L576P), KIT amplification</gene>
+    <demographic>56-year-old female</demographic>
+  </topic>
+  <topic number="12">
+    <disease>melanoma</disease>
+    <gene>KIT (K642E)</gene>
+    <demographic>62-year-old female</demographic>
+  </topic>
+  <topic number="13">
+    <disease>melanoma</disease>
+    <gene>KIT (N822Y)</gene>
+    <demographic>39-year-old female</demographic>
+  </topic>
+  <topic number="14">
+    <disease>melanoma</disease>
+    <gene>KIT amplification</gene>
+    <demographic>66-year-old female</demographic>
+  </topic>
+  <topic number="15">
+    <disease>melanoma</disease>
+    <gene>NF1 truncation</gene>
+    <demographic>70-year-old male</demographic>
+  </topic>
+  <topic number="16">
+    <disease>melanoma</disease>
+    <gene>NTRK1 rearrangement</gene>
+    <demographic>60-year-old male</demographic>
+  </topic>
+  <topic number="17">
+    <disease>melanoma</disease>
+    <gene>TP53 loss of function</gene>
+    <demographic>72-year-old male</demographic>
+  </topic>
+  <topic number="18">
+    <disease>melanoma</disease>
+    <gene>tumor cells with >50% membranous PD-L1 expression</gene>
+    <demographic>48-year-old female</demographic>
+  </topic>
+  <topic number="19">
+    <disease>melanoma</disease>
+    <gene>tumor cells negative for PD-L1 expression</gene>
+    <demographic>73-year-old male</demographic>
+  </topic>
+  <topic number="20">
+    <disease>melanoma</disease>
+    <gene>high tumor mutational burden</gene>
+    <demographic>86-year-old female</demographic>
+  </topic>
+  <topic number="21">
+    <disease>melanoma</disease>
+    <gene>extensive tumor infiltrating lymphocytes</gene>
+    <demographic>49-year-old male</demographic>
+  </topic>
+  <topic number="22">
+    <disease>melanoma</disease>
+    <gene>no tumor infiltrating lymphocytes</gene>
+    <demographic>74-year-old female</demographic>
+  </topic>
+  <topic number="23">
+    <disease>melanoma</disease>
+    <gene>PTEN loss of function</gene>
+    <demographic>68-year-old male</demographic>
+  </topic>
+  <topic number="24">
+    <disease>melanoma</disease>
+    <gene>APC loss of function</gene>
+    <demographic>47-year-old male</demographic>
+  </topic>
+  <topic number="25">
+    <disease>melanoma</disease>
+    <gene>high serum LDH levels</gene>
+    <demographic>69-year-old female</demographic>
+  </topic>
+  <topic number="26">
+    <disease>colorectal cancer</disease>
+    <gene>NRAS</gene>
+    <demographic>49-year-old male</demographic>
+  </topic>
+  <topic number="27">
+    <disease>medullary thyroid carcinoma</disease>  
+    <gene>RET</gene>
+    <demographic>45-year-old female</demographic>
+  </topic>
+  <topic number="28">
+    <disease>neuroblastoma</disease>
+    <gene>ALK</gene>
+    <demographic>4-year-old female</demographic>
+  </topic>
+  <topic number="29">
+    <disease>esophageal cancer</disease>
+    <gene>EGFR</gene>
+    <demographic>67-year-old male</demographic>
+  </topic>
+  <topic number="30">
+    <disease>lung cancer</disease>
+    <gene>ROS1</gene>
+    <demographic>71-year-old female</demographic>
+  </topic>
+  <topic number="31">
+    <disease>head and neck squamous cell carcinoma</disease>
+    <gene>CDKN2A</gene>
+    <demographic>64-year-old male</demographic>
+  </topic>
+  <topic number="32">
+    <disease>leukemia</disease>
+    <gene>ABL1</gene>
+    <demographic>4-year-old female</demographic>
+  </topic>
+  <topic number="33">
+    <disease>gastric cancer</disease>
+    <gene>EGFR</gene>
+    <demographic>60-year-old female</demographic>
+  </topic>
+  <topic number="34">
+    <disease>sarcoma</disease>
+    <gene>MDM2</gene>
+    <demographic>78-year-old female</demographic>
+  </topic>
+  <topic number="35">
+    <disease>breast cancer</disease>
+    <gene>CDKN2A</gene>
+    <demographic>73-year-old female</demographic>
+  </topic>
+  <topic number="36">
+    <disease>lung cancer</disease>
+    <gene>ERBB2</gene>
+    <demographic>49-year-old female</demographic>
+  </topic>
+  <topic number="37">
+    <disease>non-small cell carcinoma</disease>
+    <gene>MET</gene>
+    <demographic>68-year-old male</demographic>
+  </topic>
+  <topic number="38">
+    <disease>cholangiocarcinoma</disease>
+    <gene>IDH1</gene>
+    <demographic>50-year-old male</demographic>
+  </topic>
+  <topic number="39">
+    <disease>anaplastic large cell lymphoma</disease>
+    <gene>ALK</gene>
+    <demographic>18-year-old male</demographic>
+  </topic>
+  <topic number="40">
+    <disease>breast cancer</disease>
+    <gene>ERBB2</gene>
+    <demographic>56-year-old female</demographic>
+  </topic>
+  <topic number="41">
+    <disease>papillary thyroid carcinoma</disease>
+    <gene>NTRK1</gene>
+    <demographic>46-year-old female</demographic>
+  </topic>
+  <topic number="42">
+    <disease>glioblastoma</disease>
+    <gene>CDK6</gene>
+    <demographic>84-year-old male</demographic>
+  </topic>
+  <topic number="43">
+    <disease>basal cell carcinoma</disease>
+    <gene>PTCH1</gene>
+    <demographic>56-year-old female</demographic>
+  </topic>
+  <topic number="44">
+    <disease>glioma</disease>
+    <gene>BRAF</gene>
+    <demographic>82-year-old male</demographic>
+  </topic>
+  <topic number="45">
+    <disease>thyroid cancer</disease>
+    <gene>BRAF</gene>
+    <demographic>40-year-old female</demographic>
+  </topic>
+  <topic number="46">
+    <disease>lung cancer</disease>
+    <gene>FGFR1</gene>
+    <demographic>57-year-old male</demographic>
+  </topic>
+  <topic number="47">
+    <disease>prostate cancer</disease>
+    <gene>PTEN</gene>
+    <demographic>70-year-old male</demographic>
+  </topic>
+  <topic number="48">
+    <disease>adenoid cystic carcinoma</disease>
+    <gene>KIT</gene>
+    <demographic>58-year-old female</demographic>
+  </topic>
+  <topic number="49">
+    <disease>acute myeloid leukemia</disease>
+    <gene>IDH1</gene>
+    <demographic>1-year-old male</demographic>
+  </topic>
+  <topic number="50">
+    <disease>acute myeloid leukemia</disease>
+    <gene>FLT3</gene>
+    <demographic>13-year-old male</demographic>
+  </topic>
+</topics>
