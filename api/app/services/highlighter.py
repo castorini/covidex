@@ -68,8 +68,8 @@ class Highlighter:
                             para_words, original_paragraph) -> List[Tuple[int]]:
         '''Returns the start and end character positions of highlighted sentences'''
 
-        if original_paragraph is None or original_paragraph == "":
-            return '', []
+        if not original_paragraph:
+            return []
 
         sim_matrix = self.similarity_matrix(
             vector1=query_state, vector2=para_state)
@@ -116,8 +116,8 @@ class Highlighter:
         Iterates over highlighted and original text simultaneously to compute character positions.
         """
 
-        if len(highlights) == 0:
-            return original_text, []
+        if not highlights:
+            return []
 
         highlights_idx = 0
         original_text_idx = 0
