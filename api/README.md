@@ -9,8 +9,8 @@ Download the [latest Anserini index](https://github.com/castorini/anserini/blob/
 for the COVID-19 dataset and rename the index as `lucene-index-covid-paragraph/`
 
 ```
-INDEX_NAME=lucene-index-covid-paragraph-2020-03-27
-INDEX_URL=https://www.dropbox.com/s/o95pehyzem0yalp/lucene-index-covid-paragraph-2020-03-27.tar.gz
+INDEX_NAME=lucene-index-covid-paragraph-2020-04-03
+INDEX_URL=https://www.dropbox.com/s/rfzxrrstwlck4wh/lucene-index-covid-paragraph-2020-04-03.tar.gz
 
 wget ${INDEX_URL}
 tar xvfz ${INDEX_NAME}.tar.gz && rm ${INDEX_NAME}.tar.gz
