@@ -65,8 +65,11 @@ class Highlighter:
         return (vector1.unsqueeze(1) * vector2.unsqueeze(0)).sum(-1)
 
     def highlight_paragraph(self, query_state, para_state,
-                            para_words) -> List[Tuple[int]]:
-        '''Returns the start and end positions of sentences that have the to'''
+                            para_words, original_paragraph) -> List[Tuple[int]]:
+        '''Returns the start and end character positions of highlighted sentences'''
+
+        if original_paragraph is None or original_paragraph == "":
+            return '', []
 
         sim_matrix = self.similarity_matrix(
             vector1=query_state, vector2=para_state)
@@ -102,7 +105,66 @@ class Highlighter:
 
             new_paragraph.append(sent)
             last_pos += len(sent) + 1
-        return ' '.join(new_paragraph), highlights
+
+        highlighted = ' '.join(new_paragraph)
+        return self.adjust_highlights(original_paragraph, highlighted, highlights)
+
+    def adjust_highlights(self, original_text: str, highlighted_text: str,
+                          highlights: List[List[Tuple[int]]]):
+        """
+        Adjusts highlights based on extra spaces introduced by the tokenization process.
+        Iterates over highlighted and original text simultaneously to compute character positions.
+        """
+
+        if len(highlights) == 0:
+            return original_text, []
+
+        highlights_idx = 0
+        original_text_idx = 0
+        highlighted_text_idx = 0
+        new_highlight_start = -1
+        inside_highlight = False
+        adjusted_highlights = []
+
+        while original_text_idx < len(original_text) and highlighted_text_idx < len(highlighted_text) \
+            and highlights_idx < len(highlights):
+
+            original_char = original_text[original_text_idx]
+            highlighted_char = highlighted_text[highlighted_text_idx]
+            cur_highlight = highlights[highlights_idx]
+
+            # Adjust highlights based on current text indices
+            if not inside_highlight and highlighted_text_idx >= cur_highlight[0]:
+                inside_highlight = True
+                new_highlight_start = original_text_idx
+            elif inside_highlight and highlighted_text_idx >= cur_highlight[1]:
+                inside_highlight = False
+                adjusted_highlights.append([new_highlight_start, original_text_idx])
+                original_text_idx += 1
+                highlights_idx += 1
+
+            # Increment character indexes based on values
+            if original_char == highlighted_char:
+                original_text_idx += 1
+                highlighted_text_idx += 1
+            elif original_text[original_text_idx] == " ":
+                original_text_idx += 1
+            elif highlighted_text[highlighted_text_idx:highlighted_text_idx+5] == "[UNK]":
+                # Token was not be able to be parsed properly
+                highlighted_text_idx += 5
+
+                # Original text may have multiple spaces and characters to form [UNK] token
+                if highlighted_text_idx < len(highlighted_text):
+                    highlighted_next = highlighted_text[highlighted_text_idx]
+                    while original_text[original_text_idx] != highlighted_next:
+                        original_text_idx += 1
+            else:
+                highlighted_text_idx += 1
+
+        if inside_highlight:
+            adjusted_highlights.append([new_highlight_start, len(original_text) - 1])
+
+        return adjusted_highlights
 
     def highlight_paragraphs(self, query: str,
                              paragraphs: List[str]) -> List[List[Tuple[int]]]:
@@ -114,7 +176,6 @@ class Highlighter:
             paragraphs: A list of paragraphs
 
         Returns:
-            new_paragraphs: A list of newly formatted paragraphs.
             all_highlights: A list of lists of tuples, where the elements of
                 the tuple denote the start and end positions of the segments
                 to be highlighted.
@@ -125,15 +186,14 @@ class Highlighter:
         new_paragraphs = []
         all_highlights = []
         for paragraph in paragraphs:
-
             para_words, para_state = self.text_to_vectors(text=paragraph)
-            new_paragraph, highlights = self.highlight_paragraph(
+            highlights = self.highlight_paragraph(
                 query_state=query_state,
                 para_state=para_state,
-                para_words=para_words)
+                para_words=para_words,
+                original_paragraph=paragraph)
             all_highlights.append(highlights)
-            new_paragraphs.append(new_paragraph)
-        return new_paragraphs, all_highlights
+        return all_highlights
 
 
 highlighter = Highlighter()
