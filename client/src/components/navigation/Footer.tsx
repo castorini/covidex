@@ -1,49 +1,24 @@
 import React from 'react';
 import styled from 'styled-components';
-import GitHubButton from 'react-github-btn';
 
 import NYU from '../../img/nyu.png';
 import UWaterloo from '../../img/uwaterloo.png';
 
 import { Link, PageContent } from '../../shared/Styles';
-import { TABLET_BREAKPOINT, LARGE_MOBILE_BREAKPOINT } from '../../shared/Constants';
+import { TABLET_BREAKPOINT } from '../../shared/Constants';
 
 const Footer = () => {
   return (
     <FooterWrapper>
       <PageContent>
-        <Row>
-          <GithubWrapper>
-            <GitHubButton
-              href="https://github.com/castorini/covidex"
-              data-color-scheme="no-preference: light; light: light; dark: light;"
-              data-icon="octicon-star"
-              data-size="large"
-              data-show-count={true}
-              aria-label="Star castorini/covidex on GitHub"
-            >
-              Star
-            </GitHubButton>
-            <GitHubButton
-              href="https://github.com/castorini/covidex/fork"
-              data-color-scheme="no-preference: light; light: light; dark: light;"
-              data-icon="octicon-repo-forked"
-              data-size="large"
-              data-show-count={true}
-              aria-label="Fork castorini/covidex on GitHub"
-            >
-              Fork
-            </GitHubButton>
-          </GithubWrapper>
-          <Images>
-            <Link href="https://uwaterloo.ca/" target="_blank" rel="noopener noreferrer">
-              <SchoolImage src={UWaterloo} alt="University of Waterloo Logo" />
-            </Link>
-            <Link href="https://www.nyu.edu/" target="_blank" rel="noopener noreferrer">
-              <SchoolImage src={NYU} alt="NYU Logo" />
-            </Link>
-          </Images>
-        </Row>
+        <Images>
+          <Link href="https://uwaterloo.ca/" target="_blank" rel="noopener noreferrer">
+            <SchoolImage src={UWaterloo} alt="University of Waterloo Logo" marginRight={24} />
+          </Link>
+          <Link href="https://www.nyu.edu/" target="_blank" rel="noopener noreferrer">
+            <SchoolImage src={NYU} alt="NYU Logo" />
+          </Link>
+        </Images>
       </PageContent>
     </FooterWrapper>
   );
@@ -56,46 +31,21 @@ const FooterWrapper = styled.div`
   display: flex;
   position: relative;
   flex-direction: column;
-  margin-top: 16px;
 
   @media only screen and (max-width: ${TABLET_BREAKPOINT}px) {
     padding: 24px 16px;
   }
 `;
 
-const Row = styled.div`
-  display: flex;
-  align-items: center;
-  border-top: 1px solid ${({ theme }) => theme.lightGrey};
-  padding-top: 24px;
-
-  @media only screen and (max-width: ${LARGE_MOBILE_BREAKPOINT}px) {
-    display: block;
-  }
-`;
-
 const Images = styled.div`
+  margin-top: 16px;
   display: flex;
   position: relative;
   justify-content: flex-end;
-
-  @media only screen and (max-width: ${LARGE_MOBILE_BREAKPOINT}px) {
-    margin-top: 24px;
-    justify-content: flex-start;
-  }
 `;
 
-const SchoolImage = styled.img`
+const SchoolImage = styled.img<{ marginRight?: number }>`
   height: 28px;
   width: auto;
-  margin-right: 24px;
-`;
-
-const GithubWrapper = styled.div`
-  display: flex;
-  flex: 1;
-
-  & > span:last-child {
-    margin-left: 8px;
-  }
+  margin-right: ${({ marginRight }) => marginRight || 0}px;
 `;
