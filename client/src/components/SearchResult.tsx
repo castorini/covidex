@@ -203,7 +203,7 @@ const SearchResultWrapper = styled.div`
   flex-direction: column;
   width: 100%;
   margin: auto;
-  padding: 24px;
+  padding: 24px 0;
   border-bottom: 1px dotted ${({ theme }) => theme.lightGrey};
   margin-bottom: 8px;
 `;
