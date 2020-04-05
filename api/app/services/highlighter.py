@@ -25,6 +25,7 @@ class Highlighter:
         self.nlp.add_pipe(self.nlp.create_pipe("sentencizer"))
 
         self.highlight_token = '[HIGHLIGHT]'
+        self.max_paragraph_length = 10000
 
     def text_to_vectors(self, text: str):
         """Converts a text to a sequence of vectors, one for each subword."""
@@ -133,7 +134,7 @@ class Highlighter:
 
         tagged_sentences = [
             sent.string.strip()
-            for sent in self.nlp(tagged_paragraph).sents]
+            for sent in self.nlp(tagged_paragraph[:self.max_paragraph_length]).sents]
 
         new_paragraph = []
         highlights = []
