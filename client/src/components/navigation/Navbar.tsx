@@ -30,9 +30,11 @@ const NavbarWrapper = styled.div`
 `;
 
 const NavbarLogo = styled.div`
+  display: flex;
   ${Heading1}
   position: relative;
   font-weight: 800;
   cursor: pointer;
   color: ${({ theme }) => theme.white};
+  max-width: fit-content;
 `;
