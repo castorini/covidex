@@ -1,6 +1,7 @@
 """Script to convert PubMed to Anserini Format."""
 import argparse
 import gzip
+import json
 import logging
 import multiprocessing
 import os
@@ -160,7 +161,7 @@ def build_document(article: Any) -> Dict[str, str]:
     if not contents:
         contents = 'dummy'
 
-    return {'raw': doc, 'contents': contents}
+    return {'id': doc['id'], 'raw': doc, 'contents': contents}
 
 
 def pubmed_to_json(args: Tuple[str]) -> int:
@@ -183,7 +184,7 @@ def pubmed_to_json(args: Tuple[str]) -> int:
 
         for article in root.iterfind('PubmedArticle'):
             document = build_document(article=article)
-            fout.write(f'{document}\n')
+            fout.write(json.dumps(document) + '\n')
             added_docs += 1
 
     return added_docs
