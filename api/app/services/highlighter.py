@@ -64,6 +64,51 @@ class Highlighter:
         vector2 = vector2 / torch.sqrt((vector2 ** 2).sum(1, keepdims=True))
         return (vector1.unsqueeze(1) * vector2.unsqueeze(0)).sum(-1)
 
+    def adjust_highlights(self, original_text: str, highlighted_text: str):
+        """
+        Adjusts highlights to ignore extra spaces introduced by the tokenization process.
+        Iterates over highlighted and original text simultaneously to compute character positions.
+
+        Returns:
+            Original text with highlight tokens inserted in correct locations.
+        """
+
+        original_idx = 0
+        hlt_idx = 0
+        highlighted_original_text = ''
+
+        while original_idx < len(original_text) and hlt_idx < len(highlighted_text):
+            if original_text[original_idx] == highlighted_text[hlt_idx]:
+                highlighted_original_text += original_text[original_idx]
+                original_idx += 1
+                hlt_idx += 1
+            elif highlighted_text[hlt_idx:hlt_idx+len(self.highlight_token)] == self.highlight_token:
+                # Insert highlight token into original text
+                highlighted_original_text += self.highlight_token
+                hlt_idx += len(self.highlight_token)
+            elif highlighted_text[hlt_idx:hlt_idx+5] == "[UNK]":
+                hlt_idx += 5
+                if hlt_idx >= len(highlighted_text):
+                    break
+                # Original text may have multiple spaces and characters to form [UNK] token
+                highlighted_next = highlighted_text[hlt_idx]
+                while original_text[original_idx] != highlighted_next:
+                    highlighted_original_text += original_text[original_idx]
+                    original_idx += 1
+            elif original_text[original_idx] == " ":
+                # Handle extra spaces in original text
+                highlighted_original_text += original_text[original_idx]
+                original_idx += 1
+            else:
+                # Handle extra spaces in tokenized text
+                hlt_idx += 1
+
+        # Append remaining characters
+        if original_idx < len(original_text):
+            highlighted_original_text += original_text[original_idx:]
+
+        return highlighted_original_text
+
     def highlight_paragraph(self, query_state, para_state,
                             para_words, original_paragraph) -> List[Tuple[int]]:
         '''Returns the start and end character positions of highlighted sentences'''
@@ -91,9 +136,12 @@ class Highlighter:
         tagged_paragraph = self.tokenizer.clean_up_tokenization(
             tagged_paragraph)
 
+        tagged_original_paragraph = self.adjust_highlights(original_paragraph,
+            tagged_paragraph)
+
         tagged_sentences = [
             sent.string.strip()
-            for sent in self.nlp(tagged_paragraph[:10000]).sents]
+            for sent in self.nlp(tagged_original_paragraph).sents]
 
         new_paragraph = []
         highlights = []
@@ -106,65 +154,7 @@ class Highlighter:
             new_paragraph.append(sent)
             last_pos += len(sent) + 1
 
-        highlighted = ' '.join(new_paragraph)
-        return self.adjust_highlights(original_paragraph, highlighted, highlights)
-
-    def adjust_highlights(self, original_text: str, highlighted_text: str,
-                          highlights: List[List[Tuple[int]]]):
-        """
-        Adjusts highlights based on extra spaces introduced by the tokenization process.
-        Iterates over highlighted and original text simultaneously to compute character positions.
-        """
-
-        if not highlights:
-            return []
-
-        highlights_idx = 0
-        original_text_idx = 0
-        highlighted_text_idx = 0
-        new_highlight_start = -1
-        inside_highlight = False
-        adjusted_highlights = []
-
-        while original_text_idx < len(original_text) and highlighted_text_idx < len(highlighted_text) \
-            and highlights_idx < len(highlights):
-
-            original_char = original_text[original_text_idx]
-            highlighted_char = highlighted_text[highlighted_text_idx]
-            cur_highlight = highlights[highlights_idx]
-
-            # Adjust highlights based on current text indices
-            if not inside_highlight and highlighted_text_idx >= cur_highlight[0]:
-                inside_highlight = True
-                new_highlight_start = original_text_idx
-            elif inside_highlight and highlighted_text_idx >= cur_highlight[1]:
-                inside_highlight = False
-                adjusted_highlights.append([new_highlight_start, original_text_idx])
-                original_text_idx += 1
-                highlights_idx += 1
-
-            # Increment character indexes based on values
-            if original_char == highlighted_char:
-                original_text_idx += 1
-                highlighted_text_idx += 1
-            elif original_text[original_text_idx] == " ":
-                original_text_idx += 1
-            elif highlighted_text[highlighted_text_idx:highlighted_text_idx+5] == "[UNK]":
-                # Token was not be able to be parsed properly
-                highlighted_text_idx += 5
-
-                # Original text may have multiple spaces and characters to form [UNK] token
-                if highlighted_text_idx < len(highlighted_text):
-                    highlighted_next = highlighted_text[highlighted_text_idx]
-                    while original_text[original_text_idx] != highlighted_next:
-                        original_text_idx += 1
-            else:
-                highlighted_text_idx += 1
-
-        if inside_highlight:
-            adjusted_highlights.append([new_highlight_start, len(original_text) - 1])
-
-        return adjusted_highlights
+        return highlights
 
     def highlight_paragraphs(self, query: str,
                              paragraphs: List[str]) -> List[List[Tuple[int]]]:
