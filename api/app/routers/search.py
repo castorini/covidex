@@ -68,20 +68,15 @@ async def get_search(query: str):
         for result in ranked_results:
             paragraphs.extend(result.paragraphs)
         paragraphs = paragraphs[:settings.highlight_max_paragraphs]
+        all_highlights = highlighter.highlight_paragraphs(query=query, paragraphs=paragraphs)
 
-        new_paragraphs, all_highlights = highlighter.highlight_paragraphs(query=query, paragraphs=paragraphs)
-        highlighted_paragraphs = list(zip(new_paragraphs, all_highlights))
-
-        # Update ranked results with highlighted paragraphs.
+        # Update results with highlights.
         highlight_idx = 0
         for result in ranked_results:
             num_paragraphs = len(result.paragraphs)
-            highlighted = highlighted_paragraphs[highlight_idx:highlight_idx+num_paragraphs]
-            result.paragraphs = [h[0] for h in highlighted]
-            result.highlights = [h[1] for h in highlighted]
+            result.highlights = all_highlights[highlight_idx:highlight_idx+num_paragraphs]
             highlight_idx += num_paragraphs
-
-            if highlight_idx >= len(highlighted_paragraphs):
+            if highlight_idx >= len(all_highlights):
                 break
 
         print(f'Time to highlight: {time.time() - highlight_time}')
