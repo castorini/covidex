@@ -66,6 +66,8 @@ const FooterWrapper = styled.div`
 const Row = styled.div`
   display: flex;
   align-items: center;
+  border-top: 1px solid ${({ theme }) => theme.lightGrey};
+  padding-top: 24px;
 
   @media only screen and (max-width: ${LARGE_MOBILE_BREAKPOINT}px) {
     display: block;
