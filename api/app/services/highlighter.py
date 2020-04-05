@@ -128,20 +128,12 @@ class Highlighter:
         for kk in word_positions:
             para_words[kk] += self.highlight_token
 
-        tagged_paragraph = self.tokenizer.convert_tokens_to_string(
-            para_words)
-
-        # Clean up a list of simple English tokenization artifacts like spaces
-        # before punctuations and abreviated forms.
-        tagged_paragraph = self.tokenizer.clean_up_tokenization(
-            tagged_paragraph)
-
-        tagged_original_paragraph = self.adjust_highlights(original_paragraph,
-            tagged_paragraph)
+        tagged_paragraph = self.tokenizer.convert_tokens_to_string(para_words)
+        tagged_paragraph = self.adjust_highlights(original_paragraph, tagged_paragraph)
 
         tagged_sentences = [
             sent.string.strip()
-            for sent in self.nlp(tagged_original_paragraph).sents]
+            for sent in self.nlp(tagged_paragraph).sents]
 
         new_paragraph = []
         highlights = []
