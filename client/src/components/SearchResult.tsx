@@ -125,13 +125,11 @@ const SearchResult = ({ article, number, queryTokens }: SearchResultProps) => {
   // Separate abstract from other paragraphs if it was highlighted
   const originalAbstract = article.highlighted_abstract
     ? article.paragraphs[0]
-    : article.abstract
-    ? article.abstract
-    : '';
+    : article.abstract || '';
 
   const abstract = parseAbstract(originalAbstract);
   const abstractHighlights = article.highlighted_abstract
-    ? adjustHighlights(article.highlights[0], originalAbstract.length - abstract.length)
+    ? adjustHighlights(article.highlights[0], abstract.length - originalAbstract.length)
     : [];
 
   const paragraphs = article.highlighted_abstract
@@ -203,7 +201,7 @@ const SearchResultWrapper = styled.div`
   flex-direction: column;
   width: 100%;
   margin: auto;
-  padding: 24px;
+  padding: 24px 0;
   border-bottom: 1px dotted ${({ theme }) => theme.lightGrey};
   margin-bottom: 8px;
 `;

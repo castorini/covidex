@@ -3,7 +3,7 @@
 # kill running servers
 pkill -9 uvicorn
 
-sh ./deploy-client.sh
+sh ./scripts/update-client.sh
 
 # run server without the development flag
 cd api

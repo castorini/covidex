@@ -13,7 +13,7 @@ const Footer = () => {
       <PageContent>
         <Images>
           <Link href="https://uwaterloo.ca/" target="_blank" rel="noopener noreferrer">
-            <SchoolImage src={UWaterloo} alt="University of Waterloo Logo" />
+            <SchoolImage src={UWaterloo} alt="University of Waterloo Logo" marginRight={24} />
           </Link>
           <Link href="https://www.nyu.edu/" target="_blank" rel="noopener noreferrer">
             <SchoolImage src={NYU} alt="NYU Logo" />
@@ -44,8 +44,8 @@ const Images = styled.div`
   justify-content: flex-end;
 `;
 
-const SchoolImage = styled.img`
-  height: 32px;
+const SchoolImage = styled.img<{ marginRight?: number }>`
+  height: 28px;
   width: auto;
-  margin-right: 24px;
+  margin-right: ${({ marginRight }) => marginRight || 0}px;
 `;
