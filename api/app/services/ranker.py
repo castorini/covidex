@@ -17,13 +17,15 @@ class Ranker:
         self.device = torch.device(settings.t5_device)
         self.model = loader.load().to(self.device).eval()
         self.tokenizer = T5Tokenizer.from_pretrained(settings.t5_model_type)  # type: T5Tokenizer
+        self.t5_max_length = settings.t5_max_length
 
     async def predict_t5(self, inputs: List[str]) -> List[float]:
         log_probs = []
         for i in range(0, len(inputs), settings.t5_batch_size):
             batch_inputs = inputs[i:i + settings.t5_batch_size]
             # noinspection PyTypeChecker
-            input_ids = list(map(lambda x: self.tokenizer.encode(x) + [1], batch_inputs))
+            input_ids = list(map(lambda x: self.tokenizer.encode(x, max_length=self.t5_max_length - 1) + [1],
+                                 batch_inputs))
             max_len = max(map(len, input_ids))
             attn_mask = torch.tensor([[1] * len(x) + [0] * (max_len - len(x)) for x in input_ids])
             input_ids = torch.tensor([x + [0] * (max_len - len(x)) for x in input_ids])
