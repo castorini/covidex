@@ -5,5 +5,6 @@ pyserini==0.8.1
 python-dotenv==0.12.0
 spacy==2.2.4
 tensorflow-gpu==2.1.0
+tensorflow-text==2.1.1
 torch==1.4.0
-transformers==2.7.0
+transformers==2.6.0
