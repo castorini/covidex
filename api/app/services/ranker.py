@@ -16,6 +16,8 @@ class Ranker:
                                      settings.flush_cache)
         self.device = torch.device(settings.t5_device)
         self.model = loader.load().to(self.device).eval()
+        with torch.no_grad():  # Make more similar to TensorFlow implementation
+            self.model.decoder.block[0].layer[1].EncDecAttention.relative_attention_bias.weight.data.zero_()
         self.tokenizer = T5Tokenizer.from_pretrained(settings.t5_model_type)  # type: T5Tokenizer
         self.t5_max_length = settings.t5_max_length
 
