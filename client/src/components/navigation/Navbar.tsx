@@ -27,7 +27,7 @@ const Navbar = ({ history }: RouteComponentProps) => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Give Feedback
+              Feedback
             </Link>
           </NavbarLinks>
         </Row>
