@@ -1,3 +1,6 @@
+from pathlib import Path
+import os
+
 from pydantic import BaseSettings
 
 
@@ -16,9 +19,15 @@ class Settings(BaseSettings):
     rm3_original_query_weight: float = 0.5
 
     # T5 model settings
-    t5_model_dir: str = 'gs://neural-covidex/data/t5_base/export/1585070383'
+    t5_model_dir: str = 'gs://neuralresearcher_data/covid/data/model_exp304'
     t5_batch_size: int = 96
     t5_device: str = 'cuda:0'
+    t5_model_type: str = 't5-base'
+    t5_max_length: int = 256
+
+    # Cache settings
+    cache_dir: Path = Path(os.getenv('XDG_CACHE_HOME', str(Path.home() / '.cache'))) / 'covidex'
+    flush_cache: bool = False
 
     # Paragraph highlighting
     highlight = True
