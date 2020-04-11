@@ -13,7 +13,7 @@ const HomeText = () => {
           COVID-19 Open Research Dataset (CORD-19)
         </Link>
         &nbsp;provided by the <Link href="https://allenai.org/">Allen Institute for AI</Link> (data
-        release of April 3, 2020). We hope that our service can contribute to the fight against this
+        release of April 10, 2020). We hope that our service can contribute to the fight against this
         global pandemic by helping policy makers and clinicians make better-informed decisions and
         by helping researchers generate new insights.
       </Paragraph>
