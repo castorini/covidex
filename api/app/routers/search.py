@@ -1,21 +1,28 @@
+import json
 import time
 from collections import OrderedDict
+from datetime import datetime
 from typing import List
+from uuid import uuid4
 
 import dateparser
 from fastapi import APIRouter
 
-from app.models import Article
+from app.models import (Article, SearchLogData, SearchLogType,
+                        SearchQueryResponse, SearchVertical)
 from app.services.highlighter import highlighter
 from app.services.ranker import ranker
 from app.services.searcher import searcher
 from app.settings import settings
+from app.util.logging import build_timed_logger
 
 router = APIRouter()
+search_logger = build_timed_logger('search_logger', settings.search_log_path)
 
 
-@router.get('/search', response_model=List[Article])
-async def get_search(query: str):
+@router.get('/search', response_model=SearchQueryResponse)
+async def get_search(query: str, vertical: SearchVertical = SearchVertical.cord19):
+    # Get search results from Lucene index.
     searcher_hits = searcher.search(query)
 
     # Only rerank based on paragraph or abstract if original document was retrieved.
@@ -57,7 +64,7 @@ async def get_search(query: str):
         paragraphs.sort(key=lambda x: x[1])
         paragraphs = [text for (text, _) in paragraphs]
 
-        # Build article
+        # Add full article to results.
         article = build_article(top_hit, base_docid, top_score, paragraphs, highlighted_abstract)
         ranked_results.append(article)
 
@@ -81,7 +88,46 @@ async def get_search(query: str):
 
         print(f'Time to highlight: {time.time() - highlight_time}')
 
-    return ranked_results
+    # Generate UUID for query.
+    query_id = str(uuid4())
+
+    # Log query and results.
+    search_logger.info(json.dumps({
+        'query_id': query_id,
+        'type': SearchLogType.query,
+        'vertical': vertical,
+        'query': query,
+        'timestamp': datetime.utcnow().isoformat(),
+        'response': [r.json() for r in ranked_results]}))
+
+    return SearchQueryResponse(query_id=query_id, response=ranked_results)
+
+@router.post('/search/log/collapsed', response_model=None)
+async def post_collapsed(data: SearchLogData):
+    search_logger.info(json.dumps({
+        'query_id': data.query_id,
+        'type': SearchLogType.collapsed,
+        'result_id': data.result_id,
+        'position': data.position,
+        'timestamp': datetime.utcnow().isoformat()}))
+
+@router.post('/search/log/expanded', response_model=None)
+async def post_expanded(data: SearchLogData):
+    search_logger.info(json.dumps({
+        'query_id': data.query_id,
+        'type': SearchLogType.expanded,
+        'result_id': data.result_id,
+        'position': data.position,
+        'timestamp': datetime.utcnow().isoformat()}))
+
+@router.post('/search/log/clicked', response_model=None)
+async def post_clicked(data: SearchLogData):
+    search_logger.info(json.dumps({
+        'query_id': data.query_id,
+        'type': SearchLogType.clicked,
+        'result_id ': data.result_id,
+        'position': data.position,
+        'timestamp': datetime.utcnow().isoformat()}))
 
 def build_article(hit, id: str, score: float, paragraphs: List[str], highlighted_abstract: bool):
     doc = hit.lucene_document

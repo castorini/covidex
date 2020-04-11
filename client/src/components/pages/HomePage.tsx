@@ -18,6 +18,8 @@ const HomePage = ({ history, location }: RouteComponentProps) => {
 
   const [loading, setLoading] = useState<Boolean>(false);
   const [queryInputText, setQueryInputText] = useState<string>(query || '');
+
+  const [queryId, setQueryId] = useState<string>('');
   const [searchResults, setSearchResults] = useState<Array<any> | null>(null);
 
   useEffect(() => {
@@ -35,10 +37,13 @@ const HomePage = ({ history, location }: RouteComponentProps) => {
       try {
         setLoading(true);
         setSearchResults(null);
+
         let response = await fetch(`${API_BASE}${SEARCH_ENDPOINT}?query=${query.toLowerCase()}`);
         setLoading(false);
+
         let data = await response.json();
-        setSearchResults(data);
+        setQueryId(data.query_id);
+        setSearchResults(data.response);
       } catch {
         setLoading(false);
         setSearchResults([]);
@@ -90,7 +95,13 @@ const HomePage = ({ history, location }: RouteComponentProps) => {
               <NoResults>No results found</NoResults>
             ) : (
               searchResults.map((article, i) => (
-                <SearchResult article={article} key={i} number={i + 1} queryTokens={queryTokens} />
+                <SearchResult
+                  key={i}
+                  article={article}
+                  position={i}
+                  queryTokens={queryTokens}
+                  queryId={queryId}
+                />
               ))
             ))}
         </SearchResults>

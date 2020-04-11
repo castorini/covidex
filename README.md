@@ -77,3 +77,5 @@ sh scripts/deploy-prod.sh
 ```
 PORT=8000 sh scripts/deploy-prod.sh
 ```
+
+Log files are available under `api/logs`, where new files are created daily based on UTC time. All filenames have the date appended except for the current one, which will be named `search.log`.
