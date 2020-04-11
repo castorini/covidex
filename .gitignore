@@ -9,11 +9,13 @@ lucene-index-covid*/
 *.pb
 variables/
 
-*.log
+# Logs
+*.log*
+*.log.*
+*.out
+
 .vscode
 
 # client builds
 build/
 static/
-
-*.out
