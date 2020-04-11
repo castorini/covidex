@@ -4,6 +4,13 @@ import { ChevronsDown } from 'react-feather';
 import Highlighter from 'react-highlight-words';
 
 import { Link, Heading3, LinkStyle, BodySmall, FadeInText } from '../shared/Styles';
+import {
+  API_BASE,
+  COLLAPSED_ENDPOINT,
+  EXPANDED_ENDPOINT,
+  CLICKED_ENDPOINT,
+} from '../shared/Constants';
+import { makePOSTRequest } from '../shared/Util';
 
 interface Article extends Object {
   id: string;
@@ -23,7 +30,8 @@ interface Article extends Object {
 }
 interface SearchResultProps {
   article: Article;
-  number: number;
+  position: number;
+  queryId: string;
   queryTokens: Array<string>;
 }
 
@@ -104,7 +112,7 @@ const adjustHighlights = (
   return highlights.map((highlight) => [highlight[0] + adjustment, highlight[1] + adjustment]);
 };
 
-const SearchResult = ({ article, number, queryTokens }: SearchResultProps) => {
+const SearchResult = ({ article, position, queryId, queryTokens }: SearchResultProps) => {
   const fullTextRef = useRef(null);
   const [collapsed, setCollapsed] = useState<boolean>(true);
 
@@ -139,11 +147,18 @@ const SearchResult = ({ article, number, queryTokens }: SearchResultProps) => {
     ? article.highlights.slice(1)
     : article.highlights;
 
+  const interactionRequestBody = { query_id: queryId, result_id: article.id, position };
+
   return (
     <SearchResultWrapper>
       <Title>
-        {number}.&nbsp;
-        <Link href={article.url} target="_blank" rel="noopener noreferrer">
+        {position + 1}.&nbsp;
+        <Link
+          href={article.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => makePOSTRequest(`${API_BASE}${CLICKED_ENDPOINT}`, interactionRequestBody)}
+        >
           {article.title}
         </Link>
       </Title>
@@ -183,7 +198,13 @@ const SearchResult = ({ article, number, queryTokens }: SearchResultProps) => {
       {(abstract || paragraphs.length > 0) && (
         <ShowTextLink
           collapsed={collapsed}
-          onClick={() => setCollapsed(!collapsed)}
+          onClick={() => {
+            makePOSTRequest(
+              `${API_BASE}${collapsed ? EXPANDED_ENDPOINT : COLLAPSED_ENDPOINT}`,
+              interactionRequestBody,
+            );
+            setCollapsed(!collapsed);
+          }}
           onMouseDown={(e) => e.preventDefault()}
         >
           {collapsed ? 'Show more' : 'Show less'}

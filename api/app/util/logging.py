@@ -11,11 +11,7 @@ def build_timed_logger(name: str, path: str) -> logging.Logger:
     '''
     logger = logging.getLogger(name)
     logger.setLevel(logging.INFO)
-
-    # Remove default log handlers
-    for handler in logger.handlers:
-        logger.removeHandler(handler)
-
+    logger.propagate = False
     abs_path = pkg_resources.resource_filename(__name__, path)
     handler = TimedRotatingFileHandler(path, when="d", interval=1, utc=True)
     logger.addHandler(handler)

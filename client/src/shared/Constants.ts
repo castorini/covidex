@@ -12,6 +12,9 @@ export const CONTENT_WIDTH = 1100;
 /* API */
 export const API_BASE = '/api/';
 export const SEARCH_ENDPOINT = 'search';
+export const COLLAPSED_ENDPOINT = 'search/log/collapsed';
+export const EXPANDED_ENDPOINT = 'search/log/expanded';
+export const CLICKED_ENDPOINT = 'search/log/clicked';
 
 /* NLTK Stopwords */
 export const STOP_WORDS = new Set([
