@@ -1,6 +1,7 @@
 import json
 import time
 from collections import OrderedDict
+from datetime import datetime
 from typing import List
 from uuid import uuid4
 
@@ -96,6 +97,7 @@ async def get_search(query: str, vertical: SearchVertical = SearchVertical.cord1
         'type': SearchLogType.query,
         'vertical': vertical,
         'query': query,
+        'timestamp': datetime.utcnow().isoformat(),
         'response': [r.json() for r in ranked_results]}))
 
     return SearchQueryResponse(query_id=query_id, response=ranked_results)
@@ -106,7 +108,8 @@ async def post_collapsed(data: SearchLogData):
         'query_id': data.query_id,
         'type': SearchLogType.collapsed,
         'result_id': data.result_id,
-        'position': data.position}))
+        'position': data.position,
+        'timestamp': datetime.utcnow().isoformat()}))
 
 @router.post('/search/log/expanded', response_model=None)
 async def post_expanded(data: SearchLogData):
@@ -114,7 +117,8 @@ async def post_expanded(data: SearchLogData):
         'query_id': data.query_id,
         'type': SearchLogType.expanded,
         'result_id': data.result_id,
-        'position': data.position}))
+        'position': data.position,
+        'timestamp': datetime.utcnow().isoformat()}))
 
 @router.post('/search/log/clicked', response_model=None)
 async def post_clicked(data: SearchLogData):
@@ -122,7 +126,8 @@ async def post_clicked(data: SearchLogData):
         'query_id': data.query_id,
         'type': SearchLogType.clicked,
         'result_id ': data.result_id,
-        'position': data.position}))
+        'position': data.position,
+        'timestamp': datetime.utcnow().isoformat()}))
 
 def build_article(hit, id: str, score: float, paragraphs: List[str], highlighted_abstract: bool):
     doc = hit.lucene_document
