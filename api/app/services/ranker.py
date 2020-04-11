@@ -1,3 +1,4 @@
+from functools import partial
 from typing import List
 
 from transformers import T5Tokenizer
@@ -25,9 +26,14 @@ class Ranker:
         log_probs = []
         for i in range(0, len(inputs), settings.t5_batch_size):
             batch_inputs = inputs[i:i + settings.t5_batch_size]
-            # noinspection PyTypeChecker
-            input_ids = list(map(lambda x: self.tokenizer.encode(x, max_length=self.t5_max_length - 1) + [1],
-                                 batch_inputs))
+            # TensorFlow padding convention
+            input_ids = []
+            for input_text in batch_inputs:
+                ids = self.tokenizer.encode(input_text, max_length=self.t5_max_length)
+                if len(ids) < self.t5_max_length:
+                    ids.append(1)
+                input_ids.append(ids)
+
             max_len = max(map(len, input_ids))
             attn_mask = torch.tensor([[1] * len(x) + [0] * (max_len - len(x)) for x in input_ids])
             input_ids = torch.tensor([x + [0] * (max_len - len(x)) for x in input_ids])
