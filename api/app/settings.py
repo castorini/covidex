@@ -6,6 +6,7 @@ from pydantic import BaseSettings
 
 class Settings(BaseSettings):
     development: bool = True
+    search_log_path: str = 'logs/search.log'
 
     # Anserini searcher settings
     index_path: str = 'lucene-index-covid-paragraph'
