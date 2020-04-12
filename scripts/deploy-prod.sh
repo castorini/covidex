@@ -1,14 +1,16 @@
 #!/bin/bash
 
-# kill running servers
-pkill -9 uvicorn
-
 sh ./scripts/update-client.sh
 
 # run server without the development flag
 cd api
 pip install -r requirements.txt
 export DEVELOPMENT=False
+
+# kill running servers
+echo "Stopping existing servers..."
+pkill -9 uvicorn
+sleep 10 # Buffer to make sure servers stop
 
 echo "Starting server..."
 PORT=${PORT:-8000}
