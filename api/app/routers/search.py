@@ -6,7 +6,7 @@ from typing import List
 from uuid import uuid4
 
 import dateparser
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 
 from app.models import (Article, SearchLogData, SearchLogType,
                         SearchQueryResponse, SearchVertical)
@@ -21,7 +21,7 @@ search_logger = build_timed_logger('search_logger', settings.search_log_path)
 
 
 @router.get('/search', response_model=SearchQueryResponse)
-async def get_search(query: str, vertical: SearchVertical = SearchVertical.cord19):
+async def get_search(request: Request, query: str, vertical: SearchVertical = SearchVertical.cord19):
     # Get search results from Lucene index.
     try:
         searcher_hits = searcher.search(query)
@@ -104,6 +104,7 @@ async def get_search(query: str, vertical: SearchVertical = SearchVertical.cord1
         'type': SearchLogType.query,
         'vertical': vertical,
         'query': query,
+        'request_ip': request.client.host,
         'timestamp': datetime.utcnow().isoformat(),
         'response': [r.json() for r in ranked_results]}))
 
