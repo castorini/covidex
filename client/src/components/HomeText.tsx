@@ -13,9 +13,12 @@ const HomeText = () => {
           COVID-19 Open Research Dataset (CORD-19)
         </Link>
         &nbsp;provided by the <Link href="https://allenai.org/">Allen Institute for AI</Link> (data
-        release of April 10, 2020). We hope that our service can contribute to the fight against
-        this global pandemic by helping policy makers and clinicians make better-informed decisions
-        and by helping researchers generate new insights.
+        release of April 10, 2020), which currently contains over 47,000 scholarly articles,
+        including over 36,000 with full text, about COVID-19 and coronavirus-related research, drawn
+        from a variety of sources including PubMed, a curated list of articles from the WHO, as well
+        as preprints from bioRxiv and medRxiv. We hope that our service can contribute to the fight
+        against this global pandemic by helping policy makers and clinicians make better-informed
+        decisions and by helping researchers generate new insights.
       </Paragraph>
       <Paragraph>
         Try some of the example questions below:
@@ -32,9 +35,9 @@ const HomeText = () => {
           </ListItem>
           <ListItem>
             <QueryLink
-              to={`/?query=What%20do%20we%20know%20about%20asymptomatic%20transmission%20of%20COVID-19?`}
+              to={`/?query=Are%20there%20cases%20of%20asymptomatic%20transmission%20of%20COVID-19?`}
             >
-              What do we know about asymptomatic transmission of COVID-19?
+              Are there cases of asymptomatic transmission of COVID-19?
             </QueryLink>
           </ListItem>
           <ListItem>
