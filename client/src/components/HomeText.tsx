@@ -140,9 +140,13 @@ const HomeText = () => {
         <Link href="https://github.com/edwinzhng" target="_blank" rel="noopener noreferrer">
           Edwin Zhang
         </Link>
-        &nbsp;and&nbsp;
+        ,&nbsp;
         <Link href="https://github.com/nikhilro" target="_blank" rel="noopener noreferrer">
           Nikhil Gupta
+        </Link>
+        &nbsp;and&nbsp;
+        <Link href="http://ralphtang.com" target="_blank" rel="noopener noreferrer">
+          Ralph Tang
         </Link>
         . Special thanks to&nbsp;
         <Link href="https://colinraffel.com/" target="_blank" rel="noopener noreferrer">
