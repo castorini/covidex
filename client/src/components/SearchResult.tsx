@@ -189,7 +189,7 @@ const SearchResult = ({ article, position, queryId, queryTokens }: SearchResultP
         {paragraphs.map((paragraph, i) => (
           <Paragraph marginTop={i === 0 ? 0 : 16} key={i} collapsed={collapsed}>
             {highlightText(paragraph, highlights[i], queryTokens)}
-            {i === paragraphs.length - 1 && highlights[i] && (
+            {i === paragraphs.length - 1 && highlights[i] && highlights[i].length > 0 && (
               <Ellipsis className="showCollapsed">...</Ellipsis>
             )}
           </Paragraph>
