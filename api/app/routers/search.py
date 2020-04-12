@@ -23,7 +23,11 @@ search_logger = build_timed_logger('search_logger', settings.search_log_path)
 @router.get('/search', response_model=SearchQueryResponse)
 async def get_search(query: str, vertical: SearchVertical = SearchVertical.cord19):
     # Get search results from Lucene index.
-    searcher_hits = searcher.search(query)
+    try:
+        searcher_hits = searcher.search(query)
+    except:
+        # Sometimes errors out due to encoding bugs.
+        searcher_hits = []
 
     # Only rerank based on paragraph or abstract if original document was retrieved.
     ranked_paragraphs = [hit.contents.split('\n')[-1][:5000] for hit in searcher_hits]
@@ -62,7 +66,7 @@ async def get_search(query: str, vertical: SearchVertical = SearchVertical.cord1
 
         # Sort top paragraphs by order of appearance in actual text.
         paragraphs.sort(key=lambda x: x[1])
-        paragraphs = [text for (text, _) in paragraphs]
+        paragraphs = [text for text, number in paragraphs]
 
         # Add full article to results.
         article = build_article(top_hit, base_docid, top_score, paragraphs, highlighted_abstract)
@@ -74,8 +78,11 @@ async def get_search(query: str, vertical: SearchVertical = SearchVertical.cord1
         paragraphs = []
         for result in ranked_results:
             paragraphs.extend(result.paragraphs)
+        total_paragraphs = len(paragraphs)
         paragraphs = paragraphs[:settings.highlight_max_paragraphs]
+
         all_highlights = highlighter.highlight_paragraphs(query=query, paragraphs=paragraphs)
+        all_highlights.extend([[] for _ in range(total_paragraphs - settings.highlight_max_paragraphs)])
 
         # Update results with highlights.
         highlight_idx = 0
