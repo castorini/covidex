@@ -1,55 +1,26 @@
-import spacy
-import torch
-import transformers
-
-from app.settings import settings
 from typing import List
 from typing import Tuple
+
+import spacy
+import torch
+
+from app.services.t5 import encoder_vector_cache, provider
 
 
 class Highlighter:
     def __init__(self):
-
-        self.device = torch.device(settings.highlight_device)
-
-        print('Loading tokenizer...')
-        self.tokenizer = transformers.AutoTokenizer.from_pretrained(
-            'monologg/biobert_v1.1_pubmed', do_lower_case=False)
-        print('Loading model...')
-        self.model = transformers.AutoModel.from_pretrained(
-            'monologg/biobert_v1.1_pubmed')
-        self.model.to(self.device)
-
         print('Loading sentence tokenizer...')
         self.nlp = spacy.blank("en")
         self.nlp.add_pipe(self.nlp.create_pipe("sentencizer"))
 
         self.highlight_token = '[HIGHLIGHT]'
         self.max_paragraph_length = 10000
+        self.model = provider.model
+        self.tokenizer = provider.tokenizer
 
     def text_to_vectors(self, text: str):
         """Converts a text to a sequence of vectors, one for each subword."""
-        text_ids = torch.tensor(
-            self.tokenizer.encode(text, add_special_tokens=True))
-        text_ids = text_ids.to(self.device)
-
-        text_words = self.tokenizer.convert_ids_to_tokens(text_ids)[1:-1]
-
-        states = []
-        for i in range(1, text_ids.size(0), 510):
-            text_ids_ = text_ids[i: i + 510]
-            text_ids_ = torch.cat([text_ids[0].unsqueeze(0), text_ids_])
-
-            if text_ids_[-1] != text_ids[-1]:
-                text_ids_ = torch.cat(
-                    [text_ids_, text_ids[-1].unsqueeze(0)])
-
-            with torch.no_grad():
-                state, _ = self.model(text_ids_.unsqueeze(0))
-                state = state[0, 1:-1, :]
-            states.append(state)
-        state = torch.cat(states, axis=0)
-        return text_words, state
+        return encoder_vector_cache.encode(text)
 
     def similarity_matrix(self, vector1, vector2):
         """Compute the cosine similarity matrix of two vectors of same size.
@@ -87,11 +58,11 @@ class Highlighter:
                 # Insert highlight token into original text
                 highlighted_original_text += self.highlight_token
                 hlt_idx += len(self.highlight_token)
-            elif highlighted_text[hlt_idx:hlt_idx+5] == "[UNK]":
+            elif highlighted_text[hlt_idx:hlt_idx+5] == self.tokenizer.unk_token:
                 hlt_idx += 5
                 if hlt_idx >= len(highlighted_text):
                     break
-                # Original text may have multiple spaces and characters to form [UNK] token
+                # Original text may have multiple spaces and characters to form <unk> token
                 highlighted_next = highlighted_text[hlt_idx]
                 while original_text[original_idx] != highlighted_next:
                     highlighted_original_text += original_text[original_idx]

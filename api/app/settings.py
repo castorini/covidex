@@ -24,6 +24,7 @@ class Settings(BaseSettings):
     t5_device: str = 'cuda:0'
     t5_model_type: str = 't5-base'
     t5_max_length: int = 256
+    t5_cache_size: int = 256
 
     # Cache settings
     cache_dir: Path = Path(os.getenv('XDG_CACHE_HOME', str(Path.home() / '.cache'))) / 'covidex'
@@ -32,7 +33,6 @@ class Settings(BaseSettings):
     # Paragraph highlighting
     highlight = True
     highlight_max_paragraphs: int = 30
-    highlight_device: str = 'cuda:1'
 
     # Response settings
     max_paragraphs_per_doc = 2
