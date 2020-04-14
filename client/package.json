@@ -23,6 +23,7 @@
     "react-bootstrap-typeahead": "^5.0.0-alpha.1",
     "react-collapse": "^5.0.1",
     "react-dom": "^16.13.1",
+    "react-error-boundary": "^1.2.5",
     "react-fade-in": "^0.1.8",
     "react-feather": "^2.0.3",
     "react-github-btn": "^1.1.1",

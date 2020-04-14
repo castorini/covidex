@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useLocation } from 'react-router';
+import ErrorBoundary from 'react-error-boundary';
 
 import { PageWrapper, PageContent, Heading2 } from '../../../shared/Styles';
 import Loading from '../../common/Loading';
@@ -60,7 +61,7 @@ const HomePage = () => {
         setSearchResults(null);
 
         let response = await fetch(
-          `${API_BASE}${SEARCH_ENDPOINT}?query=${query.toLowerCase()}?vertical=${vertical}`,
+          `${API_BASE}${SEARCH_ENDPOINT}?query=${query.toLowerCase()}&vertical=${vertical}`,
         );
         setLoading(false);
 
@@ -86,25 +87,28 @@ const HomePage = () => {
           setQuery={setQueryInputText}
           setVertical={setSelectedVertical}
         />
-        {loading && <Loading />}
-        <SearchResults>
-          {!query && <HomeText />}
-          {query &&
-            searchResults !== null &&
-            (searchResults.length === 0 ? (
-              <NoResults>No results found</NoResults>
-            ) : (
-              searchResults.map((article, i) => (
-                <SearchResult
-                  key={i}
-                  article={article}
-                  position={i}
-                  queryTokens={queryTokens}
-                  queryId={queryId}
-                />
-              ))
-            ))}
-        </SearchResults>
+        <ErrorBoundary FallbackComponent={() => <NoResults>No results found</NoResults>}>
+          {loading && <Loading />}
+          <SearchResults>
+            {!query && <HomeText />}
+            {query &&
+              searchResults !== undefined &&
+              searchResults !== null &&
+              (searchResults.length === 0 ? (
+                <NoResults>No results found</NoResults>
+              ) : (
+                searchResults.map((article, i) => (
+                  <SearchResult
+                    key={i}
+                    article={article}
+                    position={i}
+                    queryTokens={queryTokens}
+                    queryId={queryId}
+                  />
+                ))
+              ))}
+          </SearchResults>
+        </ErrorBoundary>
       </PageContent>
     </PageWrapper>
   );
