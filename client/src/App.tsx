@@ -4,7 +4,7 @@ import styled, { ThemeProvider } from 'styled-components';
 
 import Navbar from './components/navigation/Navbar';
 import Footer from './components/navigation/Footer';
-import HomePage from './components/pages/HomePage';
+import HomePage from './components/pages/HomePage/HomePage';
 import NotFoundPage from './components/pages/NotFoundPage';
 
 import { HOME_ROUTE } from './shared/Constants';

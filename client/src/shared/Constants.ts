@@ -1,3 +1,5 @@
+import { OptionTypeBase } from 'react-select';
+
 /* Routes */
 export const HOME_ROUTE = '/';
 
@@ -16,7 +18,13 @@ export const COLLAPSED_ENDPOINT = 'search/log/collapsed';
 export const EXPANDED_ENDPOINT = 'search/log/expanded';
 export const CLICKED_ENDPOINT = 'search/log/clicked';
 
-export const SearchVerticalOptions = [
+/* Search Vertical Models */
+export interface SearchVerticalOption extends OptionTypeBase {
+  value: string;
+  label: string;
+}
+
+export const SEARCH_VERTICAL_OPTIONS: Array<SearchVerticalOption> = [
   { value: 'cord19', label: 'CORD-19' },
   { value: 'trialstreamer', label: 'Trialstreamer' },
 ];

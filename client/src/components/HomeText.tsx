@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link as RouterLink } from 'react-router-dom';
-import { Body, Link, LinkStyle } from '../shared/Styles';
+import { Body, Link } from '../shared/Styles';
 
 const HomeText = () => {
   return (
@@ -16,50 +15,14 @@ const HomeText = () => {
         release of April 10, 2020), which currently contains over 47,000 scholarly articles,
         including over 36,000 with full text, about COVID-19 and coronavirus-related research, drawn
         from a variety of sources including PubMed, a curated list of articles from the WHO, as well
-        as preprints from bioRxiv and medRxiv. We hope that our service can contribute to the fight
-        against this global pandemic by helping policy makers and clinicians make better-informed
-        decisions and by helping researchers generate new insights.
+        as preprints from bioRxiv and medRxiv. We also support searching for randomized controlled
+        trials related to COVID-19 via datasets provided by&nbsp;
+        <Link href="https://trialstreamer.robotreviewer.net/">Trialstreamer</Link>.
       </Paragraph>
       <Paragraph>
-        Try some of the example questions below:
-        <List>
-          <ListItem>
-            <QueryLink to={`/?query=What+is+the+incubation+period+of+COVID-19?`}>
-              What is the incubation period of COVID-19?
-            </QueryLink>
-          </ListItem>
-          <ListItem>
-            <QueryLink to={`/?query=What%27s+the+effectiveness+of+chloroquine+for+COVID-19?`}>
-              What's the effectiveness of chloroquine for COVID-19?
-            </QueryLink>
-          </ListItem>
-          <ListItem>
-            <QueryLink
-              to={`/?query=Are%20there%20cases%20of%20asymptomatic%20transmission%20of%20COVID-19?`}
-            >
-              Are there cases of asymptomatic transmission of COVID-19?
-            </QueryLink>
-          </ListItem>
-          <ListItem>
-            <QueryLink
-              to={`/?query=How+do+weather+conditions+affect+the+transmission+of+COVID-19?`}
-            >
-              How do weather conditions affect the transmission of COVID-19?
-            </QueryLink>
-          </ListItem>
-          <ListItem>
-            <QueryLink to={`/?query=Tell%20me%20about%20IgG%20and%20IgM%20tests%20for%20covid-19.`}>
-              Tell me about IgG and IgM tests for covid-19.
-            </QueryLink>
-          </ListItem>
-          <ListItem>
-            <QueryLink
-              to={`/?query=what%20is%20the%20prognostic%20value%20of%20IL-6%20levels%20in%20covid-19?`}
-            >
-              What is the prognostic value of IL-6 levels in covid-19?
-            </QueryLink>
-          </ListItem>
-        </List>
+        We hope that our service can contribute to the fight against this global pandemic by helping
+        policy makers and clinicians make better-informed decisions and by helping researchers
+        generate new insights.
       </Paragraph>
       <Paragraph>
         To properly calibrate expectations, our system relies on inference using
@@ -177,14 +140,10 @@ const ListItem = styled.li`
 
 const Paragraph = styled.div`
   ${Body}
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 `;
 
 const Bold = styled.span`
   ${Body}
   font-weight: 600;
-`;
-
-const QueryLink = styled(RouterLink)`
-  ${LinkStyle}
 `;
