@@ -1,0 +1,21 @@
+{
+  "category": "Transmission, incubation, and environmental stability",
+  "sub_category": "Length of viral shedding after illness onset",
+  "answers": [
+    {
+      "id": "bg0cw5s6",
+      "title": "Factors associated with prolonged viral shedding and impact of Lopinavir/Ritonavir treatment in patients with SARS-CoV-2 infection",
+      "exact_answer": "23 days (IQR, 18-32 days)"
+    },
+    {
+      "id": "r5a46n9a",
+      "title": "Viral Kinetics and Antibody Responses in Patients with COVID-19",
+      "exact_answer": "12 (3-38), 19 (5-37), and 18 (7-26) days in nasopharyngeal swabs, sputum and stools, respectively"
+    },
+    {
+      "id": "r5a46n9a",
+      "title": "Clinical course and risk factors for mortality of adult inpatients with COVID-19 in Wuhan, China: a retrospective cohort study",
+      "exact_answer": "20·0 days (IQR 17·0–24·0)"
+    }
+  ]
+}
