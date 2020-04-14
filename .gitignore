@@ -3,7 +3,7 @@
 __pycache__
 
 # Anserini index
-lucene-index-covid*/
+lucene-index*
 
 # TensorFlow SavedModel
 *.pb

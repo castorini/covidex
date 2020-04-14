@@ -9,7 +9,8 @@ class Settings(BaseSettings):
     search_log_path: str = 'logs/search.log'
 
     # Anserini searcher settings
-    index_path: str = 'lucene-index-covid-paragraph'
+    cord19_index_path: str = 'index/lucene-index-covid-paragraph'
+    trialstreamer_index_path: str = 'index/lucene-index-trialstreamer'
     max_docs: int = 96
     bm25_k1: float = 0.4
     bm25_b: float = 0.9

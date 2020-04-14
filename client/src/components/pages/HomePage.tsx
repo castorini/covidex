@@ -3,21 +3,25 @@ import { Search } from 'react-feather';
 import styled from 'styled-components';
 import { useLocation, withRouter, RouteComponentProps } from 'react-router';
 import { Button } from 'reakit';
+import Select from 'react-select';
 
 import { PageWrapper, PageContent, Heading2 } from '../../shared/Styles';
-import { HOME_ROUTE, API_BASE, SEARCH_ENDPOINT } from '../../shared/Constants';
-
 import Loading from '../common/Loading';
 import SearchResult from '../SearchResult';
 import HomeText from '../HomeText';
+
 import { tokenize } from '../../shared/Util';
+import Theme from '../../shared/Theme';
+import { HOME_ROUTE, API_BASE, SEARCH_ENDPOINT, SearchVerticalOptions } from '../../shared/Constants';
 
 const HomePage = ({ history, location }: RouteComponentProps) => {
   const urlParams = new URLSearchParams(useLocation().search);
   const query = urlParams.get('query') || '';
+  const vertical = urlParams.get('vertical') || 'cord19';
 
   const [loading, setLoading] = useState<Boolean>(false);
   const [queryInputText, setQueryInputText] = useState<string>(query || '');
+  const [selectedVertical, setSelectedVertical] = useState<any>('cord19');
 
   const [queryId, setQueryId] = useState<string>('');
   const [searchResults, setSearchResults] = useState<Array<any> | null>(null);
@@ -25,6 +29,19 @@ const HomePage = ({ history, location }: RouteComponentProps) => {
   useEffect(() => {
     setQueryInputText(query);
   }, [query]);
+
+  useEffect(() => {
+    switch (vertical) {
+      case 'cord19':
+        setSelectedVertical(SearchVerticalOptions[0]);
+        break;
+      case 'trialstreamer':
+        setSelectedVertical(SearchVerticalOptions[1]);
+        break;
+      default:
+        setSelectedVertical(SearchVerticalOptions[0]);
+    }
+  }, [vertical]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,7 +55,7 @@ const HomePage = ({ history, location }: RouteComponentProps) => {
         setLoading(true);
         setSearchResults(null);
 
-        let response = await fetch(`${API_BASE}${SEARCH_ENDPOINT}?query=${query.toLowerCase()}`);
+        let response = await fetch(`${API_BASE}${SEARCH_ENDPOINT}?query=${query.toLowerCase()}&vertical=${vertical}`);
         setLoading(false);
 
         let data = await response.json();
@@ -50,12 +67,12 @@ const HomePage = ({ history, location }: RouteComponentProps) => {
       }
     };
     fetchData();
-  }, [query]);
+  }, [query, vertical]);
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) =>
     setQueryInputText(event.target.value);
 
-  const submitQuery = () => history.push(`${HOME_ROUTE}?query=${encodeURI(queryInputText)}`);
+  const submitQuery = () => history.push(`${HOME_ROUTE}?query=${encodeURI(queryInputText)}&vertical=${selectedVertical.value}`);
 
   const handleEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
@@ -69,6 +86,15 @@ const HomePage = ({ history, location }: RouteComponentProps) => {
     <PageWrapper>
       <PageContent>
         <SearchBarWrapper>
+          <Dropdown
+            styles={dropdownStyles}
+            className="dropdown"
+            width="200px"
+            options={SearchVerticalOptions}
+            isSearchable={false}
+            value={selectedVertical}
+            onChange={(value: Object) => setSelectedVertical(value)}
+          />
           <SearchBar
             placeholder="Search..."
             value={queryInputText}
@@ -80,7 +106,7 @@ const HomePage = ({ history, location }: RouteComponentProps) => {
             type="submit"
             onSubmit={submitQuery}
             onClick={submitQuery}
-            onMouseDown={(e) => e.preventDefault()}
+            onMouseDown={(e: any) => e.preventDefault()}
           >
             <SearchIcon />
             Search
@@ -167,3 +193,46 @@ const NoResults = styled.div`
   padding-bottom: 24px;
   border-bottom: 1px solid ${({ theme }) => theme.lightGrey};
 `;
+
+const Dropdown = styled(Select)``;
+
+const dropdownStyles = {
+  option: (provided: any, state: any) => ({
+    ...provided,
+    color: state.isFocused ? Theme.white : Theme.primary,
+    background: state.isFocused ? Theme.primary : Theme.white,
+    cursor: 'pointer',
+    '&:hover': {
+      background: Theme.primary,
+      color: Theme.white,
+    }
+  }),
+  control: (_: any, state: any) => ({
+    width: 'fit-content',
+    border: `1px solid ${state.isFocused ? Theme.primary : Theme.grey}`,
+    marginRight: 8,
+    borderRadius: 4,
+    cursor: 'pointer',
+    display: 'flex',
+    padding: 4,
+    paddingLeft: 8,
+    '&:hover': {
+      border: `1px solid ${Theme.primary}`
+    }
+  }),
+  valueContainer: () => ({
+    display: 'flex',
+    alignItems: 'center',
+    whiteSpace: 'nowrap'
+  }),
+  singleValue: () => ({
+    position: 'relative',
+    whiteSpace: 'nowrap'
+  }),
+  placeholder: () => ({
+    position: 'relative'
+  }),
+  indicatorSeparator: () => ({
+    display: 'none'
+  })
+};

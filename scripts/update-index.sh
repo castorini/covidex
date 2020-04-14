@@ -8,7 +8,7 @@ INDEX_URL=https://www.dropbox.com/s/ivk87journyajw3/lucene-index-covid-paragraph
 wget ${INDEX_URL}
 tar xvfz ${INDEX_NAME}.tar.gz && rm ${INDEX_NAME}.tar.gz
 
-rm -rf api/lucene-index-covid-paragraph
-mv ${INDEX_NAME} api/lucene-index-covid-paragraph
+rm -rf api/index/lucene-index-covid-paragraph
+mv ${INDEX_NAME} api/index/lucene-index-covid-paragraph
 
 echo "Successfully updated Anserini index at api/${INDEX_NAME}"

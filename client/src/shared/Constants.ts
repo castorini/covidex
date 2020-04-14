@@ -16,6 +16,11 @@ export const COLLAPSED_ENDPOINT = 'search/log/collapsed';
 export const EXPANDED_ENDPOINT = 'search/log/expanded';
 export const CLICKED_ENDPOINT = 'search/log/clicked';
 
+export const SearchVerticalOptions = [
+  { value: 'cord19', label: 'CORD-19' },
+  { value: 'trialstreamer', label: 'Trialstreamer' },
+];
+
 /* NLTK Stopwords */
 export const STOP_WORDS = new Set([
   'i',
