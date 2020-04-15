@@ -18,7 +18,8 @@ import Keycodes from '../../../shared/Keycodes';
 const CORD_EXAMPLES = [
   'What is the incubation period of COVID-19?',
   'What is the effectiveness of chloroquine for COVID-19?',
-  'Are there cases of asymptomatic transmission of COVID-19?',
+  'What is the duration of viral shedding for COVID-19?',
+  'How does COVID-19 bind to the ACE2 receptor?',
   'How do weather conditions affect the transmission of COVID-19?',
   'Tell me about IgG and IgM tests for COVID-19.',
   'What is the prognostic value of IL-6 levels in COVID-19?',
@@ -37,30 +38,25 @@ const SearchBar = ({ query, vertical, setQuery, setVertical, history }: SearchBa
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => setQuery(event.target.value);
 
-  const submitQuery = () =>
-    history.push(`${HOME_ROUTE}?query=${encodeURI(query)}&vertical=${vertical.value}`);
-
-  const handleEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.keyCode === Keycodes.ENTER) {
-      submitQuery();
-    }
-  };
+  const submitQuery = (q: string = query, v: string = vertical.value) =>
+    history.push(`${HOME_ROUTE}?query=${encodeURI(q)}&vertical=${v}`);
 
   const handleUserKeyPress = useCallback(
     (event: KeyboardEvent) => {
+      if (event.keyCode === Keycodes.ENTER && inputFocused) {
+        submitQuery();
+      } 
+
       if (event.keyCode === Keycodes.UP) {
-        event.preventDefault();
         setTypeaheadIndex(Math.max(0, typeaheadIndex - 1));
       } else if (event.keyCode === Keycodes.DOWN) {
-        event.preventDefault();
         setTypeaheadIndex(Math.min(CORD_EXAMPLES.length - 1, typeaheadIndex + 1));
       } else if (event.keyCode === Keycodes.ENTER && typeaheadIndex >= 0 && query === '') {
-        event.preventDefault();
-        setQuery(CORD_EXAMPLES[typeaheadIndex]);
+        submitQuery(CORD_EXAMPLES[typeaheadIndex]);
       }
     },
     // eslint-disable-next-line
-    [typeaheadIndex, query],
+    [typeaheadIndex, query, inputFocused],
   );
 
   useEffect(() => {
@@ -95,21 +91,20 @@ const SearchBar = ({ query, vertical, setQuery, setVertical, history }: SearchBa
             placeholder="something about COVID-19..."
             value={query}
             onChange={handleInput}
-            onSubmit={submitQuery}
-            onKeyPress={handleEnter}
+            onSubmit={() => submitQuery()}
             onFocus={() => setInputFocused(true)}
             onBlur={() => setInputFocused(false)}
           />
           {inputFocused && query === '' && (
             <TypeaheadWrapper>
-              {CORD_EXAMPLES.map((q, idx) => (
+              {CORD_EXAMPLES.map((example, idx) => (
                 <TypeaheadResult
                   key={idx}
-                  onClick={() => setQuery(q)}
-                  onMouseDown={() => setQuery(q)}
+                  onClick={() => submitQuery(example)}
+                  onMouseDown={() => submitQuery(example)}
                   selected={idx === typeaheadIndex}
                 >
-                  {q}
+                  {example}
                 </TypeaheadResult>
               ))}
             </TypeaheadWrapper>
@@ -117,8 +112,8 @@ const SearchBar = ({ query, vertical, setQuery, setVertical, history }: SearchBa
         </SearchInputWrapper>
         <SearchButton
           type="submit"
-          onSubmit={submitQuery}
-          onClick={submitQuery}
+          onSubmit={() => submitQuery()}
+          onClick={() => submitQuery()}
           onMouseDown={(e: any) => e.preventDefault()}
         >
           <SearchIcon />
