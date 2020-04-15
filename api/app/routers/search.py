@@ -99,12 +99,17 @@ async def get_search(request: Request, query: str, vertical: SearchVertical = Se
     query_id = str(uuid4())
 
     # Log query and results.
+    forwarded_header = 'X-Forwarded-For'
+    request_ip = request.client.host
+    if forwarded_header in request.headers:
+        request_ip = request.headers[forwarded_header]
+
     search_logger.info(json.dumps({
         'query_id': query_id,
         'type': SearchLogType.query,
         'vertical': vertical,
         'query': query,
-        'request_ip': request.client.host,
+        'request_ip': request_ip,
         'timestamp': datetime.utcnow().isoformat(),
         'response': [r.json() for r in ranked_results]}))
 
