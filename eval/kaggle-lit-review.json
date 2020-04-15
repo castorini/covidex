@@ -1,21 +1,84 @@
-{
-  "category": "Transmission, incubation, and environmental stability",
-  "sub_category": "Length of viral shedding after illness onset",
-  "answers": [
-    {
-      "id": "bg0cw5s6",
-      "title": "Factors associated with prolonged viral shedding and impact of Lopinavir/Ritonavir treatment in patients with SARS-CoV-2 infection",
-      "exact_answer": "23 days (IQR, 18-32 days)"
-    },
-    {
-      "id": "r5a46n9a",
-      "title": "Viral Kinetics and Antibody Responses in Patients with COVID-19",
-      "exact_answer": "12 (3-38), 19 (5-37), and 18 (7-26) days in nasopharyngeal swabs, sputum and stools, respectively"
-    },
-    {
-      "id": "r5a46n9a",
-      "title": "Clinical course and risk factors for mortality of adult inpatients with COVID-19 in Wuhan, China: a retrospective cohort study",
-      "exact_answer": "20·0 days (IQR 17·0–24·0)"
-    }
-  ]
-}
+[
+  {
+    "category": "Transmission, incubation, and environmental stability",
+    "sub_category": "Length of viral shedding after illness onset",
+    "answers": [
+      {
+        "id": "bg0cw5s6",
+        "title": "Factors associated with prolonged viral shedding and impact of Lopinavir/Ritonavir treatment in patients with SARS-CoV-2 infection",
+        "exact_answer": "23 days (IQR, 18-32 days)"
+      },
+      {
+        "id": "r5a46n9a",
+        "title": "Viral Kinetics and Antibody Responses in Patients with COVID-19",
+        "exact_answer": "12 (3-38), 19 (5-37), and 18 (7-26) days in nasopharyngeal swabs, sputum and stools, respectively"
+      },
+      {
+        "id": "r5a46n9a",
+        "title": "Clinical course and risk factors for mortality of adult inpatients with COVID-19 in Wuhan, China: a retrospective cohort study",
+        "exact_answer": "20·0 days (IQR 17·0–24·0)"
+      }
+    ]
+  },
+  {
+    "category": "Transmission, incubation, and environmental stability",
+    "sub_category": "Proportion of patients who were asymptomatic",
+    "answers": [
+      {
+        "id": "bmsmegbs",
+        "title": "A considerable proportion of individuals with asymptomatic SARS-CoV-2 infection in Tibetan population",
+        "exact_answer": "21.7%"
+      },
+      {
+        "id": "jjgfgqwg",
+        "title": "Modes of contact and risk of transmission in COVID-19 among close contacts",
+        "exact_answer": "6.2%"
+      },
+      {
+        "id": "7w1bhaz6",
+        "title": "High incidence of asymptomatic SARS-CoV-2 infection, Chongqing, China",
+        "exact_answer": "19%"
+      },
+      {
+        "id": "xsqgrd5l",
+        "title": "High transmissibility of COVID-19 near symptom onset",
+        "exact_answer": "there were 32 laboratory-confirmed COVID-19 patients, including five household/family clusters and four asymptomatic patients"
+      },
+      {
+        "id": "6su2x8mk",
+        "title": "Non-severe vs severe symptomatic COVID-19: 104 cases from the outbreak on the cruise ship “Diamond Princess” in Japan",
+        "exact_answer": "76 and 28 patients were classified as non-severe (asymptomatic, mild)"
+      },
+      {
+        "id": "rjm1dqk7",
+        "title": "Epidemiological characteristics of 2019 novel coronavirus family clustering in Zhejiang Province",
+        "exact_answer": "54 asymptomatic infected cases"
+      },
+      {
+        "id": "56zhxd6e",
+        "title": "Epidemiological parameters of coronavirus disease 2019: a pooled analysis of publicly reported individual data of 1155 cases from seven countries",
+        "exact_answer": "49 (14.89%) were asymptomatic"
+      },
+      {
+        "id": "atnz63pk",
+        "title": "Estimating the Asymptomatic Proportion of 2019 Novel Coronavirus onboard the Princess Cruises Ship, 2020",
+        "exact_answer": "17.9%"
+      },
+      {
+        "id": "ofoqk100",
+        "title": "Clinical Characteristics of 24 Asymptomatic Infections with COVID-19 Screened among Close Contacts in Nanjing, China",
+        "exact_answer": "The remaining 7 (29.2%) cases showed normal CT image and had no symptoms during hospitalization."
+      },
+      {
+        "id": "k3f7ohzg",
+        "title": "Characteristics of COVID-19 infection in Beijing",
+        "exact_answer": "13 (5.0%) asymptomatic cases"
+      },
+      {
+        "id": "f3h74j1n",
+        "title": "Estimation of the asymptomatic ratio of novel coronavirus infections (COVID-19)",
+        "exact_answer": "the asymptomatic ratio at 41.6%"
+      }
+    ]
+  }
+]
