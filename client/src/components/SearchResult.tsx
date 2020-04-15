@@ -153,14 +153,20 @@ const SearchResult = ({ article, position, queryId, queryTokens }: SearchResultP
     <SearchResultWrapper>
       <Title>
         {position + 1}.&nbsp;
-        <Link
-          href={article.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={() => makePOSTRequest(`${API_BASE}${CLICKED_ENDPOINT}`, interactionRequestBody)}
-        >
-          {article.title}
-        </Link>
+        {article.url !== null && article.url !== '' ? (
+          <Link
+            href={article.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() =>
+              makePOSTRequest(`${API_BASE}${CLICKED_ENDPOINT}`, interactionRequestBody)
+            }
+          >
+            {article.title}
+          </Link>
+        ) : (
+          article.title
+        )}
       </Title>
       <Subtitle>
         {authorString && <Authors>{authorString}</Authors>}

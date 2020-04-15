@@ -1,16 +1,20 @@
 from pyserini.search import pysearch
+
+from app.models import SearchVertical
 from app.settings import settings
 
 
 class Searcher:
     def __init__(self):
-        self.searcher = self.build_searcher()
+        self.searchers = {}
+        self.searchers[SearchVertical.cord19] = self.build_searcher(settings.cord19_index_path)
+        self.searchers[SearchVertical.trialstreamer] = self.build_searcher(settings.trialstreamer_index_path)
 
-    def build_searcher(self):
-        searcher = pysearch.SimpleSearcher(settings.index_path)
+    def build_searcher(self, index_path):
+        searcher = pysearch.SimpleSearcher(index_path)
         searcher.set_bm25_similarity(settings.bm25_k1, settings.bm25_b)
-        print('Initializing BM25, setting '
-              f'k1={settings.bm25_k1} and b={settings.bm25_b}')
+        print(f'Initializing BM25 {index_path}, '
+              f'setting k1={settings.bm25_k1} and b={settings.bm25_b}')
         if settings.rm3:
             searcher.set_rm3_reranker(settings.rm3_fb_terms,
                                       settings.rm3_fb_docs,
@@ -22,8 +26,7 @@ class Searcher:
                   f'originalQueryWeight={settings.rm3_original_query_weight}')
         return searcher
 
-    def search(self, query):
-        return self.searcher.search(q=query, k=settings.max_docs)
-
+    def search(self, query: str, vertical: SearchVertical):
+        return self.searchers[vertical].search(q=query, k=settings.max_docs)
 
 searcher = Searcher()

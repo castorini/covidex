@@ -26,4 +26,4 @@ done
 echo "Warming up models..."
 curl http://localhost:$PORT/api/search?query=test > /dev/null
 
-echo "Server started successfully! Logs are available at api/nohup.out"
+echo "Server started successfully! Logs are available at api/logs/"

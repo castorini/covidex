@@ -21,10 +21,10 @@ search_logger = build_timed_logger('search_logger', settings.search_log_path)
 
 
 @router.get('/search', response_model=SearchQueryResponse)
-async def get_search(request: Request, query: str, vertical: SearchVertical = SearchVertical.cord19):
+async def get_search(request: Request, query: str, vertical: SearchVertical):
     # Get search results from Lucene index.
     try:
-        searcher_hits = searcher.search(query)
+        searcher_hits = searcher.search(query, vertical)
     except:
         # Sometimes errors out due to encoding bugs.
         searcher_hits = []
@@ -152,7 +152,7 @@ def build_article(hit, id: str, score: float, paragraphs: List[str], highlighted
                    abstract=doc.get('abstract'),
                    journal=doc.get('journal'),
                    year=dateparser.parse(doc.get('publish_time')).year if doc.get('year') else None,
-                   url=doc.get('url') if doc.get('url') else 'https://www.semanticscholar.org/',
+                   url=doc.get('url'),
                    publish_time=doc.get('publish_time'),
                    score=score,
                    paragraphs=paragraphs,
