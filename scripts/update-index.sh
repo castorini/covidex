@@ -7,8 +7,8 @@ CORD19_INDEX_DATE=2020-04-10
 CORD19_INDEX_URL=https://www.dropbox.com/s/ivk87journyajw3/lucene-index-covid-paragraph-2020-04-10.tar.gz
 
 TRIALSTREAMER_INDEX_NAME=lucene-index-trialstreamer
-TRIALSTREAMER_INDEX_DATE=2020-04-14
-TRIALSTREAMER_INDEX_URL=https://www.dropbox.com/s/mvtxpo4u5n5k65f/lucene-index-trialstreamer-2020-04-14.tar.gz
+TRIALSTREAMER_INDEX_DATE=2020-04-15
+TRIALSTREAMER_INDEX_URL=https://www.dropbox.com/s/d2s92i6y927s1c7/lucene-index-trialstreamer-2020-04-15.tar.gz
 
 echo "Updating CORD-19 index..."
 wget ${CORD19_INDEX_URL}
