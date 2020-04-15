@@ -15,8 +15,8 @@ const HomeText = () => {
         release of April 10, 2020), which currently contains over 47,000 scholarly articles,
         including over 36,000 with full text, about COVID-19 and coronavirus-related research, drawn
         from a variety of sources including PubMed, a curated list of articles from the WHO, as well
-        as preprints from bioRxiv and medRxiv. We also support searching for randomized controlled
-        trials related to COVID-19 via datasets provided by&nbsp;
+        as preprints from bioRxiv and medRxiv. In addition, we also support search on 100+
+        randomized controlled trials (published and ongoing) related to COVID-19 provided by&nbsp;
         <Link href="https://trialstreamer.robotreviewer.net/">Trialstreamer</Link>.
       </Paragraph>
       <Paragraph>
