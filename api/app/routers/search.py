@@ -152,7 +152,7 @@ def build_article(hit, id: str, score: float, paragraphs: List[str], highlighted
                    abstract=doc.get('abstract'),
                    journal=doc.get('journal'),
                    year=dateparser.parse(doc.get('publish_time')).year if doc.get('year') else None,
-                   url=doc.get('url') if doc.get('url') else 'https://www.semanticscholar.org/',
+                   url=doc.get('url'),
                    publish_time=doc.get('publish_time'),
                    score=score,
                    paragraphs=paragraphs,

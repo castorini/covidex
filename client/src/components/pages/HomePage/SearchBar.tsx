@@ -232,6 +232,7 @@ const TypeaheadWrapper = styled.div`
   background: ${({ theme }) => theme.white};
   border-radius: 4px;
   border: 1px solid ${({ theme }) => theme.lightGrey};
+  z-index: 2;
 `;
 
 const Section = styled.div`
