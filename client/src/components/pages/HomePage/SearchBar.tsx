@@ -25,6 +25,14 @@ const CORD_EXAMPLES = [
   'What is the prognostic value of IL-6 levels in COVID-19?',
 ];
 
+const TRIALSTREAMER_EXAMPLES = [
+  'chloroquine',
+  'lopinavir',
+  'remdesivir',
+  'abidol hydrochloride',
+  'methylprednisolone',
+];
+
 interface SearchBarProps extends RouteComponentProps {
   query: string;
   vertical: SearchVerticalOption;
@@ -36,6 +44,13 @@ const SearchBar = ({ query, vertical, setQuery, setVertical, history }: SearchBa
   const [typeaheadIndex, setTypeaheadIndex] = useState<number>(-1);
   const [inputFocused, setInputFocused] = useState<boolean>(false);
 
+  let examples: Array<string>;
+  if (vertical.value === 'cord19') {
+    examples = CORD_EXAMPLES;
+  } else {
+    examples = TRIALSTREAMER_EXAMPLES;
+  }
+
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => setQuery(event.target.value);
 
   const submitQuery = (q: string = query, v: string = vertical.value) =>
@@ -45,14 +60,14 @@ const SearchBar = ({ query, vertical, setQuery, setVertical, history }: SearchBa
     (event: KeyboardEvent) => {
       if (event.keyCode === Keycodes.ENTER && inputFocused) {
         submitQuery();
-      } 
+      }
 
       if (event.keyCode === Keycodes.UP) {
         setTypeaheadIndex(Math.max(0, typeaheadIndex - 1));
       } else if (event.keyCode === Keycodes.DOWN) {
-        setTypeaheadIndex(Math.min(CORD_EXAMPLES.length - 1, typeaheadIndex + 1));
+        setTypeaheadIndex(Math.min(examples.length - 1, typeaheadIndex + 1));
       } else if (event.keyCode === Keycodes.ENTER && typeaheadIndex >= 0 && query === '') {
-        submitQuery(CORD_EXAMPLES[typeaheadIndex]);
+        submitQuery(examples[typeaheadIndex]);
       }
     },
     // eslint-disable-next-line
@@ -68,7 +83,7 @@ const SearchBar = ({ query, vertical, setQuery, setVertical, history }: SearchBa
 
   useEffect(() => {
     setTypeaheadIndex(-1);
-  }, [query]);
+  }, [query, vertical]);
 
   return (
     <SearchBarWrapper>
@@ -97,7 +112,7 @@ const SearchBar = ({ query, vertical, setQuery, setVertical, history }: SearchBa
           />
           {inputFocused && query === '' && (
             <TypeaheadWrapper>
-              {CORD_EXAMPLES.map((example, idx) => (
+              {examples.map((example, idx) => (
                 <TypeaheadResult
                   key={idx}
                   onClick={() => submitQuery(example)}
