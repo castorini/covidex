@@ -153,7 +153,7 @@ const SearchResult = ({ article, position, queryId, queryTokens }: SearchResultP
     <SearchResultWrapper>
       <Title>
         {position + 1}.&nbsp;
-        {article.url !== null ? (
+        {article.url !== null && article.url !== '' ? (
           <Link
             href={article.url}
             target="_blank"
