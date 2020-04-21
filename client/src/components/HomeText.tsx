@@ -12,7 +12,7 @@ const HomeText = () => {
           COVID-19 Open Research Dataset (CORD-19)
         </Link>
         &nbsp;provided by the <Link href="https://allenai.org/">Allen Institute for AI</Link> (data
-        release of April 10, 2020), which currently contains over 47,000 scholarly articles,
+        release of April 17, 2020), which currently contains over 47,000 scholarly articles,
         including over 36,000 with full text, about COVID-19 and coronavirus-related research, drawn
         from a variety of sources including PubMed, a curated list of articles from the WHO, as well
         as preprints from bioRxiv and medRxiv. In addition, we also support search on 100+
