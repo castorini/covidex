@@ -2,7 +2,7 @@
 
 echo "Updating Anserini index..."
 
-CORD19_INDEX_NAME=lucene-index-covid-paragraph
+CORD19_INDEX_NAME=lucene-index-cord19-paragraph
 CORD19_INDEX_DATE=2020-04-24
 CORD19_INDEX_URL=https://www.dropbox.com/s/xg2b4aapjvmx3ve/lucene-index-cord19-paragraph-2020-04-24.tar.gz
 
