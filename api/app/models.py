@@ -54,13 +54,14 @@ class SearchVertical(str, Enum):
 
 class RelatedArticle(BaseModel):
     distance: str
-    uid: str
-    url: str
-    title: str
+    id: str
+    abstract: str = None
     authors: List[str] = []
     journal: str = None
     publish_time: str = None
-    abstract: str = None
+    source: str
+    title: str
+    url: str
 
 
 class RelatedQueryResponse(BaseModel):

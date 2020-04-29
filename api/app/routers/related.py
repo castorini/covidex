@@ -36,8 +36,9 @@ async def get_related(request: Request, uid: str, page_number: int = 1):
 
         related_results.append({
             'distance': str(dist),
-            'uid': uid,
+            'id': uid,
             'url': gen_metadata_from_uid(uid, 'url'),
+            'source': gen_metadata_from_uid(uid, 'source_x'),
             'title': gen_metadata_from_uid(uid, 'title'),
             'authors': get_authors_from_uid(uid),
             'journal': gen_metadata_from_uid(uid, 'journal'),
@@ -74,4 +75,4 @@ def get_authors_from_uid(uid) -> List[str]:
     if authors is None:
         return []
 
-    return authors.split(';')
+    return [author.strip() for author in authors.split(';')]
