@@ -5,8 +5,8 @@ export const tokenize = (text: string): Array<string> => {
   let results: Array<string> = [];
   let words = text
     .toLowerCase()
-    .replace(/[^\w\s]|_/g, " ")
-    .replace(/\s+/g, " ")
+    .replace(/[^\w\s]|_/g, ' ')
+    .replace(/\s+/g, ' ')
     .split(' ');
 
   words.forEach((word) => {

@@ -27,7 +27,7 @@ const Filters: React.FC<FiltersProps> = ({ filters, selectedFilters, setSelected
       <FilterTitle>Filter your search</FilterTitle>
       {filters.yearMinMax[0] !== filters.yearMinMax[1] && (
         <FilterComponent>
-          <FilterSubtitle>Year</FilterSubtitle>
+          <FilterSubtitle>Publish Time</FilterSubtitle>
           <RangeSlider
             min={filters.yearMinMax[0]}
             max={filters.yearMinMax[1]}
@@ -38,6 +38,22 @@ const Filters: React.FC<FiltersProps> = ({ filters, selectedFilters, setSelected
                 yearRange: values,
               })
             }
+          />
+        </FilterComponent>
+      )}
+      {filters.sources.length > 0 && (
+        <FilterComponent>
+          <FilterSubtitle>Source</FilterSubtitle>
+          <SelectionFilter
+            options={filters.sources}
+            selectedOptions={selectedFilters.sources}
+            maxDisplayed={10}
+            setSelectedOptions={(source) => {
+              setSelectedFilters({
+                ...selectedFilters,
+                sources: updateSelectionFilter(selectedFilters.sources, source),
+              });
+            }}
           />
         </FilterComponent>
       )}
@@ -71,21 +87,6 @@ const Filters: React.FC<FiltersProps> = ({ filters, selectedFilters, setSelected
           />
         </FilterComponent>
       )}
-      {filters.sources.length > 0 && (
-        <FilterComponent>
-          <FilterSubtitle>Source</FilterSubtitle>
-          <SelectionFilter
-            options={filters.sources}
-            selectedOptions={selectedFilters.sources}
-            setSelectedOptions={(source) => {
-              setSelectedFilters({
-                ...selectedFilters,
-                sources: updateSelectionFilter(selectedFilters.sources, source),
-              });
-            }}
-          />
-        </FilterComponent>
-      )}
     </FiltersWrapper>
   );
 };
@@ -95,8 +96,8 @@ export default Filters;
 const FiltersWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 240px;
-  min-width: 240px;
+  width: 200px;
+  min-width: 200px;
   margin-right: 48px;
   padding-top: 24px;
 `;

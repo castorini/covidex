@@ -14,7 +14,7 @@ const SelectionFilter: React.FC<SelectionFilterProps> = ({
   options = [],
   selectedOptions = new Set([]),
   setSelectedOptions = () => {},
-  maxDisplayed = 10,
+  maxDisplayed = 5,
 }) => {
   const theme = useTheme();
 
@@ -46,7 +46,9 @@ const SelectionFilter: React.FC<SelectionFilterProps> = ({
             onMouseDown={(e: any) => e.preventDefault()}
           >
             <Checkbox className="checkbox" checked={selectedOptions.has(option)}>
-              {selectedOptions.has(option) && <Check strokeWidth={3} color={theme.white} size={14} />}
+              {selectedOptions.has(option) && (
+                <Check strokeWidth={3} color={theme.white} size={14} />
+              )}
             </Checkbox>
             <OptionText>{option}</OptionText>
           </OptionWrapper>

@@ -16,15 +16,15 @@ export interface SearchArticle {
 }
 
 export interface SearchFilters {
-  yearMinMax: number[],
-  authors: string[],
-  journals: string[],
-  sources: string[]
+  yearMinMax: number[];
+  authors: string[];
+  journals: string[];
+  sources: string[];
 }
 
 export interface SelectedSearchFilters {
-  yearRange: number[],
-  authors: Set<string>,
-  journals: Set<string>,
-  sources: Set<string>
+  yearRange: number[];
+  authors: Set<string>;
+  journals: Set<string>;
+  sources: Set<string>;
 }

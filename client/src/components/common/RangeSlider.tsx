@@ -9,6 +9,7 @@ interface RangeSliderProps {
   step?: number;
   values: number[];
   setValues: (values: number[]) => void;
+  monthLabels?: boolean;
 }
 
 const RangeSlider: React.FC<RangeSliderProps> = ({
@@ -19,6 +20,8 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
   setValues,
 }) => {
   const theme = useTheme();
+  const minString = String(values[0]);
+  const maxString = String(values[1]);
 
   return (
     <RangeWrapper>
@@ -46,8 +49,12 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
         renderThumb={({ props }) => <Thumb {...props} />}
       />
       <Values>
-        <ValueText>{values[0]}</ValueText>
-        <ValueText>{values[1]}</ValueText>
+        <ValueText>
+          {minString.length > 4 ? `${minString.substr(0, 4)}/${minString.substr(4, 6)}` : minString}
+        </ValueText>
+        <ValueText>
+          {maxString.length > 4 ? `${maxString.substr(0, 4)}/${maxString.substr(4, 6)}` : maxString}
+        </ValueText>
       </Values>
     </RangeWrapper>
   );

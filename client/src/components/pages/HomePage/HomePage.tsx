@@ -58,7 +58,7 @@ const getSearchFilters = (searchResults: SearchArticle[] | null): SearchFilters 
   });
 
   return {
-    yearMinMax: [min, max],
+    yearMinMax: min === max ? [min * 100 + 1, min * 100 + 12] : [min, max],
     authors: Array.from(authors.values()),
     journals: Array.from(journals.values()),
     sources: Array.from(sources.values()),
@@ -151,7 +151,12 @@ const HomePage = () => {
           (article) =>
             (!article.publish_time ||
               (Number(article.publish_time.substr(0, 4)) >= selectedFilters.yearRange[0] &&
-                Number(article.publish_time.substr(0, 4)) <= selectedFilters.yearRange[1])) &&
+                Number(article.publish_time.substr(0, 4)) <= selectedFilters.yearRange[1]) ||
+              (article.publish_time.length >= 7 &&
+                Number(article.publish_time.substr(0, 7).replace('-', '')) >=
+                  selectedFilters.yearRange[0] &&
+                Number(article.publish_time.substr(0, 7).replace('-', '')) <=
+                  selectedFilters.yearRange[1])) &&
             (selectedFilters.authors.size === 0 ||
               article.authors.some((a) => selectedFilters.authors.has(a))) &&
             (selectedFilters.journals.size === 0 ||
