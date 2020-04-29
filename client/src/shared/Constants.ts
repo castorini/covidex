@@ -2,6 +2,7 @@ import { OptionTypeBase } from 'react-select';
 
 /* Routes */
 export const HOME_ROUTE = '/';
+export const RELATED_ROUTE = '/related';
 
 /* Breakpoints */
 export const SMALL_MOBILE_BREAKPOINT = 425;
@@ -12,11 +13,13 @@ export const TABLET_BREAKPOINT = 800;
 export const CONTENT_WIDTH = 1100;
 
 /* API */
-export const API_BASE = '/api/';
-export const SEARCH_ENDPOINT = 'search';
-export const COLLAPSED_ENDPOINT = 'search/log/collapsed';
-export const EXPANDED_ENDPOINT = 'search/log/expanded';
-export const CLICKED_ENDPOINT = 'search/log/clicked';
+export const API_BASE = '/api';
+export const SEARCH_ENDPOINT = '/search';
+export const COLLAPSED_ENDPOINT = '/search/log/collapsed';
+export const EXPANDED_ENDPOINT = '/search/log/expanded';
+export const CLICKED_ENDPOINT = '/search/log/clicked';
+
+export const RELATED_ENDPOINT = '/related';
 
 /* Search Vertical Models */
 export interface SearchVerticalOption extends OptionTypeBase {

@@ -2,6 +2,7 @@ import React, { useState, ReactNode, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { ChevronsDown } from 'react-feather';
 import Highlighter from 'react-highlight-words';
+import { useHistory } from 'react-router';
 
 import { Link, Heading3, LinkStyle, BodySmall, FadeInText } from '../shared/Styles';
 import {
@@ -9,6 +10,7 @@ import {
   COLLAPSED_ENDPOINT,
   EXPANDED_ENDPOINT,
   CLICKED_ENDPOINT,
+  RELATED_ROUTE,
 } from '../shared/Constants';
 import { makePOSTRequest } from '../shared/Util';
 import { SearchArticle } from '../shared/Models';
@@ -98,6 +100,8 @@ const adjustHighlights = (
 };
 
 const SearchResult = ({ article, position, queryId, queryTokens }: SearchResultProps) => {
+  const history = useHistory();
+
   const fullTextRef = useRef(null);
   const [collapsed, setCollapsed] = useState<boolean>(true);
 
@@ -186,22 +190,26 @@ const SearchResult = ({ article, position, queryId, queryTokens }: SearchResultP
           </Paragraph>
         ))}
       </div>
-      {(abstract || paragraphs.length > 0) && (
-        <ShowTextLink
-          collapsed={collapsed}
-          onClick={() => {
-            makePOSTRequest(
-              `${API_BASE}${collapsed ? EXPANDED_ENDPOINT : COLLAPSED_ENDPOINT}`,
-              interactionRequestBody,
-            );
-            setCollapsed(!collapsed);
-          }}
-          onMouseDown={(e) => e.preventDefault()}
-        >
-          {collapsed ? 'Show more' : 'Show less'}
-          <Chevron collapsed={collapsed} />
-        </ShowTextLink>
-      )}
+      <LinkContainer>
+        {(abstract || paragraphs.length > 0) && (
+          <TextLink
+            onClick={() => {
+              makePOSTRequest(
+                `${API_BASE}${collapsed ? EXPANDED_ENDPOINT : COLLAPSED_ENDPOINT}`,
+                interactionRequestBody,
+              );
+              setCollapsed(!collapsed);
+            }}
+            onMouseDown={(e) => e.preventDefault()}
+          >
+            {collapsed ? 'Show more' : 'Show less'}
+            <Chevron collapsed={collapsed} />
+          </TextLink>
+        )}
+        <TextLink onClick={() => history.push(`${RELATED_ROUTE}/${article.id}`)}>
+          Related articles
+        </TextLink>
+      </LinkContainer>
     </SearchResultWrapper>
   );
 };
@@ -281,11 +289,16 @@ const Paragraph = styled(ResultText)`
   `}
 `;
 
-const ShowTextLink = styled.button<{ collapsed: boolean }>`
+const LinkContainer = styled.div`
+  display: flex;
+`;
+
+const TextLink = styled.button`
   ${BodySmall}
   ${LinkStyle}
   max-width: fit-content;
   margin-top: 8px;
+  margin-right: 16px;
   display: flex;
   align-items: center;
   background: none;
