@@ -57,7 +57,7 @@ class RelatedArticle(BaseModel):
     uid: str
     url: str
     title: str
-    authors: str = None
+    authors: List[str] = []
     journal: str = None
     publish_time: str = None
     abstract: str = None

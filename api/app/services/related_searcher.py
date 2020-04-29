@@ -3,7 +3,7 @@ import hnswlib
 import csv
 
 
-class RelatedHelper:
+class RelatedSearcher:
     def __init__(self):
         # Variables
         self.DIM = None
@@ -20,12 +20,12 @@ class RelatedHelper:
         self.loadHNSW()
 
     def loadHNSW(self):
-        print('>> [RelatedHelper] hnswlib indexing')
+        print('>> [RelatedSearcher] hnswlib indexing')
         self.HNSW = hnswlib.Index(space='l2', dim=self.DIM)
         self.HNSW.load_index(settings.related_bin_path,
                              max_elements=self.TOTAL_NUM_ELEMENTS)
         self.HNSW.set_ef(50)
-        print('<< [RelatedHelper] done')
+        print('<< [RelatedSearcher] done')
 
     def loadIndexToUidFile(self):
         res = []
@@ -39,7 +39,7 @@ class RelatedHelper:
         self.index_to_uid = res
         self.TOTAL_NUM_ELEMENTS = len(res)
         print(
-            f'>> [RelatedHelper] Detected {self.TOTAL_NUM_ELEMENTS} elements')
+            f'>> [RelatedSearcher] Detected {self.TOTAL_NUM_ELEMENTS} elements')
 
     def loadMetadataCSV(self):
         res = {}
@@ -61,7 +61,7 @@ class RelatedHelper:
                 res[uid] = item
 
         self.metadata = res
-        print('>> [RelatedHelper] Loaded Metadata CSV')
+        print('>> [RelatedSearcher] Loaded Metadata CSV')
 
     def loadEmbeddingCSV(self):
         res = {}
@@ -78,12 +78,12 @@ class RelatedHelper:
                     vectorDimension = len(vector)
                 else:
                     assert vectorDimension == len(
-                        vector), "[RelatedHelper] Embedding Dimension Mismatch"
+                        vector), "[RelatedSearcher] Embedding Dimension Mismatch"
 
         self.embedding = res
         self.DIM = vectorDimension
-        print('>> [RelatedHelper] Loaded Embedding CSV')
-        print(f'>> [RelatedHelper] Embedding dimension -> {self.DIM}')
+        print('>> [RelatedSearcher] Loaded Embedding CSV')
+        print(f'>> [RelatedSearcher] Embedding dimension -> {self.DIM}')
 
 
-relatedHelper = RelatedHelper()
+related_searcher = RelatedSearcher()

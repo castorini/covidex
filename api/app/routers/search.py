@@ -15,6 +15,7 @@ from app.services.ranker import ranker
 from app.services.searcher import searcher
 from app.settings import settings
 from app.util.logging import build_timed_logger
+from app.util.request import get_request_ip
 
 router = APIRouter()
 search_logger = build_timed_logger('search_logger', settings.search_log_path)
@@ -99,17 +100,12 @@ async def get_search(request: Request, query: str, vertical: SearchVertical):
     query_id = str(uuid4())
 
     # Log query and results.
-    forwarded_header = 'X-Forwarded-For'
-    request_ip = request.client.host
-    if forwarded_header in request.headers:
-        request_ip = request.headers[forwarded_header]
-
     search_logger.info(json.dumps({
         'query_id': query_id,
         'type': SearchLogType.query,
         'vertical': vertical,
         'query': query,
-        'request_ip': request_ip,
+        'request_ip': get_request_ip(request),
         'timestamp': datetime.utcnow().isoformat(),
         'response': [r.json() for r in ranked_results]}))
 
