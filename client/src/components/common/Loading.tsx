@@ -1,7 +1,9 @@
 import React from 'react';
-import styled, { withTheme } from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 
-const Loading = ({ theme }: any) => {
+const Loading = () => {
+  const theme = useTheme();
+
   return (
     <LoadingWrapper>
       <svg
@@ -31,7 +33,7 @@ const Loading = ({ theme }: any) => {
   );
 };
 
-export default withTheme(Loading);
+export default Loading;
 
 const LoadingWrapper = styled.div`
   margin: 64px auto;

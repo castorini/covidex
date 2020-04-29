@@ -11,25 +11,10 @@ import {
   CLICKED_ENDPOINT,
 } from '../shared/Constants';
 import { makePOSTRequest } from '../shared/Util';
+import { SearchArticle } from '../shared/Models';
 
-interface Article extends Object {
-  id: string;
-  title: string;
-  doi: string;
-  source: string;
-  url: string;
-  score: number;
-  authors: Array<string>;
-  abstract: string;
-  journal: string;
-  year: number;
-  publish_time: string;
-  paragraphs: Array<string>;
-  highlights: Array<Array<[number, number]>>;
-  highlighted_abstract: boolean;
-}
 interface SearchResultProps {
-  article: Article;
+  article: SearchArticle;
   position: number;
   queryId: string;
   queryTokens: Array<string>;
@@ -227,7 +212,7 @@ const SearchResultWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin: auto;
+  margin: 0 auto;
   padding: 24px 0;
   border-bottom: 1px dotted ${({ theme }) => theme.lightGrey};
   margin-bottom: 8px;
