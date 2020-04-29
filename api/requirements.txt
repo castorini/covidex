@@ -1,5 +1,6 @@
 dateparser==0.7.4
 fastapi[all]==0.52.0
+hnswlib==0.3.4
 httpx==0.12.1
 pyserini==0.8.1
 python-dotenv==0.12.0

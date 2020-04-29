@@ -7,6 +7,7 @@ from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
 from app.routers import search
+from app.routers import related
 from app.settings import settings
 
 app = FastAPI()
@@ -21,6 +22,7 @@ if settings.development:
 
 # API endpoints
 app.include_router(search.router, tags=['search'], prefix="/api")
+app.include_router(related.router, tags=['related'], prefix="/api")
 
 @app.get("/api/.*", status_code=404, include_in_schema=False)
 def invalid_api():
