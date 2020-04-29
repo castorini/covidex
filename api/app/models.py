@@ -53,10 +53,10 @@ class SearchVertical(str, Enum):
 
 
 class RelatedArticle(BaseModel):
-    distance: str
     id: str
     abstract: str = None
     authors: List[str] = []
+    distance: str
     journal: str = None
     publish_time: str = None
     source: str

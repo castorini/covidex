@@ -35,15 +35,15 @@ async def get_related(request: Request, uid: str, page_number: int = 1):
         uid = related_searcher.index_to_uid[index]
 
         related_results.append({
-            'distance': str(dist),
             'id': uid,
-            'url': gen_metadata_from_uid(uid, 'url'),
-            'source': gen_metadata_from_uid(uid, 'source_x'),
-            'title': gen_metadata_from_uid(uid, 'title'),
+            'abstract': gen_metadata_from_uid(uid, 'abstract'),
             'authors': get_authors_from_uid(uid),
+            'distance': str(dist),
             'journal': gen_metadata_from_uid(uid, 'journal'),
             'publish_time': gen_metadata_from_uid(uid, 'publish_time'),
-            'abstract': gen_metadata_from_uid(uid, 'abstract'),
+            'source': gen_metadata_from_uid(uid, 'source_x'),
+            'title': gen_metadata_from_uid(uid, 'title'),
+            'url': gen_metadata_from_uid(uid, 'url'),
         })
 
     # Generate UUID for query.
