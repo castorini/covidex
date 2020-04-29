@@ -1,14 +1,12 @@
 import { STOP_WORDS } from './Constants';
 
-/* Tokenize words based on stopwords and split by common punctuation */
+/* Tokenize words without stopwords and split by punctuation */
 export const tokenize = (text: string): Array<string> => {
   let results: Array<string> = [];
   let words = text
     .toLowerCase()
-    .replace('-', ' ')
-    .replace('.', ' ')
-    .replace(',', ' ')
-    .replace('?', ' ')
+    .replace(/[^\w\s]|_/g, " ")
+    .replace(/\s+/g, " ")
     .split(' ');
 
   words.forEach((word) => {

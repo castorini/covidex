@@ -8942,6 +8942,11 @@ react-popper@^1.0.0:
     typed-styles "^0.0.7"
     warning "^4.0.2"
 
+react-range@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/react-range/-/react-range-1.6.0.tgz#9f7435402fbcf221fb178f4bbdc6a36052c89da0"
+  integrity sha512-OTaylp3wzDxWq1awwH+rOz7UHbKmimu4wmxyZ0XzWtuO19Frz2D8c79R4YTC2IHqX+6ly3YmTLKhICSXi8x/NQ==
+
 react-router-dom@^5.1.2:
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-5.1.2.tgz#06701b834352f44d37fbb6311f870f84c76b9c18"

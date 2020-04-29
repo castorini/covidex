@@ -16,6 +16,54 @@ import {
   SEARCH_VERTICAL_OPTIONS,
   SearchVerticalOption,
 } from '../../../shared/Constants';
+import Filters from './Filters';
+import { SearchArticle, SearchFilters, SelectedSearchFilters } from '../../../shared/Models';
+
+const defaultFilter = {
+  yearMinMax: [0, 0],
+  authors: [],
+  journals: [],
+  sources: [],
+};
+
+const getSearchFilters = (searchResults: SearchArticle[] | null): SearchFilters => {
+  if (searchResults === null || searchResults.length === 0) {
+    return defaultFilter;
+  }
+
+  let min = Number.MAX_VALUE;
+  let max = -1;
+  let authors: Set<string> = new Set([]);
+  let journals: Set<string> = new Set([]);
+  let sources: Set<string> = new Set([]);
+
+  searchResults.forEach((article) => {
+    if (article.publish_time) {
+      const year = Number(article.publish_time.substr(0, 4));
+      min = Math.min(year, min);
+      max = Math.max(year, max);
+    }
+
+    if (article.authors) {
+      article.authors.forEach((a) => authors.add(a));
+    }
+
+    if (article.journal) {
+      journals.add(article.journal);
+    }
+
+    if (article.source) {
+      sources.add(article.source);
+    }
+  });
+
+  return {
+    yearMinMax: [min, max],
+    authors: Array.from(authors.values()),
+    journals: Array.from(journals.values()),
+    sources: Array.from(sources.values()),
+  };
+};
 
 const HomePage = () => {
   const urlParams = new URLSearchParams(useLocation().search);
@@ -28,8 +76,16 @@ const HomePage = () => {
     SEARCH_VERTICAL_OPTIONS[0],
   );
 
+  const [filters, setFilters] = useState<SearchFilters>(defaultFilter);
+  const [selectedFilters, setSelectedFilters] = useState<SelectedSearchFilters>({
+    yearRange: [0, 0],
+    authors: new Set([]),
+    journals: new Set([]),
+    sources: new Set([]),
+  });
+
   const [queryId, setQueryId] = useState<string>('');
-  const [searchResults, setSearchResults] = useState<Array<any> | null>(null);
+  const [searchResults, setSearchResults] = useState<SearchArticle[] | null>(null);
 
   useEffect(() => {
     setQueryInputText(query);
@@ -67,7 +123,18 @@ const HomePage = () => {
 
         let data = await response.json();
         setQueryId(data.query_id);
-        setSearchResults(data.response);
+
+        const searchResults = data.response;
+        const filters = getSearchFilters(searchResults);
+
+        setSearchResults(searchResults);
+        setSelectedFilters({
+          yearRange: filters.yearMinMax,
+          authors: new Set([]),
+          journals: new Set([]),
+          sources: new Set([]),
+        });
+        setFilters(filters);
       } catch {
         setLoading(false);
         setSearchResults([]);
@@ -77,6 +144,20 @@ const HomePage = () => {
   }, [query, vertical]);
 
   const queryTokens = tokenize(query);
+  const filteredResults =
+    searchResults === null
+      ? null
+      : searchResults.filter(
+          (article) =>
+            (!article.publish_time ||
+              (Number(article.publish_time.substr(0, 4)) >= selectedFilters.yearRange[0] &&
+                Number(article.publish_time.substr(0, 4)) <= selectedFilters.yearRange[1])) &&
+            (selectedFilters.authors.size === 0 ||
+              article.authors.some((a) => selectedFilters.authors.has(a))) &&
+            (selectedFilters.journals.size === 0 ||
+              selectedFilters.journals.has(article.journal)) &&
+            (selectedFilters.sources.size === 0 || selectedFilters.sources.has(article.source)),
+        );
 
   return (
     <PageWrapper>
@@ -89,25 +170,35 @@ const HomePage = () => {
         />
         <ErrorBoundary FallbackComponent={() => <NoResults>No results found</NoResults>}>
           {loading && <Loading />}
-          <SearchResults>
+          <HomeContent>
             {!query && <HomeText />}
+            {query && searchResults !== null && searchResults.length > 0 && (
+              <Filters
+                filters={filters}
+                selectedFilters={selectedFilters}
+                setSelectedFilters={setSelectedFilters}
+              />
+            )}
             {query &&
-              searchResults !== undefined &&
-              searchResults !== null &&
-              (searchResults.length === 0 ? (
+              filteredResults !== null &&
+              (searchResults === null || filteredResults.length === 0 ? (
                 <NoResults>No results found</NoResults>
               ) : (
-                searchResults.map((article, i) => (
-                  <SearchResult
-                    key={i}
-                    article={article}
-                    position={i}
-                    queryTokens={queryTokens}
-                    queryId={queryId}
-                  />
-                ))
+                <>
+                  <SearchResults>
+                    {filteredResults.map((article, i) => (
+                      <SearchResult
+                        key={i}
+                        article={article}
+                        position={i}
+                        queryTokens={queryTokens}
+                        queryId={queryId}
+                      />
+                    ))}
+                  </SearchResults>
+                </>
               ))}
-          </SearchResults>
+          </HomeContent>
         </ErrorBoundary>
       </PageContent>
     </PageWrapper>
@@ -116,9 +207,10 @@ const HomePage = () => {
 
 export default HomePage;
 
-const SearchResults = styled.div`
+const HomeContent = styled.div`
   width: 100%;
   margin-right: auto;
+  display: flex;
 `;
 
 const NoResults = styled.div`
@@ -126,5 +218,9 @@ const NoResults = styled.div`
   display: flex;
   margin-top: 16px;
   padding-bottom: 24px;
-  border-bottom: 1px solid ${({ theme }) => theme.lightGrey};
+`;
+
+const SearchResults = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
