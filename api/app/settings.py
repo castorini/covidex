@@ -7,6 +7,13 @@ from pydantic import BaseSettings
 class Settings(BaseSettings):
     development: bool = True
     search_log_path: str = 'logs/search.log'
+    related_log_path: str = 'logs/related.log'
+
+    # Related searcher settings
+    related_bin_path: str = "index/cord19-hnsw-index/cord19-hnsw.bin"
+    related_index_to_uid_path: str = "index/cord19-hnsw-index/cord19-hnsw.txt"
+    related_metadata_csv_path: str = "index/cord19-hnsw-index/metadata.csv"
+    related_specter_csv_path: str = "index/cord19-hnsw-index/specter.csv"
 
     # Anserini searcher settings
     cord19_index_path: str = 'index/lucene-index-cord19-paragraph'

@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from pydantic.class_validators import validator
 from enum import Enum
 
+
 class Article(BaseModel):
     id: str
     title: str
@@ -27,14 +28,17 @@ class Article(BaseModel):
             assert len(v) == len(values['paragraphs'])
         return v
 
+
 class SearchQueryResponse(BaseModel):
     query_id: str
     response: List[Article]
+
 
 class SearchLogData(BaseModel):
     query_id: str
     result_id: str
     position: int
+
 
 class SearchLogType(str, Enum):
     query = 'query'
@@ -42,6 +46,23 @@ class SearchLogType(str, Enum):
     expanded = 'expanded'
     clicked = 'clicked'
 
+
 class SearchVertical(str, Enum):
     cord19 = 'cord19'
     trialstreamer = 'trialstreamer'
+
+
+class RelatedArticle(BaseModel):
+    distance: str
+    uid: str
+    url: str
+    title: str
+    authors: str = None
+    journal: str = None
+    publish_time: str = None
+    abstract: str = None
+
+
+class RelatedQueryResponse(BaseModel):
+    query_id: str
+    response: List[RelatedArticle]
