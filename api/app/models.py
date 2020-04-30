@@ -4,23 +4,24 @@ from pydantic import BaseModel
 from pydantic.class_validators import validator
 from enum import Enum
 
-
-class Article(BaseModel):
+class BaseArticle(BaseModel):
     id: str
+    abstract: str = None
+    authors: List[str] = []
+    journal: str = None
+    publish_time: str = None
     title: str
-    doi: str
     source: str
     url: str
+
+
+class SearchArticle(BaseArticle):
     score: float
-    authors: List[str] = []
     paragraphs: List[str] = []
-    abstract: str = None
-    journal: str = None
-    year: int = None
-    publish_time: str = None
     paragraphs: List[str] = []
     highlights: List[List[tuple]] = []
     highlighted_abstract: bool = False
+    has_related_articles: bool = False
 
     @validator('highlights')
     def validate_highlights(cls, v, values):
@@ -29,9 +30,18 @@ class Article(BaseModel):
         return v
 
 
+class RelatedArticle(BaseArticle):
+    distance: str
+
+
 class SearchQueryResponse(BaseModel):
     query_id: str
-    response: List[Article]
+    response: List[SearchArticle]
+
+
+class RelatedQueryResponse(BaseModel):
+    query_id: str
+    response: List[RelatedArticle]
 
 
 class SearchLogData(BaseModel):
@@ -50,20 +60,3 @@ class SearchLogType(str, Enum):
 class SearchVertical(str, Enum):
     cord19 = 'cord19'
     trialstreamer = 'trialstreamer'
-
-
-class RelatedArticle(BaseModel):
-    id: str
-    abstract: str = None
-    authors: List[str] = []
-    distance: str
-    journal: str = None
-    publish_time: str = None
-    source: str
-    title: str
-    url: str
-
-
-class RelatedQueryResponse(BaseModel):
-    query_id: str
-    response: List[RelatedArticle]

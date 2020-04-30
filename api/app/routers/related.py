@@ -24,16 +24,18 @@ async def get_related(request: Request, uid: str, page_number: int = 1):
 
     source_vector = related_searcher.embedding[uid]
     related_results = []
+
+    # HNSW parameters.
     k = 20 * page_number
     # https://github.com/nmslib/hnswlib/blob/master/ALGO_PARAMS.md
     # ef needs to be between k and dataset.size()
     ef = 2 * k
     related_searcher.HNSW.set_ef(ef)
-    print(f"Querying {k} docs from [{uid}]")
+
+    # Retrieve documents from HNSW.
     labels, distances = related_searcher.HNSW.knn_query(source_vector, k=k)
     for index, dist in zip(labels[0], distances[0]):
         uid = related_searcher.index_to_uid[index]
-
         related_results.append({
             'id': uid,
             'abstract': gen_metadata_from_uid(uid, 'abstract'),
@@ -75,4 +77,4 @@ def get_authors_from_uid(uid) -> List[str]:
     if authors is None:
         return []
 
-    return [author.strip() for author in authors.split(';')]
+    return [' '.join(reversed(author.split(', '))).strip() for author in authors.split(';')]
