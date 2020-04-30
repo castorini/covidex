@@ -34,7 +34,9 @@ async def get_related(request: Request, uid: str, page_number: int = 1):
 
     # Retrieve documents from HNSW.
     labels, distances = related_searcher.HNSW.knn_query(source_vector, k=k)
-    for index, dist in zip(labels[0], distances[0]):
+    start_idx = (page_number - 1)*20
+    end_idx = start_idx + 20
+    for index, dist in zip(labels[0][start_idx:end_idx], distances[0][start_idx:end_idx]):
         uid = related_searcher.index_to_uid[index]
         related_results.append({
             'id': uid,
