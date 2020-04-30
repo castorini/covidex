@@ -3,13 +3,14 @@ from datetime import datetime
 from typing import List
 from uuid import uuid4
 
-from fastapi import APIRouter, Request, HTTPException
-from app.models import (RelatedArticle, RelatedQueryResponse)
+from fastapi import APIRouter, HTTPException, Request
+
+from app.models import (RelatedArticle, RelatedQueryResponse, SearchLogData,
+                        SearchLogType)
+from app.services.related_searcher import related_searcher
 from app.settings import settings
 from app.util.logging import build_timed_logger
 from app.util.request import get_request_ip
-from app.services.related_searcher import related_searcher
-
 
 router = APIRouter()
 related_logger = build_timed_logger(
@@ -17,7 +18,7 @@ related_logger = build_timed_logger(
 
 
 @router.get('/related/{uid}', response_model=RelatedQueryResponse)
-async def get_related(request: Request, uid: str, page_number: int = 1):
+async def get_related(request: Request, uid: str, page_number: int = 1, query_id: str = None):
     # Invalid uid -> 404
     if uid not in related_searcher.index_to_uid:
         raise HTTPException(status_code=404, detail="Item not found")
@@ -64,6 +65,16 @@ async def get_related(request: Request, uid: str, page_number: int = 1):
     }))
 
     return RelatedQueryResponse(query_id=query_id, response=related_results)
+
+
+@router.post('/related/log/clicked', response_model=None)
+async def post_collapsed(data: SearchLogData):
+    related_logger.info(json.dumps({
+        'query_id': data.query_id,
+        'type': SearchLogType.clicked,
+        'result_id': data.result_id,
+        'position': data.position,
+        'timestamp': datetime.utcnow().isoformat()}))
 
 
 def gen_metadata_from_uid(uid, field) -> str:
