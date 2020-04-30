@@ -16,5 +16,5 @@ export default {
 
   breakpoints: {
     singleColumn: 720,
-  }
+  },
 };

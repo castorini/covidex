@@ -6,14 +6,16 @@ import { Heading3, Link } from '../../shared/Styles';
 
 interface BaseArticleResultProps {
   article: BaseArticle;
-  position: number;
+  position?: number;
   onClickTitle?: () => void;
+  boldTitle?: boolean;
 }
 
 const BaseArticleResult: React.FC<BaseArticleResultProps> = ({
   article,
   position,
-  onClickTitle,
+  onClickTitle = () => {},
+  boldTitle = false,
 }) => {
   let authorString = '';
   if (article.authors.length > 0) {
@@ -31,8 +33,8 @@ const BaseArticleResult: React.FC<BaseArticleResultProps> = ({
 
   return (
     <>
-      <Title>
-        {position + 1}.&nbsp;
+      <Title bold={boldTitle}>
+        {position !== undefined ? `${position + 1}. ` : ''}
         {article.url !== null && article.url !== '' ? (
           <Link href={article.url} target="_blank" rel="noopener noreferrer" onClick={onClickTitle}>
             {article.title}
@@ -53,9 +55,10 @@ const BaseArticleResult: React.FC<BaseArticleResultProps> = ({
 
 export default BaseArticleResult;
 
-const Title = styled.div`
+const Title = styled.div<{ bold?: boolean }>`
   ${Heading3}
   margin-bottom: 16px;
+  font-weight: ${({ bold }) => (bold ? 700 : 400)};
 `;
 
 const Subtitle = styled.div`

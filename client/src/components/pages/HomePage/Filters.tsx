@@ -124,6 +124,6 @@ const FilterComponent = styled.div`
   width: 100%;
 
   @media only screen and (max-width: ${({ theme }) => theme.breakpoints.singleColumn}px) {
-    margin: 8px auto
+    margin: 8px auto;
   }
 `;

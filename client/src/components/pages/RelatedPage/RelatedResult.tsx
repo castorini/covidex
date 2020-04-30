@@ -1,10 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import { Link as LinkIcon } from 'react-feather';
 
 import { RelatedArticle } from '../../../shared/Models';
 import BaseArticleResult from '../../common/BaseArticleResult';
-import { BodySmall } from '../../../shared/Styles';
+import { BodySmall, LinkStyle } from '../../../shared/Styles';
 import { parseAbstract } from '../../../shared/Util';
+import { RELATED_ROUTE } from '../../../shared/Constants';
 
 interface RelatedResultProps {
   article: RelatedArticle;
@@ -12,7 +15,6 @@ interface RelatedResultProps {
 }
 
 const RelatedResult: React.FC<RelatedResultProps> = ({ article, position }) => {
-  console.log(article);
   return (
     <RelatedResultWrapper>
       <BaseArticleResult article={article} position={position} />
@@ -20,11 +22,12 @@ const RelatedResult: React.FC<RelatedResultProps> = ({ article, position }) => {
       {article.abstract && (
         <>
           <AbstractTitle className="hideCollapsed">Abstract</AbstractTitle>
-          <Paragraph>
-            {parseAbstract(article.abstract)}
-          </Paragraph>
+          <Paragraph>{parseAbstract(article.abstract)}</Paragraph>
         </>
       )}
+      <RelatedLink to={`${RELATED_ROUTE}/${article.id}`}>
+        Related articles <LinkIcon size={12} style={{ marginLeft: '4px' }} />
+      </RelatedLink>
     </RelatedResultWrapper>
   );
 };
@@ -48,4 +51,13 @@ const Paragraph = styled.div`
 const AbstractTitle = styled.div`
   ${BodySmall}
   font-weight: 700;
+`;
+
+const RelatedLink = styled(Link)`
+  ${BodySmall}
+  ${LinkStyle}
+  margin-top: 8px;
+  margin-right: 16px;
+  display: flex;
+  align-items: center;
 `;

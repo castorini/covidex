@@ -1,8 +1,8 @@
 import React, { useState, ReactNode, useRef } from 'react';
 import styled, { css } from 'styled-components';
-import { ChevronsDown } from 'react-feather';
+import { ChevronsDown, Link as LinkIcon } from 'react-feather';
 import Highlighter from 'react-highlight-words';
-import { useHistory } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import { LinkStyle, BodySmall, FadeInText } from '../../../shared/Styles';
 import {
@@ -96,8 +96,6 @@ const adjustHighlights = (
 };
 
 const SearchResult = ({ article, position, queryId, queryTokens }: SearchResultProps) => {
-  const history = useHistory();
-
   const fullTextRef = useRef(null);
   const [collapsed, setCollapsed] = useState<boolean>(true);
 
@@ -173,9 +171,9 @@ const SearchResult = ({ article, position, queryId, queryTokens }: SearchResultP
           </TextLink>
         )}
         {article.has_related_articles && (
-          <TextLink onClick={() => history.push(`${RELATED_ROUTE}/${article.id}`)}>
-            Related articles
-          </TextLink>
+          <RelatedLink to={`${RELATED_ROUTE}/${article.id}`}>
+            Related articles <LinkIcon size={12} style={{ marginLeft: '4px' }} />
+          </RelatedLink>
         )}
       </LinkContainer>
     </SearchResultWrapper>
@@ -237,19 +235,27 @@ const Paragraph = styled(ResultText)`
 
 const LinkContainer = styled.div`
   display: flex;
+  margin-top: 8px;
 `;
 
 const TextLink = styled.button`
   ${BodySmall}
   ${LinkStyle}
   max-width: fit-content;
-  margin-top: 8px;
   margin-right: 16px;
   display: flex;
   align-items: center;
   background: none;
   padding: 0;
   border: none;
+`;
+
+const RelatedLink = styled(Link)`
+  ${BodySmall}
+  ${LinkStyle}
+  margin-right: 16px;
+  display: flex;
+  align-items: center;
 `;
 
 const Chevron = styled(ChevronsDown)<{ collapsed: boolean }>`
