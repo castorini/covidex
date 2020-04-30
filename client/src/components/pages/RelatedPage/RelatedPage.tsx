@@ -92,22 +92,30 @@ const RelatedPage = () => {
     setRelatedArticles([...currentArticles, ...responseArticles]);
   };
 
+  const TitleRow = (
+    <Row>
+      <RelatedTitle>
+        Related Articles <FileText size={24} style={{ marginLeft: '8px' }} />
+      </RelatedTitle>
+      <SearchLink to={HOME_ROUTE}>
+        Search All Articles
+        <Search size={16} style={{ marginLeft: '4px' }} />
+      </SearchLink>
+    </Row>
+  );
+
   return (
     <PageWrapper>
       <PageContent>
         <ErrorBoundary FallbackComponent={NotFoundComponent}>
-          <Row>
-            <RelatedTitle>
-              Related Articles <FileText size={28} style={{ marginLeft: '8px' }} />
-            </RelatedTitle>
-            <SearchLink to={HOME_ROUTE}>
-              Search All Articles
-              <Search size={16} style={{ marginLeft: '4px' }} />
-            </SearchLink>
-          </Row>
           <RelatedContent>
             {loading && <Loading />}
-            {notFound && <NotFoundComponent />}
+            {notFound && (
+              <>
+                {TitleRow}
+                <NotFoundComponent />
+              </>
+            )}
             {originalArticle && relatedArticles && (
               <>
                 <OriginalArticle>
@@ -120,6 +128,7 @@ const RelatedPage = () => {
                     </>
                   )}
                 </OriginalArticle>
+                {TitleRow}
                 <InfiniteScroll
                   pageStart={page}
                   loadMore={loadMoreResults}
@@ -156,7 +165,7 @@ const RelatedContent = styled.div`
 const RelatedTitle = styled.div`
   ${Heading2}
   font-weight: 700;
-  font-size: 28px;
+  font-size: 24px;
   display: flex;
   align-items: center;
 `;
@@ -187,7 +196,7 @@ const AbstractTitle = styled.div`
 `;
 
 const OriginalArticle = styled.div`
-  margin: 32px 0 24px 0;
+  margin-bottom: 16px;
   border: 1px solid ${({ theme }) => theme.yellow};
   border-bottom: 1px solid ${({ theme }) => theme.yellow};
   padding: 12px 12px 4px 12px;
@@ -199,6 +208,8 @@ const Row = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-top: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px dotted ${({ theme }) => theme.lightGrey};
 `;
 
 const SearchLink = styled(RouterLink)`
