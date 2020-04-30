@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Body, Link } from '../shared/Styles';
+import { Body, Link } from '../../../shared/Styles';
 
 const HomeText = () => {
   return (

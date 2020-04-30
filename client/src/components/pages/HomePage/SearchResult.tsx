@@ -1,17 +1,20 @@
 import React, { useState, ReactNode, useRef } from 'react';
 import styled, { css } from 'styled-components';
-import { ChevronsDown } from 'react-feather';
+import { ChevronsDown, Link as LinkIcon } from 'react-feather';
 import Highlighter from 'react-highlight-words';
+import { Link } from 'react-router-dom';
 
-import { Link, Heading3, LinkStyle, BodySmall, FadeInText } from '../shared/Styles';
+import { LinkStyle, BodySmall, FadeInText } from '../../../shared/Styles';
 import {
   API_BASE,
-  COLLAPSED_ENDPOINT,
-  EXPANDED_ENDPOINT,
-  CLICKED_ENDPOINT,
-} from '../shared/Constants';
-import { makePOSTRequest } from '../shared/Util';
-import { SearchArticle } from '../shared/Models';
+  SEARCH_COLLAPSED_ENDPOINT,
+  SEARCH_EXPANDED_ENDPOINT,
+  SEARCH_CLICKED_ENDPOINT,
+  RELATED_ROUTE,
+} from '../../../shared/Constants';
+import { makePOSTRequest, parseAbstract } from '../../../shared/Util';
+import { SearchArticle } from '../../../shared/Models';
+import BaseArticleResult from '../../common/BaseArticleResult';
 
 interface SearchResultProps {
   article: SearchArticle;
@@ -80,11 +83,6 @@ const highlightMatches = (queryTokens: Array<string>, text: string): ReactNode =
   );
 };
 
-// Remove "abstract" string from beginning of abstract
-const parseAbstract = (abstract: string): string => {
-  return abstract.replace(/^\s*abstract\s*/gi, '');
-};
-
 // adjust highlights based on difference
 const adjustHighlights = (
   highlights: Array<[number, number]>,
@@ -100,20 +98,6 @@ const adjustHighlights = (
 const SearchResult = ({ article, position, queryId, queryTokens }: SearchResultProps) => {
   const fullTextRef = useRef(null);
   const [collapsed, setCollapsed] = useState<boolean>(true);
-
-  let authorString = '';
-  if (article.authors.length > 0) {
-    article.authors.forEach((author, idx) => {
-      if (author !== '') {
-        authorString += idx === article.authors.length - 1 ? `${author}.` : `${author}, `;
-      }
-    });
-  }
-
-  // Indicate if medRxiv or bioRxiv is the source
-  const source = ['medrxiv', 'biorxiv'].includes(article.source.toLowerCase())
-    ? article.source.replace('r', 'R')
-    : '';
 
   // Separate abstract from other paragraphs if it was highlighted
   const originalAbstract = article.highlighted_abstract
@@ -136,29 +120,13 @@ const SearchResult = ({ article, position, queryId, queryTokens }: SearchResultP
 
   return (
     <SearchResultWrapper>
-      <Title>
-        {position + 1}.&nbsp;
-        {article.url !== null && article.url !== '' ? (
-          <Link
-            href={article.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() =>
-              makePOSTRequest(`${API_BASE}${CLICKED_ENDPOINT}`, interactionRequestBody)
-            }
-          >
-            {article.title}
-          </Link>
-        ) : (
-          article.title
-        )}
-      </Title>
-      <Subtitle>
-        {authorString && <Authors>{authorString}</Authors>}
-        {article.journal && <Journal>{article.journal}</Journal>}
-        {source && <Journal>{source}</Journal>}
-        {article.publish_time && <PublishTime>({article.publish_time})</PublishTime>}
-      </Subtitle>
+      <BaseArticleResult
+        article={article}
+        position={position}
+        onClickTitle={() =>
+          makePOSTRequest(`${API_BASE}${SEARCH_CLICKED_ENDPOINT}`, interactionRequestBody)
+        }
+      />
       <div ref={fullTextRef}>
         {/* Display abstract */}
         {abstract && (
@@ -186,22 +154,28 @@ const SearchResult = ({ article, position, queryId, queryTokens }: SearchResultP
           </Paragraph>
         ))}
       </div>
-      {(abstract || paragraphs.length > 0) && (
-        <ShowTextLink
-          collapsed={collapsed}
-          onClick={() => {
-            makePOSTRequest(
-              `${API_BASE}${collapsed ? EXPANDED_ENDPOINT : COLLAPSED_ENDPOINT}`,
-              interactionRequestBody,
-            );
-            setCollapsed(!collapsed);
-          }}
-          onMouseDown={(e) => e.preventDefault()}
-        >
-          {collapsed ? 'Show more' : 'Show less'}
-          <Chevron collapsed={collapsed} />
-        </ShowTextLink>
-      )}
+      <LinkContainer>
+        {(abstract || paragraphs.length > 0) && (
+          <TextLink
+            onClick={() => {
+              makePOSTRequest(
+                `${API_BASE}${collapsed ? SEARCH_EXPANDED_ENDPOINT : SEARCH_COLLAPSED_ENDPOINT}`,
+                interactionRequestBody,
+              );
+              setCollapsed(!collapsed);
+            }}
+            onMouseDown={(e) => e.preventDefault()}
+          >
+            {collapsed ? 'Show more' : 'Show less'}
+            <Chevron collapsed={collapsed} />
+          </TextLink>
+        )}
+        {article.has_related_articles && (
+          <RelatedLink to={`${RELATED_ROUTE}/${article.id}`}>
+            Related articles <LinkIcon size={12} style={{ marginLeft: '4px' }} />
+          </RelatedLink>
+        )}
+      </LinkContainer>
     </SearchResultWrapper>
   );
 };
@@ -217,28 +191,6 @@ const SearchResultWrapper = styled.div`
   border-bottom: 1px dotted ${({ theme }) => theme.lightGrey};
   margin-bottom: 8px;
 `;
-
-const Title = styled.div`
-  ${Heading3}
-  margin-bottom: 16px;
-`;
-
-const Subtitle = styled.div`
-  font-size: 16px;
-  margin-bottom: 16px;
-  color: ${({ theme }) => theme.black};
-`;
-
-const Authors = styled.span`
-  margin-right: 4px;
-`;
-
-const Journal = styled.span`
-  font-style: italic;
-  margin-right: 4px;
-`;
-
-const PublishTime = styled.span``;
 
 const fadeInAnimation = css`animation ${FadeInText} 0.5s ease-in-out;`;
 
@@ -281,16 +233,29 @@ const Paragraph = styled(ResultText)`
   `}
 `;
 
-const ShowTextLink = styled.button<{ collapsed: boolean }>`
+const LinkContainer = styled.div`
+  display: flex;
+  margin-top: 8px;
+`;
+
+const TextLink = styled.button`
   ${BodySmall}
   ${LinkStyle}
   max-width: fit-content;
-  margin-top: 8px;
+  margin-right: 16px;
   display: flex;
   align-items: center;
   background: none;
   padding: 0;
   border: none;
+`;
+
+const RelatedLink = styled(Link)`
+  ${BodySmall}
+  ${LinkStyle}
+  margin-right: 16px;
+  display: flex;
+  align-items: center;
 `;
 
 const Chevron = styled(ChevronsDown)<{ collapsed: boolean }>`

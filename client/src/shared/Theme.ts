@@ -13,4 +13,8 @@ export default {
   slate: '#616161',
   lightGrey: '#E8E8E8',
   darkGrey: '#555555',
+
+  breakpoints: {
+    singleColumn: 720,
+  },
 };

@@ -5,8 +5,8 @@ import ErrorBoundary from 'react-error-boundary';
 
 import { PageWrapper, PageContent, Heading2 } from '../../../shared/Styles';
 import Loading from '../../common/Loading';
-import SearchResult from '../../SearchResult';
-import HomeText from '../../HomeText';
+import SearchResult from './SearchResult';
+import HomeText from './HomeText';
 import SearchBar from './SearchBar';
 
 import { tokenize } from '../../../shared/Util';
@@ -59,7 +59,7 @@ const getSearchFilters = (searchResults: SearchArticle[] | null): SearchFilters 
 
   return {
     yearMinMax: min === max ? [min * 100 + 1, min * 100 + 12] : [min, max],
-    authors: Array.from(authors.values()),
+    authors: Array.from(authors.values()).filter((a) => a.length > 0),
     journals: Array.from(journals.values()),
     sources: Array.from(sources.values()),
   };
@@ -122,11 +122,10 @@ const HomePage = () => {
         setLoading(false);
 
         let data = await response.json();
-        setQueryId(data.query_id);
-
-        const searchResults = data.response;
+        const { query_id, response: searchResults } = data;
         const filters = getSearchFilters(searchResults);
 
+        setQueryId(query_id);
         setSearchResults(searchResults);
         setSelectedFilters({
           yearRange: filters.yearMinMax,
@@ -216,6 +215,10 @@ const HomeContent = styled.div`
   width: 100%;
   margin-right: auto;
   display: flex;
+
+  @media only screen and (max-width: ${({ theme }) => theme.breakpoints.singleColumn}px) {
+    flex-direction: column;
+  }
 `;
 
 const NoResults = styled.div`

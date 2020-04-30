@@ -117,7 +117,7 @@ const Checkbox = styled.div<{ checked: boolean }>`
 `;
 
 const OptionText = styled.div`
-  ${Body}
+  ${BodySmall}
   color: ${({ theme }) => theme.primary};
   cursor: pointer;
 

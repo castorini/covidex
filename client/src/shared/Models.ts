@@ -1,18 +1,24 @@
-export interface SearchArticle {
+export interface BaseArticle {
   id: string;
-  title: string;
-  doi: string;
-  source: string;
-  url: string;
-  score: number;
-  authors: Array<string>;
   abstract: string;
+  authors: Array<string>;
   journal: string;
-  year: number;
   publish_time: string;
-  paragraphs: Array<string>;
+  source: string;
+  title: string;
+  url: string;
+}
+
+export interface SearchArticle extends BaseArticle {
   highlights: Array<Array<[number, number]>>;
   highlighted_abstract: boolean;
+  paragraphs: Array<string>;
+  score: number;
+  has_related_articles: boolean;
+}
+
+export interface RelatedArticle extends BaseArticle {
+  distance: number;
 }
 
 export interface SearchFilters {

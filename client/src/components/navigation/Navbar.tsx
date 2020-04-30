@@ -12,7 +12,9 @@ const Navbar = ({ history }: RouteComponentProps) => {
     <NavbarWrapper>
       <PageContent>
         <Row>
-          <NavbarLogo onClick={() => history.push(HOME_ROUTE)}>Neural Covidex</NavbarLogo>
+          <NavbarLogo tabIndex={0} onClick={() => history.push(HOME_ROUTE)}>
+            Neural Covidex
+          </NavbarLogo>
           <NavbarLinks>
             <Link
               href="https://github.com/castorini/covidex"
@@ -56,7 +58,7 @@ const Row = styled.div`
   justify-content: space-between;
 `;
 
-const NavbarLogo = styled.div`
+const NavbarLogo = styled.a`
   display: flex;
   ${Heading1}
   position: relative;

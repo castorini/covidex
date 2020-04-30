@@ -8,7 +8,7 @@ from uuid import uuid4
 import dateparser
 from fastapi import APIRouter, Request
 
-from app.models import (Article, SearchLogData, SearchLogType,
+from app.models import (SearchArticle, SearchLogData, SearchLogType,
                         SearchQueryResponse, SearchVertical)
 from app.services.highlighter import highlighter
 from app.services.ranker import ranker
@@ -70,7 +70,7 @@ async def get_search(request: Request, query: str, vertical: SearchVertical):
         paragraphs = [text for text, number in paragraphs]
 
         # Add full article to results.
-        article = build_article(top_hit, base_docid, top_score, paragraphs, highlighted_abstract)
+        article = build_article(top_hit, base_docid, top_score, paragraphs, highlighted_abstract, vertical)
         ranked_results.append(article)
 
     if settings.highlight:
@@ -138,18 +138,18 @@ async def post_clicked(data: SearchLogData):
         'position': data.position,
         'timestamp': datetime.utcnow().isoformat()}))
 
-def build_article(hit, id: str, score: float, paragraphs: List[str], highlighted_abstract: bool):
+def build_article(hit, id: str, score: float, paragraphs: List[str],
+                  highlighted_abstract: bool, vertical: SearchVertical):
     doc = hit.lucene_document
-    return Article(id=id,
-                   title=doc.get('title'),
-                   doi=doc.get('doi'),
-                   source=doc.get('source_x'),
-                   authors=[field.stringValue() for field in doc.getFields('authors')],
-                   abstract=doc.get('abstract'),
-                   journal=doc.get('journal'),
-                   year=dateparser.parse(doc.get('publish_time')).year if doc.get('year') else None,
-                   url=doc.get('url'),
-                   publish_time=doc.get('publish_time'),
-                   score=score,
-                   paragraphs=paragraphs,
-                   highlighted_abstract=highlighted_abstract)
+    return SearchArticle(id=id,
+                         abstract=doc.get('abstract'),
+                         authors=[field.stringValue() for field in doc.getFields('authors')],
+                         journal=doc.get('journal'),
+                         publish_time=doc.get('publish_time'),
+                         source=doc.get('source_x'),
+                         title=doc.get('title'),
+                         url=doc.get('url'),
+                         score=score,
+                         paragraphs=paragraphs,
+                         highlighted_abstract=highlighted_abstract,
+                         has_related_articles=vertical == SearchVertical.cord19)
