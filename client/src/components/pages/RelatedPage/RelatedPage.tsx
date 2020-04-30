@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useRouteMatch } from 'react-router';
 import styled from 'styled-components';
 import ErrorBoundary from 'react-error-boundary';
+import InfiniteScroll from 'react-infinite-scroller';
 
 import {
   Heading2,
   Heading3,
   PageContent,
   PageWrapper,
-  Link,
   Body,
   BodySmall,
   LinkStyle,
@@ -29,10 +29,11 @@ const RelatedPage = () => {
     params: { articleId },
   } = useRouteMatch<any>();
 
-  const [loading, setLoading] = useState<Boolean>(false);
-  const [notFound, setNotFound] = useState<Boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [notFound, setNotFound] = useState<boolean>(false);
+  const [hasMore, setHasMore] = useState<boolean>(true);
   const [page, setPage] = useState<number>(1);
-  const [queryId, setQueryId] = useState<string>('');
+  const [, setQueryId] = useState<string>('');
 
   const [originalArticle, setOriginalArticle] = useState<RelatedArticle | null>(null);
   const [relatedArticles, setRelatedArticles] = useState<RelatedArticle[] | null>(null);
@@ -42,6 +43,7 @@ const RelatedPage = () => {
       if (articleId === undefined || articleId === null || articleId === '') {
         setLoading(false);
         setNotFound(true);
+        setPage(1);
         return;
       }
 
@@ -50,7 +52,7 @@ const RelatedPage = () => {
         setRelatedArticles(null);
 
         let response = await fetch(
-          `${API_BASE}${RELATED_ENDPOINT}/${articleId.toLowerCase()}?page_number=${page}`,
+          `${API_BASE}${RELATED_ENDPOINT}/${articleId.toLowerCase()}?page_number=${1}`,
         );
         setLoading(false);
 
@@ -63,14 +65,32 @@ const RelatedPage = () => {
         setQueryId(query_id);
         setOriginalArticle(originalArticle);
         setRelatedArticles(responseArticles.filter((a: RelatedArticle) => a.id !== articleId));
+        setPage(2);
       } catch {
         setLoading(false);
         setNotFound(true);
+        setPage(2);
       }
     };
 
     fetchData();
-  }, [articleId, page]);
+  }, [articleId]);
+
+  const loadMoreResults = async () => {
+    let response = await fetch(
+      `${API_BASE}${RELATED_ENDPOINT}/${articleId.toLowerCase()}?page_number=${page}`,
+    );
+    setPage(page + 1);
+
+    if (response.status > 400) {
+      setHasMore(false);
+    }
+
+    let data = await response.json();
+    const { response: responseArticles } = data;
+    const currentArticles = relatedArticles || [];
+    setRelatedArticles([...currentArticles, ...responseArticles]);
+  };
 
   return (
     <PageWrapper>
@@ -100,9 +120,20 @@ const RelatedPage = () => {
                     </>
                   )}
                 </OriginalArticle>
-                {relatedArticles.map((article, idx) => (
-                  <RelatedResult key={article.id} article={article} position={idx} />
-                ))}
+                <InfiniteScroll
+                  pageStart={page}
+                  loadMore={loadMoreResults}
+                  hasMore={hasMore}
+                  loader={
+                    <Row>
+                      <Loading />
+                    </Row>
+                  }
+                >
+                  {relatedArticles.map((article, idx) => (
+                    <RelatedResult key={article.id} article={article} position={idx} />
+                  ))}
+                </InfiniteScroll>
                 {relatedArticles.length === 0 && <NotFound>No related articles found</NotFound>}
               </>
             )}
