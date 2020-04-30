@@ -4,16 +4,17 @@ import { ChevronsDown } from 'react-feather';
 import Highlighter from 'react-highlight-words';
 import { useHistory } from 'react-router';
 
-import { Link, Heading3, LinkStyle, BodySmall, FadeInText } from '../shared/Styles';
+import { LinkStyle, BodySmall, FadeInText } from '../../../shared/Styles';
 import {
   API_BASE,
   COLLAPSED_ENDPOINT,
   EXPANDED_ENDPOINT,
   CLICKED_ENDPOINT,
   RELATED_ROUTE,
-} from '../shared/Constants';
-import { makePOSTRequest } from '../shared/Util';
-import { SearchArticle } from '../shared/Models';
+} from '../../../shared/Constants';
+import { makePOSTRequest } from '../../../shared/Util';
+import { SearchArticle } from '../../../shared/Models';
+import BaseArticleResult from '../../common/BaseArticleResult';
 
 interface SearchResultProps {
   article: SearchArticle;
@@ -105,20 +106,6 @@ const SearchResult = ({ article, position, queryId, queryTokens }: SearchResultP
   const fullTextRef = useRef(null);
   const [collapsed, setCollapsed] = useState<boolean>(true);
 
-  let authorString = '';
-  if (article.authors.length > 0) {
-    article.authors.forEach((author, idx) => {
-      if (author !== '') {
-        authorString += idx === article.authors.length - 1 ? `${author}.` : `${author}, `;
-      }
-    });
-  }
-
-  // Indicate if medRxiv or bioRxiv is the source
-  const source = ['medrxiv', 'biorxiv'].includes(article.source.toLowerCase())
-    ? article.source.replace('r', 'R')
-    : '';
-
   // Separate abstract from other paragraphs if it was highlighted
   const originalAbstract = article.highlighted_abstract
     ? article.paragraphs[0]
@@ -140,29 +127,13 @@ const SearchResult = ({ article, position, queryId, queryTokens }: SearchResultP
 
   return (
     <SearchResultWrapper>
-      <Title>
-        {position + 1}.&nbsp;
-        {article.url !== null && article.url !== '' ? (
-          <Link
-            href={article.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() =>
-              makePOSTRequest(`${API_BASE}${CLICKED_ENDPOINT}`, interactionRequestBody)
-            }
-          >
-            {article.title}
-          </Link>
-        ) : (
-          article.title
-        )}
-      </Title>
-      <Subtitle>
-        {authorString && <Authors>{authorString}</Authors>}
-        {article.journal && <Journal>{article.journal}</Journal>}
-        {source && <Journal>{source}</Journal>}
-        {article.publish_time && <PublishTime>({article.publish_time})</PublishTime>}
-      </Subtitle>
+      <BaseArticleResult
+        article={article}
+        position={position}
+        onClickTitle={() =>
+          makePOSTRequest(`${API_BASE}${CLICKED_ENDPOINT}`, interactionRequestBody)
+        }
+      />
       <div ref={fullTextRef}>
         {/* Display abstract */}
         {abstract && (
@@ -206,9 +177,11 @@ const SearchResult = ({ article, position, queryId, queryTokens }: SearchResultP
             <Chevron collapsed={collapsed} />
           </TextLink>
         )}
-        <TextLink onClick={() => history.push(`${RELATED_ROUTE}/${article.id}`)}>
-          Related articles
-        </TextLink>
+        {article.has_related_articles && (
+          <TextLink onClick={() => history.push(`${RELATED_ROUTE}/${article.id}`)}>
+            Related articles
+          </TextLink>
+        )}
       </LinkContainer>
     </SearchResultWrapper>
   );
@@ -225,28 +198,6 @@ const SearchResultWrapper = styled.div`
   border-bottom: 1px dotted ${({ theme }) => theme.lightGrey};
   margin-bottom: 8px;
 `;
-
-const Title = styled.div`
-  ${Heading3}
-  margin-bottom: 16px;
-`;
-
-const Subtitle = styled.div`
-  font-size: 16px;
-  margin-bottom: 16px;
-  color: ${({ theme }) => theme.black};
-`;
-
-const Authors = styled.span`
-  margin-right: 4px;
-`;
-
-const Journal = styled.span`
-  font-style: italic;
-  margin-right: 4px;
-`;
-
-const PublishTime = styled.span``;
 
 const fadeInAnimation = css`animation ${FadeInText} 0.5s ease-in-out;`;
 

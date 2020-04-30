@@ -25,7 +25,7 @@ const Filters: React.FC<FiltersProps> = ({ filters, selectedFilters, setSelected
   return (
     <FiltersWrapper>
       <FilterTitle>Filter your search</FilterTitle>
-      {filters.yearMinMax[0] !== filters.yearMinMax[1] && (
+      {filters.yearMinMax[0] < filters.yearMinMax[1] && (
         <FilterComponent>
           <FilterSubtitle>Publish Time</FilterSubtitle>
           <RangeSlider
