@@ -7,9 +7,9 @@ import { Link } from 'react-router-dom';
 import { LinkStyle, BodySmall, FadeInText } from '../../../shared/Styles';
 import {
   API_BASE,
-  COLLAPSED_ENDPOINT,
-  EXPANDED_ENDPOINT,
-  CLICKED_ENDPOINT,
+  SEARCH_COLLAPSED_ENDPOINT,
+  SEARCH_EXPANDED_ENDPOINT,
+  SEARCH_CLICKED_ENDPOINT,
   RELATED_ROUTE,
 } from '../../../shared/Constants';
 import { makePOSTRequest, parseAbstract } from '../../../shared/Util';
@@ -124,7 +124,7 @@ const SearchResult = ({ article, position, queryId, queryTokens }: SearchResultP
         article={article}
         position={position}
         onClickTitle={() =>
-          makePOSTRequest(`${API_BASE}${CLICKED_ENDPOINT}`, interactionRequestBody)
+          makePOSTRequest(`${API_BASE}${SEARCH_CLICKED_ENDPOINT}`, interactionRequestBody)
         }
       />
       <div ref={fullTextRef}>
@@ -159,7 +159,7 @@ const SearchResult = ({ article, position, queryId, queryTokens }: SearchResultP
           <TextLink
             onClick={() => {
               makePOSTRequest(
-                `${API_BASE}${collapsed ? EXPANDED_ENDPOINT : COLLAPSED_ENDPOINT}`,
+                `${API_BASE}${collapsed ? SEARCH_EXPANDED_ENDPOINT : SEARCH_COLLAPSED_ENDPOINT}`,
                 interactionRequestBody,
               );
               setCollapsed(!collapsed);

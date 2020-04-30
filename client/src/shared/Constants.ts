@@ -16,9 +16,10 @@ export const CONTENT_WIDTH = 1100;
 export const API_BASE =
   process.env.NODE_ENV === 'development' ? 'http://23.251.153.91:8000/api' : '/api';
 export const SEARCH_ENDPOINT = '/search';
-export const COLLAPSED_ENDPOINT = '/search/log/collapsed';
-export const EXPANDED_ENDPOINT = '/search/log/expanded';
-export const CLICKED_ENDPOINT = '/search/log/clicked';
+export const SEARCH_COLLAPSED_ENDPOINT = '/search/log/collapsed';
+export const SEARCH_EXPANDED_ENDPOINT = '/search/log/expanded';
+export const SEARCH_CLICKED_ENDPOINT = '/search/log/clicked';
+export const RELATED_CLICKED_ENDPOINT = '/related/log/clicked';
 
 export const RELATED_ENDPOINT = '/related';
 

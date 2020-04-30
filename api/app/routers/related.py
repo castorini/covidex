@@ -68,7 +68,7 @@ async def get_related(request: Request, uid: str, page_number: int = 1, query_id
 
 
 @router.post('/related/log/clicked', response_model=None)
-async def post_collapsed(data: SearchLogData):
+async def post_clicked(data: SearchLogData):
     related_logger.info(json.dumps({
         'query_id': data.query_id,
         'type': SearchLogType.clicked,

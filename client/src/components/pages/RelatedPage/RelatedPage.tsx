@@ -17,7 +17,7 @@ import { RelatedArticle } from '../../../shared/Models';
 import { API_BASE, RELATED_ENDPOINT, HOME_ROUTE } from '../../../shared/Constants';
 import Loading from '../../common/Loading';
 import RelatedResult from './RelatedResult';
-import { FileText, Search } from 'react-feather';
+import { FileText, ArrowLeft } from 'react-feather';
 import BaseArticleResult from '../../common/BaseArticleResult';
 import { parseAbstract } from '../../../shared/Util';
 import { Link as RouterLink } from 'react-router-dom';
@@ -33,7 +33,7 @@ const RelatedPage = () => {
   const [notFound, setNotFound] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [page, setPage] = useState<number>(1);
-  const [, setQueryId] = useState<string>('');
+  const [queryId, setQueryId] = useState<string>('');
 
   const [originalArticle, setOriginalArticle] = useState<RelatedArticle | null>(null);
   const [relatedArticles, setRelatedArticles] = useState<RelatedArticle[] | null>(null);
@@ -98,8 +98,8 @@ const RelatedPage = () => {
         Related Articles <FileText size={24} style={{ marginLeft: '8px' }} />
       </RelatedTitle>
       <SearchLink to={HOME_ROUTE}>
+        <ArrowLeft size={16} style={{ marginRight: '4px' }} />
         Search All Articles
-        <Search size={16} style={{ marginLeft: '4px' }} />
       </SearchLink>
     </Row>
   );
@@ -118,6 +118,7 @@ const RelatedPage = () => {
             )}
             {originalArticle && relatedArticles && (
               <>
+                {TitleRow}
                 <OriginalArticle>
                   <SmallTitle>Showing articles related to:</SmallTitle>
                   <BaseArticleResult article={originalArticle} boldTitle />
@@ -128,7 +129,6 @@ const RelatedPage = () => {
                     </>
                   )}
                 </OriginalArticle>
-                {TitleRow}
                 <InfiniteScroll
                   pageStart={page}
                   loadMore={loadMoreResults}
@@ -140,7 +140,12 @@ const RelatedPage = () => {
                   }
                 >
                   {relatedArticles.map((article, idx) => (
-                    <RelatedResult key={article.id} article={article} position={idx} />
+                    <RelatedResult
+                      key={article.id}
+                      article={article}
+                      position={idx}
+                      queryId={queryId}
+                    />
                   ))}
                 </InfiniteScroll>
                 {relatedArticles.length === 0 && <NotFound>No related articles found</NotFound>}

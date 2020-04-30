@@ -6,18 +6,27 @@ import { Link as LinkIcon } from 'react-feather';
 import { RelatedArticle } from '../../../shared/Models';
 import BaseArticleResult from '../../common/BaseArticleResult';
 import { BodySmall, LinkStyle } from '../../../shared/Styles';
-import { parseAbstract } from '../../../shared/Util';
-import { RELATED_ROUTE } from '../../../shared/Constants';
+import { parseAbstract, makePOSTRequest } from '../../../shared/Util';
+import { RELATED_ROUTE, API_BASE, RELATED_CLICKED_ENDPOINT } from '../../../shared/Constants';
 
 interface RelatedResultProps {
   article: RelatedArticle;
   position: number;
+  queryId: string;
 }
 
-const RelatedResult: React.FC<RelatedResultProps> = ({ article, position }) => {
+const RelatedResult: React.FC<RelatedResultProps> = ({ article, position, queryId }) => {
+  const interactionRequestBody = { query_id: queryId, result_id: article.id, position };
+
   return (
     <RelatedResultWrapper>
-      <BaseArticleResult article={article} position={position} />
+      <BaseArticleResult
+        article={article}
+        position={position}
+        onClickTitle={() =>
+          makePOSTRequest(`${API_BASE}${RELATED_CLICKED_ENDPOINT}`, interactionRequestBody)
+        }
+      />
       {/* Display abstract */}
       {article.abstract && (
         <>
