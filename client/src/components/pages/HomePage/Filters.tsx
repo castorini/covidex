@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import RangeSlider from '../../common/RangeSlider';
-import { Heading3, Heading2 } from '../../../shared/Styles';
+import { Heading2, Body } from '../../../shared/Styles';
 import SelectionFilter from '../../common/SelectionFilter';
 import { SearchFilters, SelectedSearchFilters } from '../../../shared/Models';
 
@@ -27,7 +27,7 @@ const Filters: React.FC<FiltersProps> = ({ filters, selectedFilters, setSelected
       <FilterTitle>Filter your search</FilterTitle>
       {filters.yearMinMax[0] < filters.yearMinMax[1] && (
         <FilterComponent>
-          <FilterSubtitle>Publish Time</FilterSubtitle>
+          <FilterSubtitle>Publication Time</FilterSubtitle>
           <RangeSlider
             min={filters.yearMinMax[0]}
             max={filters.yearMinMax[1]}
@@ -100,6 +100,12 @@ const FiltersWrapper = styled.div`
   min-width: 200px;
   margin-right: 48px;
   padding-top: 24px;
+
+  @media only screen and (max-width: ${({ theme }) => theme.breakpoints.singleColumn}px) {
+    width: 100%;
+    padding: 8px 0;
+    border-bottom: 1px solid ${({ theme }) => theme.lightGrey};
+  }
 `;
 
 const FilterTitle = styled.div`
@@ -108,12 +114,16 @@ const FilterTitle = styled.div`
 `;
 
 const FilterSubtitle = styled.div`
-  ${Heading3}
-  color: ${({ theme }) => theme.slate};
-  margin-bottom: 8px;
+  ${Body}
+  color: ${({ theme }) => theme.darkGrey};
+  font-weight: 600;
 `;
 
 const FilterComponent = styled.div`
   margin: 16px auto;
   width: 100%;
+
+  @media only screen and (max-width: ${({ theme }) => theme.breakpoints.singleColumn}px) {
+    margin: 8px auto
+  }
 `;

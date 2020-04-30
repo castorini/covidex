@@ -215,6 +215,10 @@ const HomeContent = styled.div`
   width: 100%;
   margin-right: auto;
   display: flex;
+
+  @media only screen and (max-width: ${({ theme }) => theme.breakpoints.singleColumn}px) {
+    flex-direction: column;
+  }
 `;
 
 const NoResults = styled.div`

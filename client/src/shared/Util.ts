@@ -36,3 +36,8 @@ export const makeAsyncPOSTRequest = async (url: string, body: Object) => {
     body: JSON.stringify(body),
   });
 };
+
+// Remove "abstract" string from beginning of abstract
+export const parseAbstract = (abstract: string): string => {
+  return abstract.replace(/^\s*abstract\s*/gi, '');
+};

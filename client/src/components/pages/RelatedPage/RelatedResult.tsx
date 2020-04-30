@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { RelatedArticle } from '../../../shared/Models';
 import BaseArticleResult from '../../common/BaseArticleResult';
 import { BodySmall } from '../../../shared/Styles';
+import { parseAbstract } from '../../../shared/Util';
 
 interface RelatedResultProps {
   article: RelatedArticle;
@@ -20,7 +21,7 @@ const RelatedResult: React.FC<RelatedResultProps> = ({ article, position }) => {
         <>
           <AbstractTitle className="hideCollapsed">Abstract</AbstractTitle>
           <Paragraph>
-            {article.abstract}
+            {parseAbstract(article.abstract)}
           </Paragraph>
         </>
       )}
@@ -47,5 +48,4 @@ const Paragraph = styled.div`
 const AbstractTitle = styled.div`
   ${BodySmall}
   font-weight: 700;
-
 `;

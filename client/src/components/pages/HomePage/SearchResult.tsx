@@ -12,7 +12,7 @@ import {
   CLICKED_ENDPOINT,
   RELATED_ROUTE,
 } from '../../../shared/Constants';
-import { makePOSTRequest } from '../../../shared/Util';
+import { makePOSTRequest, parseAbstract } from '../../../shared/Util';
 import { SearchArticle } from '../../../shared/Models';
 import BaseArticleResult from '../../common/BaseArticleResult';
 
@@ -81,11 +81,6 @@ const highlightMatches = (queryTokens: Array<string>, text: string): ReactNode =
       highlightClassName="match"
     />
   );
-};
-
-// Remove "abstract" string from beginning of abstract
-const parseAbstract = (abstract: string): string => {
-  return abstract.replace(/^\s*abstract\s*/gi, '');
 };
 
 // adjust highlights based on difference
