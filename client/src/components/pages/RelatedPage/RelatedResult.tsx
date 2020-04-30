@@ -60,4 +60,5 @@ const RelatedLink = styled(Link)`
   margin-right: 16px;
   display: flex;
   align-items: center;
+  max-width: fit-content;
 `;
