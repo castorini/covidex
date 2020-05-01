@@ -132,6 +132,10 @@ const HomeText = () => {
           Edwin Zhang
         </Link>
         ,{' '}
+        <Link href="https://github.com/x65han" target="_blank" rel="noopener noreferrer">
+          Johnson Han
+        </Link>
+        ,{' '}
         <Link href="https://github.com/nikhilro" target="_blank" rel="noopener noreferrer">
           Nikhil Gupta
         </Link>{' '}
