@@ -37,6 +37,7 @@ class Ranker:
             max_len = max(map(len, input_ids))
             attn_mask = torch.tensor([[1] * len(x) + [0] * (max_len - len(x)) for x in input_ids])
             input_ids = torch.tensor([x + [0] * (max_len - len(x)) for x in input_ids])
+            # Use two-step decoding to match the TensorFlow implementation
             _, batch_scores = greedy_decode(self.model,
                                             input_ids.to(self.device),
                                             length=2,
