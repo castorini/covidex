@@ -23,7 +23,4 @@ while [ "$?" -ne 0 ]; do
   l_TELNET=`echo "quit" | telnet localhost $PORT | grep "Escape character is"` > /dev/null
 done
 
-echo "Warming up models..."
-curl http://localhost:$PORT/api/search?query=test > /dev/null
-
 echo "Server started successfully! Logs are available at api/logs/"
