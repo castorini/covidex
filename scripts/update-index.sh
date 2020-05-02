@@ -11,8 +11,8 @@ TRIALSTREAMER_INDEX_DATE=2020-04-15
 TRIALSTREAMER_INDEX_URL=https://www.dropbox.com/s/d2s92i6y927s1c7/lucene-index-trialstreamer-2020-04-15.tar.gz
 
 CORD19_HNSW_INDEX_NAME=cord19-hnsw-index
-CORD19_HNSW_INDEX_DATE=2020-05-02
-CORD19_HNSW_INDEX_URL=https://www.dropbox.com/s/cw0c9hpq0bl2n05/cord19-hnsw-index-2020-05-02.tar.gz
+CORD19_HNSW_INDEX_DATE=2020-05-01
+CORD19_HNSW_INDEX_URL=https://www.dropbox.com/s/o2fhbm2jpydzrm9/cord19-hnsw-index-2020-05-01.tar.gz
 
 echo "Updating CORD-19 index..."
 wget ${CORD19_INDEX_URL}
