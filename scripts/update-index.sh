@@ -32,12 +32,6 @@ rm ${TRIALSTREAMER_INDEX_NAME}-${TRIALSTREAMER_INDEX_DATE}.tar.gz
 
 echo "Successfully updated Anserini indices at api/index/"
 
-echo "Updating CORD-19 HNSW index..."
-wget ${CORD19_HNSW_INDEX_URL}
-rm -rf api/index/${CORD19_HNSW_INDEX_NAME}
-mkdir api/index/${CORD19_HNSW_INDEX_NAME}
-tar xvfz ${CORD19_HNSW_INDEX_NAME}-${CORD19_HNSW_INDEX_DATE}.tar.gz \
-    -C api/index/${CORD19_HNSW_INDEX_NAME} --strip-components 1
-rm ${CORD19_HNSW_INDEX_NAME}-${CORD19_HNSW_INDEX_DATE}.tar.gz
-
-echo "Successfully updated CORD-19 HNSW indices at api/index/"
+echo "Building CORD-19 HNSW index..."
+python ../hnsw/indexHNSW.py
+echo "Successfully built CORD-19 HNSW indices at api/index/"
