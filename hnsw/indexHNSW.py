@@ -12,9 +12,11 @@ class Indexer:
         return os.path.join(self.folder_path, path)
 
     def load_data(self) -> None:
+        self.metadata_path = self.get_path('metadata.csv')
         self.metadata = helper.load_metadata(self.metadata_path)
         print('Metadata Length:', len(self.metadata))
 
+        self.specter_path = self.get_path('specter.csv')
         self.embedding, self.DIM = helper.load_specter_embeddings(
             self.specter_path)
         print('Number of Embedding:', len(self.embedding))

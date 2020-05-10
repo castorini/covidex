@@ -37,7 +37,7 @@ echo "Successfully updated Anserini indices at api/index/"
 echo "Updating CORD-19 HNSW index..."
 rm -rf ${CORD19_HNSW_INDEX_FOLDER}
 mkdir ${CORD19_HNSW_INDEX_FOLDER}
-wget ${CORD19_HNSW_INDEX_METADATA_URL} -O ${CORD19_HNSW_INDEX_FOLDER}/metadata.csv &
+wget ${CORD19_HNSW_INDEX_METADATA_URL} -O ${CORD19_HNSW_INDEX_FOLDER}/metadata.csv
 wget ${CORD19_HNSW_INDEX_SPECTER_URL} -O ${CORD19_HNSW_INDEX_FOLDER}/${CORD19_HNSW_INDEX_NAME}.tar.gz
 tar xvzf ${CORD19_HNSW_INDEX_FOLDER}/${CORD19_HNSW_INDEX_NAME}.tar.gz
 mv cord_19_embeddings*.csv ${CORD19_HNSW_INDEX_FOLDER}/specter.csv
