@@ -66,7 +66,7 @@ class Indexer:
         for index, uid in enumerate(self.embedding):
             if index % 200 == 0:
                 print(
-                    f'>> [Pre-process][{index + 1}/{self.TOTAL_NUM_ELEMENTS}]')
+                    f'>> [Pre-process][{index}/{self.TOTAL_NUM_ELEMENTS}]')
 
             if index % 200 == 0 and len(data_labels) > 0:
                 # save progress
@@ -82,9 +82,9 @@ class Indexer:
             index_to_uid.append(uid)
 
         if len(data_labels) > 0:
-            self._add_to_index(data, data_labels,     index)
+            self._add_to_index(data, data_labels, index)
             self._save_index(data, data_labels, index_to_uid, index)
-            print(f'>> [Pre-process][{index + 1}/{TOTAL_NUM_ELEMENTS}]')
+            print(f'>> [Pre-process][{index + 1}/{self.TOTAL_NUM_ELEMENTS}]')
 
         print('<< [Pre-process] done')
 
@@ -100,11 +100,14 @@ class Indexer:
         helper.remove_if_exist(output_path)
         self.HNSW.save_index(output_path)
         # Save index to uid file
-        helper.save_index_to_uid_file(index_to_uid, index, f'{file_name}.txt')
+        helper.save_index_to_uid_file(
+            index_to_uid,
+            index,
+            self.get_path(f'{file_name}.txt'))
 
 
 if __name__ == '__main__':
-    indexer = Indexer("../api/index")
+    indexer = Indexer("./api/index")
     indexer.download_data()
     indexer.load_data()
     indexer.initialize_hnsw_index()

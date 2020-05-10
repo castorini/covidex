@@ -33,5 +33,5 @@ rm ${TRIALSTREAMER_INDEX_NAME}-${TRIALSTREAMER_INDEX_DATE}.tar.gz
 echo "Successfully updated Anserini indices at api/index/"
 
 echo "Building CORD-19 HNSW index..."
-python ../hnsw/indexHNSW.py
+python ./hnsw/indexHNSW.py
 echo "Successfully built CORD-19 HNSW indices at api/index/"
