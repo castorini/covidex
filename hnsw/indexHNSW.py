@@ -5,33 +5,11 @@ import numpy as np
 
 
 class Indexer:
-    def __init__(self, destination_directory):
-        self.path_prefix = destination_directory
-        CORD19_HNSW_INDEX_NAME = 'cord19-hnsw-index'
-        self.folder_path = os.path.join(
-            self.path_prefix, CORD19_HNSW_INDEX_NAME)
+    def __init__(self, folder_path):
+        self.folder_path = folder_path
 
     def get_path(self, path) -> str:
         return os.path.join(self.folder_path, path)
-
-    def download_data(self) -> None:
-        # mkdir
-        helper.remove_folder(self.folder_path)
-        helper.mkdir_if_not_exist(self.folder_path)
-
-        # metadata.csv
-        URL = 'https://ai2-semanticscholar-cord-19.s3-us-west-2.amazonaws.com/latest/metadata.csv'
-        self.metadata_path = self.get_path('metadata.csv')
-        os.system(f"wget {URL} -O {self.metadata_path}")
-
-        # SPECTER embeddings
-        URL = 'https://ai2-semanticscholar-cord-19.s3-us-west-2.amazonaws.com/latest/cord_19_embeddings_5_1.tar.gz'
-        path = self.get_path('specter.tar.gz')
-        self.specter_path = self.get_path('specter.csv')
-        os.system(f"wget {URL} -O {path}")
-        os.system(f"tar xvzf {path}")
-        os.system(f"mv cord_19_embeddings*.csv {self.specter_path}")
-        os.system(f"rm {path}")
 
     def load_data(self) -> None:
         self.metadata = helper.load_metadata(self.metadata_path)
@@ -107,8 +85,7 @@ class Indexer:
 
 
 if __name__ == '__main__':
-    indexer = Indexer("./api/index")
-    indexer.download_data()
+    indexer = Indexer("./api/index/cord19-hnsw-index")
     indexer.load_data()
     indexer.initialize_hnsw_index()
     indexer.index_and_save()

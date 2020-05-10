@@ -2,18 +2,9 @@ import os
 import csv
 
 
-def remove_folder(path):
-    os.system(f"rm -rf {path}")
-
-
 def remove_if_exist(path):
     if os.path.exists(path):
         os.remove(path)
-
-
-def mkdir_if_not_exist(directory):
-    if not os.path.exists(directory):
-        os.makedirs(directory)
 
 
 def load_metadata(path):
