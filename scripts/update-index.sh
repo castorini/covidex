@@ -12,7 +12,9 @@ TRIALSTREAMER_INDEX_URL=https://www.dropbox.com/s/d2s92i6y927s1c7/lucene-index-t
 
 CORD19_HNSW_INDEX_NAME=cord19-hnsw-index
 CORD19_HNSW_INDEX_DATE=2020-05-01
-CORD19_HNSW_INDEX_URL=https://www.dropbox.com/s/o2fhbm2jpydzrm9/cord19-hnsw-index-2020-05-01.tar.gz
+CORD19_HNSW_INDEX_METADATA_URL=https://ai2-semanticscholar-cord-19.s3-us-west-2.amazonaws.com/latest/metadata.csv
+CORD19_HNSW_INDEX_SPECTER_URL=https://ai2-semanticscholar-cord-19.s3-us-west-2.amazonaws.com/latest/cord_19_embeddings_5_1.tar.gz
+CORD19_HNSW_INDEX_FOLDER=api/index/${CORD19_HNSW_INDEX_NAME}
 
 echo "Updating CORD-19 index..."
 wget ${CORD19_INDEX_URL}
@@ -33,11 +35,13 @@ rm ${TRIALSTREAMER_INDEX_NAME}-${TRIALSTREAMER_INDEX_DATE}.tar.gz
 echo "Successfully updated Anserini indices at api/index/"
 
 echo "Updating CORD-19 HNSW index..."
-wget ${CORD19_HNSW_INDEX_URL}
-rm -rf api/index/${CORD19_HNSW_INDEX_NAME}
-mkdir api/index/${CORD19_HNSW_INDEX_NAME}
-tar xvfz ${CORD19_HNSW_INDEX_NAME}-${CORD19_HNSW_INDEX_DATE}.tar.gz \
-    -C api/index/${CORD19_HNSW_INDEX_NAME} --strip-components 1
-rm ${CORD19_HNSW_INDEX_NAME}-${CORD19_HNSW_INDEX_DATE}.tar.gz
+rm -rf ${CORD19_HNSW_INDEX_FOLDER}
+mkdir ${CORD19_HNSW_INDEX_FOLDER}
+wget ${CORD19_HNSW_INDEX_METADATA_URL} -O ${CORD19_HNSW_INDEX_FOLDER}/metadata.csv
+wget ${CORD19_HNSW_INDEX_SPECTER_URL} -O ${CORD19_HNSW_INDEX_FOLDER}/${CORD19_HNSW_INDEX_NAME}.tar.gz
+tar xvzf ${CORD19_HNSW_INDEX_FOLDER}/${CORD19_HNSW_INDEX_NAME}.tar.gz
+mv cord_19_embeddings*.csv ${CORD19_HNSW_INDEX_FOLDER}/specter.csv
+rm ${CORD19_HNSW_INDEX_FOLDER}/${CORD19_HNSW_INDEX_NAME}.tar.gz
 
+python hnsw/indexHNSW.py
 echo "Successfully updated CORD-19 HNSW indices at api/index/"
