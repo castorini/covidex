@@ -3,17 +3,16 @@
 echo "Updating Anserini index..."
 
 CORD19_INDEX_NAME=lucene-index-cord19-paragraph
-CORD19_INDEX_DATE=2020-05-01
-CORD19_INDEX_URL=https://www.dropbox.com/s/6ib71scm925mclk/lucene-index-cord19-paragraph-2020-05-01.tar.gz
+CORD19_INDEX_DATE=2020-05-12
+CORD19_INDEX_URL=https://www.dropbox.com/s/s3bylw97cf0t2wq/lucene-index-cord19-paragraph-2020-05-12.tar.gz
 
 TRIALSTREAMER_INDEX_NAME=lucene-index-trialstreamer
 TRIALSTREAMER_INDEX_DATE=2020-04-15
 TRIALSTREAMER_INDEX_URL=https://www.dropbox.com/s/d2s92i6y927s1c7/lucene-index-trialstreamer-2020-04-15.tar.gz
 
 CORD19_HNSW_INDEX_NAME=cord19-hnsw-index
-CORD19_HNSW_INDEX_DATE=2020-05-01
 CORD19_HNSW_INDEX_METADATA_URL=https://ai2-semanticscholar-cord-19.s3-us-west-2.amazonaws.com/latest/metadata.csv
-CORD19_HNSW_INDEX_SPECTER_URL=https://ai2-semanticscholar-cord-19.s3-us-west-2.amazonaws.com/latest/cord_19_embeddings_5_1.tar.gz
+CORD19_HNSW_INDEX_SPECTER_URL=https://ai2-semanticscholar-cord-19.s3-us-west-2.amazonaws.com/latest/cord_19_embeddings.tar.gz
 CORD19_HNSW_INDEX_FOLDER=api/index/${CORD19_HNSW_INDEX_NAME}
 
 echo "Updating CORD-19 index..."
