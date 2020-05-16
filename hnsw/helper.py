@@ -1,5 +1,5 @@
-import os
 import csv
+import os
 
 
 def remove_if_exist(path):
@@ -31,7 +31,7 @@ def load_metadata(path):
 
 def load_specter_embeddings(path):
     res = {}
-    vectorDimension = None
+    dim = None
 
     with open(path, newline='') as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
@@ -40,13 +40,13 @@ def load_specter_embeddings(path):
             vector = row[1:]
             res[uid] = vector
 
-            if vectorDimension is None:
-                vectorDimension = len(vector)
+            if dim is None:
+                dim = len(vector)
             else:
-                assert vectorDimension == len(
-                    vector), "Embedding Dimension Mismatch"
+                assert dim == len(
+                    vector), "Embedding dimension mismatch"
 
-    return res, vectorDimension
+    return res, dim
 
 
 def save_index_to_uid_file(index_to_uid, index, path):

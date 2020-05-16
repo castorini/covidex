@@ -1,72 +1,41 @@
-from app.settings import settings
-import hnswlib
 import csv
+from typing import Dict, Set
+
+import hnswlib
+
+from app.settings import settings
 
 
 class RelatedSearcher:
     def __init__(self):
-        # Variables
-        self.DIM = None
-        self.HNSW = None
-        self.TOTAL_NUM_ELEMENTS = None
-        self.metadata = {}
-        self.embedding = {}
-        self.index_to_uid = set()
+        self.dim = None
+        self.hnsw = None
+        self.num_elements: int = None
 
-        # Initialization Procedures
-        self.loadIndexToUidFile()
-        self.loadMetadataCSV()
-        self.loadEmbeddingCSV()
-        self.loadHNSW()
+        self.embedding: Dict = {}
+        self.index_to_uid: Dict[int, str] = {}
+        self.uid_set: Set[str] = set()
 
-    def loadHNSW(self):
-        print('>> [RelatedSearcher] hnswlib indexing')
-        self.HNSW = hnswlib.Index(space='l2', dim=self.DIM)
-        self.HNSW.load_index(settings.related_bin_path,
-                             max_elements=self.TOTAL_NUM_ELEMENTS)
-        self.HNSW.set_ef(50)
-        print('<< [RelatedSearcher] done')
+        # Load index files
+        self.load_index_to_uid()
+        self.load_specter_embedding()
+        self.load_hnsw()
 
-    def loadIndexToUidFile(self):
-        res = set()
-
+    def load_index_to_uid(self):
         with open(settings.related_index_to_uid_path, 'r') as f:
             for line in f:
                 parsed_line = line.strip().split(' ')
                 i, uid = parsed_line
-                res.add(uid)
+                self.index_to_uid[int(i)] = uid
+                self.uid_set.add(uid)
 
-        self.index_to_uid = res
-        self.TOTAL_NUM_ELEMENTS = len(res)
-        print(
-            f'>> [RelatedSearcher] Detected {self.TOTAL_NUM_ELEMENTS} elements')
+        self.num_elements = len(self.index_to_uid)
+        print(f'[RelatedSearcher] Loaded {self.num_elements} elements')
 
-    def loadMetadataCSV(self):
+    def load_specter_embedding(self):
         res = {}
-        headers = None
-
-        with open(settings.related_metadata_csv_path, newline='') as csvfile:
-            reader = csv.reader(csvfile, delimiter=',', quotechar='"')
-            for row in reader:
-                if headers is None:
-                    headers = row
-                    continue
-
-                item = {}
-                uid = row[0]
-                for index, token in enumerate(row):
-                    if index != 0:
-                        item[headers[index]] = token
-
-                res[uid] = item
-
-        self.metadata = res
-        print('>> [RelatedSearcher] Loaded Metadata CSV')
-
-    def loadEmbeddingCSV(self):
-        res = {}
-        vectorDimension = None
-
+        dim = None
+        print('[RelatedSearcher] Loading SPECTER embeddings')
         with open(settings.related_specter_csv_path, newline='') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             for row in reader:
@@ -74,13 +43,18 @@ class RelatedSearcher:
                 vector = row[1:]
                 res[uid] = vector
 
-                if vectorDimension is None:
-                    vectorDimension = len(vector)
+                if dim is None:
+                    dim = len(vector)
                 else:
-                    assert vectorDimension == len(
-                        vector), "[RelatedSearcher] Embedding Dimension Mismatch"
+                    assert dim == len(
+                        vector), "[RelatedSearcher] Embedding dimension mismatch"
 
         self.embedding = res
-        self.DIM = vectorDimension
-        print('>> [RelatedSearcher] Loaded Embedding CSV')
-        print(f'>> [RelatedSearcher] Embedding dimension -> {self.DIM}')
+        self.dim = dim
+
+    def load_hnsw(self):
+        self.hnsw = hnswlib.Index(space='l2', dim=self.dim)
+        self.hnsw.load_index(settings.related_bin_path,
+                             max_elements=self.num_elements)
+        self.hnsw.set_ef(50)
+        print('[RelatedSearcher] Loaded HNSW')
