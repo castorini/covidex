@@ -11,7 +11,7 @@ class RelatedSearcher:
         self.TOTAL_NUM_ELEMENTS = None
         self.metadata = {}
         self.embedding = {}
-        self.index_to_uid = []
+        self.index_to_uid = set()
 
         # Initialization Procedures
         self.loadIndexToUidFile()
@@ -28,13 +28,13 @@ class RelatedSearcher:
         print('<< [RelatedSearcher] done')
 
     def loadIndexToUidFile(self):
-        res = []
+        res = set()
 
         with open(settings.related_index_to_uid_path, 'r') as f:
             for line in f:
                 parsed_line = line.strip().split(' ')
                 i, uid = parsed_line
-                res.append(uid)
+                res.add(uid)
 
         self.index_to_uid = res
         self.TOTAL_NUM_ELEMENTS = len(res)
@@ -84,6 +84,3 @@ class RelatedSearcher:
         self.DIM = vectorDimension
         print('>> [RelatedSearcher] Loaded Embedding CSV')
         print(f'>> [RelatedSearcher] Embedding dimension -> {self.DIM}')
-
-
-related_searcher = RelatedSearcher()

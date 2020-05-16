@@ -40,13 +40,15 @@ class CachedT5ModelLoader:
         assert m is not None, 'checkpoint file malformed'
 
         # Copy over checkpoint data
-        ckpt_patt = re.compile(rf'^{m.group(1)}\.(data-\d+-of-\d+|index|meta)$')
+        ckpt_patt = re.compile(
+            rf'^{m.group(1)}\.(data-\d+-of-\d+|index|meta)$')
         for name in file_io.list_directory(self.url):
             if not ckpt_patt.match(name):
                 continue
             url = os.path.join(self.url, name)
             url_stat = file_io.stat(url)
-            cache_file_path = self.model_cache_dir / ckpt_patt.sub(rf'{TRANSFO_PREFIX}.\1', name)
+            cache_file_path = self.model_cache_dir / \
+                ckpt_patt.sub(rf'{TRANSFO_PREFIX}.\1', name)
             try:
                 cs = os.stat(str(cache_file_path))
                 if cs.st_size == url_stat.length and cs.st_mtime_ns > url_stat.mtime_nsec and not self.flush_cache:

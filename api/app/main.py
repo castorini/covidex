@@ -6,11 +6,21 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
-from app.routers import search
-from app.routers import related
+from app.routers import related, search
+from app.services.highlighter import Highlighter
+from app.services.ranker import Ranker
+from app.services.related_searcher import RelatedSearcher
+from app.services.searcher import Searcher
 from app.settings import settings
 
 app = FastAPI()
+
+# Set global state for reusable services
+if not settings.testing:
+    app.state.highlighter = Highlighter()
+    app.state.ranker = Ranker()
+    app.state.related_searcher = RelatedSearcher()
+    app.state.searcher = Searcher()
 
 # Disable CORS in development mode
 if settings.development:
@@ -19,10 +29,15 @@ if settings.development:
                        allow_credentials=True,
                        allow_headers=['*'])
 
-
 # API endpoints
 app.include_router(search.router, tags=['search'], prefix="/api")
 app.include_router(related.router, tags=['related'], prefix="/api")
+
+
+@app.get("/api/status", status_code=200)
+def status():
+    return
+
 
 @app.get("/api/.*", status_code=404, include_in_schema=False)
 def invalid_api():
@@ -32,7 +47,8 @@ def invalid_api():
 # Serve static files and client build if not running in development mode
 if not settings.development:
     app.mount("/static",
-              StaticFiles(directory=pkg_resources.resource_filename(__name__, 'static')),
+              StaticFiles(directory=pkg_resources.resource_filename(
+                  __name__, 'static')),
               name="static")
 
     @app.get("/manifest.json", include_in_schema=False)

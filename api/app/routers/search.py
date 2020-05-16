@@ -10,33 +10,31 @@ from fastapi import APIRouter, Request
 
 from app.models import (SearchArticle, SearchLogData, SearchLogType,
                         SearchQueryResponse, SearchVertical)
-from app.services.highlighter import highlighter
-from app.services.ranker import ranker
-from app.services.searcher import searcher
 from app.settings import settings
 from app.util.logging import build_timed_logger
 from app.util.request import get_request_ip
 
 router = APIRouter()
-search_logger = build_timed_logger('search_logger', settings.search_log_path)
+search_logger = build_timed_logger('search_logger', 'search.log')
 
 
 @router.get('/search', response_model=SearchQueryResponse)
 async def get_search(request: Request, query: str, vertical: SearchVertical):
     # Get search results from Lucene index.
     try:
-        searcher_hits = searcher.search(query, vertical)
+        searcher_hits = request.app.state.searcher.search(query, vertical)
     except:
         # Sometimes errors out due to encoding bugs.
         searcher_hits = []
 
     # Only rerank based on paragraph or abstract if original document was retrieved.
-    ranked_paragraphs = [hit.contents.split('\n')[-1][:5000] for hit in searcher_hits]
+    ranked_paragraphs = [hit.contents.split(
+        '\n')[-1][:5000] for hit in searcher_hits]
     t5_inputs = [
         f'Query: {query} Document: {p} Relevant:' for p in ranked_paragraphs]
 
     # Get predictions from T5.
-    t5_scores = await ranker.predict_t5(t5_inputs)
+    t5_scores = await request.app.state.ranker.predict_t5(t5_inputs)
 
     # Sort results by T5 scores.
     results = list(zip(searcher_hits, t5_scores))
@@ -60,7 +58,8 @@ async def get_search(request: Request, query: str, vertical: SearchVertical):
         highlighted_abstract = False
 
         for (hit, score) in doc_results:
-            paragraph_number = int(hit.docid.split('.')[-1]) if hit.docid != base_docid else -1
+            paragraph_number = int(hit.docid.split(
+                '.')[-1]) if hit.docid != base_docid else -1
             if paragraph_number == -1:
                 highlighted_abstract = True
             paragraphs.append((hit.contents.split('\n')[-1], paragraph_number))
@@ -70,7 +69,8 @@ async def get_search(request: Request, query: str, vertical: SearchVertical):
         paragraphs = [text for text, number in paragraphs]
 
         # Add full article to results.
-        article = build_article(top_hit, base_docid, top_score, paragraphs, highlighted_abstract, vertical)
+        article = build_article(
+            top_hit, base_docid, top_score, paragraphs, highlighted_abstract, vertical)
         ranked_results.append(article)
 
     if settings.highlight:
@@ -82,8 +82,10 @@ async def get_search(request: Request, query: str, vertical: SearchVertical):
         total_paragraphs = len(paragraphs)
         paragraphs = paragraphs[:settings.highlight_max_paragraphs]
 
-        all_highlights = highlighter.highlight_paragraphs(query=query, paragraphs=paragraphs)
-        all_highlights.extend([[] for _ in range(total_paragraphs - settings.highlight_max_paragraphs)])
+        all_highlights = request.app.state.highlighter.highlight_paragraphs(
+            query=query, paragraphs=paragraphs)
+        all_highlights.extend(
+            [[] for _ in range(total_paragraphs - settings.highlight_max_paragraphs)])
 
         # Update results with highlights.
         highlight_idx = 0
@@ -111,6 +113,7 @@ async def get_search(request: Request, query: str, vertical: SearchVertical):
 
     return SearchQueryResponse(query_id=query_id, response=ranked_results)
 
+
 @router.post('/search/log/collapsed', response_model=None)
 async def post_collapsed(data: SearchLogData):
     search_logger.info(json.dumps({
@@ -119,6 +122,7 @@ async def post_collapsed(data: SearchLogData):
         'result_id': data.result_id,
         'position': data.position,
         'timestamp': datetime.utcnow().isoformat()}))
+
 
 @router.post('/search/log/expanded', response_model=None)
 async def post_expanded(data: SearchLogData):
@@ -129,21 +133,24 @@ async def post_expanded(data: SearchLogData):
         'position': data.position,
         'timestamp': datetime.utcnow().isoformat()}))
 
+
 @router.post('/search/log/clicked', response_model=None)
 async def post_clicked(data: SearchLogData):
     search_logger.info(json.dumps({
         'query_id': data.query_id,
         'type': SearchLogType.clicked,
-        'result_id ': data.result_id,
+        'result_id': data.result_id,
         'position': data.position,
         'timestamp': datetime.utcnow().isoformat()}))
+
 
 def build_article(hit, id: str, score: float, paragraphs: List[str],
                   highlighted_abstract: bool, vertical: SearchVertical):
     doc = hit.lucene_document
     return SearchArticle(id=id,
                          abstract=doc.get('abstract'),
-                         authors=[field.stringValue() for field in doc.getFields('authors')],
+                         authors=[field.stringValue()
+                                  for field in doc.getFields('authors')],
                          journal=doc.get('journal'),
                          publish_time=doc.get('publish_time'),
                          source=doc.get('source_x'),

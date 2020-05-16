@@ -7,18 +7,18 @@ from fastapi import APIRouter, HTTPException, Request
 
 from app.models import (RelatedArticle, RelatedQueryResponse, SearchLogData,
                         SearchLogType)
-from app.services.related_searcher import related_searcher
 from app.settings import settings
 from app.util.logging import build_timed_logger
 from app.util.request import get_request_ip
 
 router = APIRouter()
-related_logger = build_timed_logger(
-    'related_logger', settings.related_log_path)
+related_logger = build_timed_logger('related_logger', 'related.log')
 
 
 @router.get('/related/{uid}', response_model=RelatedQueryResponse)
 async def get_related(request: Request, uid: str, page_number: int = 1, query_id: str = None):
+    related_searcher = request.app.state.related_searcher
+
     # Invalid uid -> 404
     if uid not in related_searcher.index_to_uid:
         raise HTTPException(status_code=404, detail="Item not found")
