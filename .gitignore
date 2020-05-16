@@ -1,6 +1,7 @@
 .env
 *.pyc
 __pycache__
+.pytest_cache/
 
 # Anserini index
 lucene-index*

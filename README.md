@@ -9,7 +9,24 @@ This repository contains the API server, neural models, and UI client for [Covid
 
 #### API Server
 
-Download the [latest Anserini index](https://github.com/castorini/anserini/blob/master/docs/experiments-covid.md)
+
+Install CUDA 10.1
++ For Ubuntu, follow [these instructions](https://developer.nvidia.com/cuda-10.1-download-archive-update2)
++ For Debian run `sudo apt-get install nvidia-cuda-toolkit`
+
+
+Install [Anaconda](https://docs.anaconda.com/anaconda/install/linux/) (currently version 2020.02)
+```
+wget https://repo.anaconda.com/archive/Anaconda3-2020.02-Linux-x86_64.sh
+bash Anaconda3-2020.02-Linux-x86_64.sh
+```
+
+Install Java 11
+```
+sudo apt-get install openjdk-11-jre openjdk-11-jdk
+```
+
+Download the [latest Anserini indices](https://github.com/castorini/anserini/blob/master/docs/experiments-covid.md)
 ```
 sh scripts/update-index.sh
 ```
@@ -19,7 +36,7 @@ Set up environment variables by copying over the defaults and modifying as neede
 cp .env.sample .env
 ```
 
-Creating an Anaconda environment for Python 3.7 is highly recommended
+Create an Anaconda environment for Python 3.7
 ```
 conda create -n covidex python=3.7
 ```
@@ -57,7 +74,6 @@ yarn start
 
 The client will be running at [localhost:3000](http://localhost:3000)
 
-
 ## Production Deployment
 
 Redirect port 80 to specified port since only root can bind to port 80 (the below command uses port 8000):
@@ -65,12 +81,12 @@ Redirect port 80 to specified port since only root can bind to port 80 (the belo
 sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8000
 ```
 
-Download the [latest Anserini index](https://github.com/castorini/anserini/blob/master/docs/experiments-covid.md)
+Download the [latest Anserini indices](https://github.com/castorini/anserini/blob/master/docs/experiments-covid.md)
 ```
 sh scripts/update-index.sh
 ```
 
-Start the server and warm up models (deploys to port 8000 by default):
+Start the server (deploys to port 8000 by default):
 ```
 sh scripts/deploy-prod.sh
 ```
@@ -80,4 +96,11 @@ sh scripts/deploy-prod.sh
 PORT=8000 sh scripts/deploy-prod.sh
 ```
 
-Log files are available under `api/logs`, where new files are created daily based on UTC time. All filenames have the date appended except for the current one, which will be named `search.log`.
+Log files are available under `api/logs`, where new files are created daily based on UTC time. All filenames have the date appended except for the current one, which will be named `search.log` or `related.log`.
+
+## Testing
+
+To run all API tests
+```
+TESTING=true pytest api
+```

@@ -177,6 +177,3 @@ class Highlighter:
                 original_paragraph=paragraph)
             all_highlights.append(highlights)
         return all_highlights
-
-
-highlighter = Highlighter()

@@ -28,5 +28,3 @@ class Searcher:
 
     def search(self, query: str, vertical: SearchVertical):
         return self.searchers[vertical].search(q=query, k=settings.max_docs)
-
-searcher = Searcher()

@@ -5,9 +5,9 @@ from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
+    testing: bool = False
     development: bool = True
-    search_log_path: str = 'logs/search.log'
-    related_log_path: str = 'logs/related.log'
+    log_path: str = 'logs/'
 
     # Related searcher settings
     related_bin_path: str = "index/cord19-hnsw-index/cord19-hnsw.bin"
@@ -34,7 +34,8 @@ class Settings(BaseSettings):
     t5_max_length: int = 256
 
     # Cache settings
-    cache_dir: Path = Path(os.getenv('XDG_CACHE_HOME', str(Path.home() / '.cache'))) / 'covidex'
+    cache_dir: Path = Path(
+        os.getenv('XDG_CACHE_HOME', str(Path.home() / '.cache'))) / 'covidex'
     flush_cache: bool = False
 
     # Paragraph highlighting

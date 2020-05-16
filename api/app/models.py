@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from pydantic.class_validators import validator
 from enum import Enum
 
+
 class BaseArticle(BaseModel):
     id: str
     abstract: str = None
