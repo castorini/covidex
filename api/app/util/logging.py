@@ -15,7 +15,7 @@ def build_timed_logger(name: str, filename: str) -> logging.Logger:
     logger.setLevel(logging.INFO)
     logger.propagate = False
     if not settings.testing:
-        abs_path = pkg_resources.resource_filename(__name__, f'{settings.log_path}/{filename}')
-        handler = TimedRotatingFileHandler(abs_path, when="d", interval=1, utc=True)
+        path = f"{settings.log_path}/{filename}"
+        handler = TimedRotatingFileHandler(path, when="d", interval=1, utc=True)
         logger.addHandler(handler)
     return logger

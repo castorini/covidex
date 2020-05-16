@@ -1,3 +1,5 @@
+from typing import List
+
 from pyserini.search import pysearch
 
 from app.models import SearchVertical
@@ -6,9 +8,11 @@ from app.settings import settings
 
 class Searcher:
     def __init__(self):
-        self.searchers = {}
-        self.searchers[SearchVertical.cord19] = self.build_searcher(settings.cord19_index_path)
-        self.searchers[SearchVertical.trialstreamer] = self.build_searcher(settings.trialstreamer_index_path)
+        self.searchers: List[pysearch.SimpleSearcher] = {}
+        self.searchers[SearchVertical.cord19] = self.build_searcher(
+            settings.cord19_index_path)
+        self.searchers[SearchVertical.trialstreamer] = self.build_searcher(
+            settings.trialstreamer_index_path)
 
     def build_searcher(self, index_path):
         searcher = pysearch.SimpleSearcher(index_path)
@@ -28,3 +32,6 @@ class Searcher:
 
     def search(self, query: str, vertical: SearchVertical):
         return self.searchers[vertical].search(q=query, k=settings.max_docs)
+
+    def doc(self, id: str, vertical: SearchVertical):
+        return self.searchers[vertical].doc(id)

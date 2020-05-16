@@ -32,7 +32,7 @@ class SearchArticle(BaseArticle):
 
 
 class RelatedArticle(BaseArticle):
-    distance: str
+    distance: float
 
 
 class SearchQueryResponse(BaseModel):
