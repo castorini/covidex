@@ -27,14 +27,11 @@ async def get_search(request: Request, query: str, vertical: SearchVertical):
         # Sometimes errors out due to encoding bugs.
         searcher_hits = []
 
-    # Only rerank based on paragraph or abstract if original document was retrieved.
-    ranked_paragraphs = [hit.contents.split(
-        '\n')[-1][:5000] for hit in searcher_hits]
-    t5_inputs = [
-        f'Query: {query} Document: {p} Relevant:' for p in ranked_paragraphs]
+    # Get paragraph or abstract if original document was retrieved.
+    paragraphs = [hit.contents.split('\n')[-1] for hit in searcher_hits]
 
     # Get predictions from T5.
-    t5_scores = await request.app.state.ranker.predict_t5(t5_inputs)
+    t5_scores = request.app.state.ranker.rerank(query, paragraphs)
 
     # Sort results by T5 scores.
     results = list(zip(searcher_hits, t5_scores))

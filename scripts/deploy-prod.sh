@@ -17,10 +17,10 @@ PORT=${PORT:-8000}
 nohup uvicorn app.main:app --port=$PORT --host 0.0.0.0 &
 
 echo "Waiting for server availability..."
-l_TELNET=`echo "quit" | telnet localhost $PORT | grep "Escape character is"` > /dev/null
-while [ "$?" -ne 0 ]; do
+status_code=$(curl --write-out %{http_code} --silent --output /dev/null http://localhost:$PORT/api/status)
+while [ "$status_code" -ne 200 ]; do
   sleep 10
-  l_TELNET=`echo "quit" | telnet localhost $PORT | grep "Escape character is"` > /dev/null
+  status_code=$(curl --write-out %{http_code} --silent --output /dev/null http://localhost:$PORT/api/status)
 done
 
 echo "Server started successfully! Logs are available at api/logs/"
