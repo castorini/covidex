@@ -1,10 +1,10 @@
+from typing import List, Tuple
+
 import spacy
 import torch
 import transformers
 
 from app.settings import settings
-from typing import List
-from typing import Tuple
 
 
 class Highlighter:
