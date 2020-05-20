@@ -127,8 +127,8 @@ const HomeText = () => {
         <Link href="http://www.kyunghyuncho.me/" target="_blank" rel="noopener noreferrer">
           Kyunghyun Cho
         </Link>{' '}
-        from NYU, with a small team of wonderful students:{' '}
-        <Link href="https://github.com/edwinzhng" target="_blank" rel="noopener noreferrer">
+        from NYU, with a small team of wonderful collaborators and students:{' '}
+        <Link href="https://edwinzhang.me" target="_blank" rel="noopener noreferrer">
           Edwin Zhang
         </Link>
         ,{' '}
@@ -139,9 +139,17 @@ const HomeText = () => {
         <Link href="https://github.com/nikhilro" target="_blank" rel="noopener noreferrer">
           Nikhil Gupta
         </Link>{' '}
-        and{' '}
+        ,{' '}
         <Link href="http://ralphtang.com" target="_blank" rel="noopener noreferrer">
           Ralph Tang
+        </Link>
+        ,{' '}
+        <Link href="https://scholar.google.com/citations?user=xD32wZ8AAAAJ&hl=en" target="_blank" rel="noopener noreferrer">
+          Rodrigo Nogueira
+        </Link>
+        , and{' '}
+        <Link href="https://linkedin.com/in/rpradeep42" target="_blank" rel="noopener noreferrer">
+          Ronak Pradeep
         </Link>
         . Special thanks to{' '}
         <Link href="https://colinraffel.com/" target="_blank" rel="noopener noreferrer">
