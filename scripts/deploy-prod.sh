@@ -20,6 +20,7 @@ echo "Waiting for server availability..."
 status_code=$(curl --write-out %{http_code} --silent --output /dev/null http://localhost:$PORT/api/status)
 while [ "$status_code" -ne 200 ]; do
   sleep 10
+  echo "Server not available, trying again in 10 seconds..."
   status_code=$(curl --write-out %{http_code} --silent --output /dev/null http://localhost:$PORT/api/status)
 done
 
