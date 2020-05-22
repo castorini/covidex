@@ -22,7 +22,8 @@ class Ranker:
         device = torch.device(settings.t5_device)
         model = loader.load().to(device).eval()
         tokenizer = T5Tokenizer.from_pretrained(settings.t5_model_type)
-        batch_tokenizer = T5BatchTokenizer(tokenizer, settings.t5_batch_size)
+        batch_tokenizer = T5BatchTokenizer(tokenizer, settings.t5_batch_size,
+                                           max_length=settings.t5_max_length)
         return T5Reranker(model, batch_tokenizer)
 
     def rerank(self, query: str, texts: List[str]) -> List[float]:

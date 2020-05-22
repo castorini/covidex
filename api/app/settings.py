@@ -28,6 +28,7 @@ class Settings(BaseSettings):
     # T5 model settings
     t5_model_dir: str = 'gs://neuralresearcher_data/covid/data/model_exp377'
     t5_batch_size: int = 96
+    t5_max_length: int = 256
     t5_device: str = 'cuda:0'
     t5_model_type: str = 't5-base'
 
