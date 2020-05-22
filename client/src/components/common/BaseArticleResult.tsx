@@ -26,9 +26,17 @@ const BaseArticleResult: React.FC<BaseArticleResultProps> = ({
     });
   }
 
-  // Indicate if medRxiv or bioRxiv is the source
-  const source = ['medrxiv', 'biorxiv'].includes(article.source.toLowerCase())
-    ? article.source.replace('r', 'R')
+  const transformSource = (source: string) => {
+    if (source === 'arxiv') {
+      return source.replace('x', 'X');
+    } else {
+      return source.replace('r', 'R');
+    }
+  };
+
+  // Indicate if arXiv, medRxiv, or bioRxiv is the source
+  const source = ['arxiv', 'medrxiv', 'biorxiv'].includes(article.source.toLowerCase())
+    ? transformSource(article.source.toLowerCase())
     : '';
 
   return (

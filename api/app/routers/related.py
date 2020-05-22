@@ -41,7 +41,7 @@ async def get_related(request: Request, uid: str, page_number: int = 1, query_id
     for index, dist in zip(labels[0][start_idx:end_idx], distances[0][start_idx:end_idx]):
         uid = related_searcher.index_to_uid[index]
         hit = searcher.doc(uid, SearchVertical.cord19)
-        if hit.lucene_document is None:
+        if hit.lucene_document() is None:
             continue
         result = build_related_result(hit, uid, dist)
         related_results.append(result)
