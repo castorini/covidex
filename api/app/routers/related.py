@@ -70,8 +70,10 @@ async def post_clicked(data: SearchLogData):
         'timestamp': datetime.utcnow().isoformat()}))
 
 
-def build_related_result(doc, id: str, dist: float):
-    doc = doc.lucene_document()
+def build_related_result(hit, id: str, dist: float):
+    doc = hit.lucene_document()
+    doi = doc.get('doi')
+    url = doc.get('url') if doc.get('url') else f'https://doi.org/{doi}'
     return RelatedArticle(
         id=id,
         abstract=doc.get('abstract'),
@@ -82,4 +84,5 @@ def build_related_result(doc, id: str, dist: float):
         publish_time=doc.get('publish_time'),
         source=doc.get('source_x'),
         title=doc.get('title'),
-        url=doc.get('url'))
+        url=url
+    )

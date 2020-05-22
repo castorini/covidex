@@ -144,6 +144,8 @@ async def post_clicked(data: SearchLogData):
 def build_article(hit, id: str, score: float, paragraphs: List[str],
                   highlighted_abstract: bool, vertical: SearchVertical):
     doc = hit.lucene_document
+    doi = doc.get('doi')
+    url = doc.get('url') if doc.get('url') else f'https://doi.org/{doi}'
     return SearchArticle(id=id,
                          abstract=doc.get('abstract'),
                          authors=[field.stringValue()
@@ -152,7 +154,7 @@ def build_article(hit, id: str, score: float, paragraphs: List[str],
                          publish_time=doc.get('publish_time'),
                          source=doc.get('source_x'),
                          title=doc.get('title'),
-                         url=doc.get('url'),
+                         url=url,
                          score=score,
                          paragraphs=paragraphs,
                          highlighted_abstract=highlighted_abstract,

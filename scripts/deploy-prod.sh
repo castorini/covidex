@@ -19,8 +19,8 @@ nohup uvicorn app.main:app --port=$PORT --host 0.0.0.0 &
 echo "Waiting for server availability..."
 status_code=$(curl --write-out %{http_code} --silent --output /dev/null http://localhost:$PORT/api/status)
 while [ "$status_code" -ne 200 ]; do
-  sleep 10
   echo "Server not available, trying again in 10 seconds..."
+  sleep 10
   status_code=$(curl --write-out %{http_code} --silent --output /dev/null http://localhost:$PORT/api/status)
 done
 
