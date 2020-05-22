@@ -12,7 +12,7 @@ from app.models import (SearchArticle, SearchLogData, SearchLogType,
                         SearchQueryResponse, SearchVertical)
 from app.settings import settings
 from app.util.logging import build_timed_logger
-from app.util.request import get_request_ip
+from app.util.request import get_doc_url, get_request_ip
 
 router = APIRouter()
 search_logger = build_timed_logger('search_logger', 'search.log')
@@ -144,8 +144,6 @@ async def post_clicked(data: SearchLogData):
 def build_article(hit, id: str, score: float, paragraphs: List[str],
                   highlighted_abstract: bool, vertical: SearchVertical):
     doc = hit.lucene_document
-    doi = doc.get('doi')
-    url = doc.get('url') if doc.get('url') else f'https://doi.org/{doi}'
     return SearchArticle(id=id,
                          abstract=doc.get('abstract'),
                          authors=[field.stringValue()
@@ -154,7 +152,7 @@ def build_article(hit, id: str, score: float, paragraphs: List[str],
                          publish_time=doc.get('publish_time'),
                          source=doc.get('source_x'),
                          title=doc.get('title'),
-                         url=url,
+                         url=get_doc_url(doc),
                          score=score,
                          paragraphs=paragraphs,
                          highlighted_abstract=highlighted_abstract,

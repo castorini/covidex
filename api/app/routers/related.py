@@ -9,7 +9,7 @@ from app.models import (RelatedArticle, RelatedQueryResponse, SearchLogData,
                         SearchLogType, SearchVertical)
 from app.settings import settings
 from app.util.logging import build_timed_logger
-from app.util.request import get_request_ip
+from app.util.request import get_doc_url, get_request_ip
 
 router = APIRouter()
 related_logger = build_timed_logger('related_logger', 'related.log')
@@ -41,6 +41,8 @@ async def get_related(request: Request, uid: str, page_number: int = 1, query_id
     for index, dist in zip(labels[0][start_idx:end_idx], distances[0][start_idx:end_idx]):
         uid = related_searcher.index_to_uid[index]
         hit = searcher.doc(uid, SearchVertical.cord19)
+        if hit.lucene_document is None:
+            continue
         result = build_related_result(hit, uid, dist)
         related_results.append(result)
 
@@ -72,8 +74,6 @@ async def post_clicked(data: SearchLogData):
 
 def build_related_result(hit, id: str, dist: float):
     doc = hit.lucene_document()
-    doi = doc.get('doi')
-    url = doc.get('url') if doc.get('url') else f'https://doi.org/{doi}'
     return RelatedArticle(
         id=id,
         abstract=doc.get('abstract'),
@@ -84,5 +84,5 @@ def build_related_result(hit, id: str, dist: float):
         publish_time=doc.get('publish_time'),
         source=doc.get('source_x'),
         title=doc.get('title'),
-        url=url
+        url=get_doc_url(doc)
     )
