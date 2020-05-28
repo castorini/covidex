@@ -77,11 +77,11 @@ def build_related_result(hit, id: str, dist: float):
     return RelatedArticle(
         id=id,
         abstract=doc.get('abstract'),
-        authors=get_multivalued_field('authors'),
+        authors=get_multivalued_field(doc, 'authors'),
         distance=dist,
         journal=doc.get('journal'),
         publish_time=doc.get('publish_time'),
-        source=get_multivalued_field('source_x'),
+        source=get_multivalued_field(doc, 'source_x'),
         title=doc.get('title'),
         url=get_doc_url(doc)
     )

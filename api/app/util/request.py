@@ -16,9 +16,7 @@ def get_doc_url(doc) -> str:
     doi = doc.get('doi')
     if doi:
         return f'https://doi.org/{doi}'
-
-    url = doc.get('url').split('; ')[0]
-    return url
+    return doc.get('url')
 
 def get_multivalued_field(doc, field) -> List[str]:
     return [field.stringValue() for field in doc.getFields(field)]
