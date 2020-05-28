@@ -48,12 +48,12 @@ const getSearchFilters = (searchResults: SearchArticle[] | null): SearchFilters 
       article.authors.forEach((a) => authors.add(a));
     }
 
-    if (article.journal) {
-      journals.add(article.journal);
+    if (article.source) {
+      article.source.forEach((s) => sources.add(s));
     }
 
-    if (article.source) {
-      sources.add(article.source);
+    if (article.journal) {
+      journals.add(article.journal);
     }
   });
 
@@ -160,7 +160,8 @@ const HomePage = () => {
               article.authors.some((a) => selectedFilters.authors.has(a))) &&
             (selectedFilters.journals.size === 0 ||
               selectedFilters.journals.has(article.journal)) &&
-            (selectedFilters.sources.size === 0 || selectedFilters.sources.has(article.source)),
+            (selectedFilters.sources.size === 0 ||
+              article.source.some((s) => selectedFilters.sources.has(s))),
         );
 
   return (

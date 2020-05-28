@@ -9,7 +9,7 @@ from app.models import (RelatedArticle, RelatedQueryResponse, SearchLogData,
                         SearchLogType, SearchVertical)
 from app.settings import settings
 from app.util.logging import build_timed_logger
-from app.util.request import get_doc_url, get_request_ip
+from app.util.request import get_doc_url, get_multivalued_field, get_request_ip
 
 router = APIRouter()
 related_logger = build_timed_logger('related_logger', 'related.log')
@@ -77,12 +77,11 @@ def build_related_result(hit, id: str, dist: float):
     return RelatedArticle(
         id=id,
         abstract=doc.get('abstract'),
-        authors=[field.stringValue()
-                 for field in doc.getFields('authors')],
+        authors=get_multivalued_field('authors'),
         distance=dist,
         journal=doc.get('journal'),
         publish_time=doc.get('publish_time'),
-        source=doc.get('source_x'),
+        source=get_multivalued_field('source_x'),
         title=doc.get('title'),
         url=get_doc_url(doc)
     )

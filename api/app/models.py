@@ -12,7 +12,7 @@ class BaseArticle(BaseModel):
     journal: str = None
     publish_time: str = None
     title: str
-    source: str
+    source: List[str] = []
     url: str
 
 

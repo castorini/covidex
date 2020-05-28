@@ -12,7 +12,7 @@ from app.models import (SearchArticle, SearchLogData, SearchLogType,
                         SearchQueryResponse, SearchVertical)
 from app.settings import settings
 from app.util.logging import build_timed_logger
-from app.util.request import get_doc_url, get_request_ip
+from app.util.request import get_doc_url, get_multivalued_field, get_request_ip
 
 router = APIRouter()
 search_logger = build_timed_logger('search_logger', 'search.log')
@@ -146,11 +146,10 @@ def build_article(hit, id: str, score: float, paragraphs: List[str],
     doc = hit.lucene_document
     return SearchArticle(id=id,
                          abstract=doc.get('abstract'),
-                         authors=[field.stringValue()
-                                  for field in doc.getFields('authors')],
+                         authors=get_multivalued_field('authors'),
                          journal=doc.get('journal'),
                          publish_time=doc.get('publish_time'),
-                         source=doc.get('source_x'),
+                         source=get_multivalued_field('source_x'),
                          title=doc.get('title'),
                          url=get_doc_url(doc),
                          score=score,

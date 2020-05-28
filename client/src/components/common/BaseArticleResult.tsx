@@ -26,7 +26,7 @@ const BaseArticleResult: React.FC<BaseArticleResultProps> = ({
     });
   }
 
-  const transformSource = (source: string) => {
+  const transformPreprintSource = (source: string) => {
     if (source === 'arxiv') {
       return source.replace('x', 'X');
     } else {
@@ -35,9 +35,12 @@ const BaseArticleResult: React.FC<BaseArticleResultProps> = ({
   };
 
   // Indicate if arXiv, medRxiv, or bioRxiv is the source
-  const source = ['arxiv', 'medrxiv', 'biorxiv'].includes(article.source.toLowerCase())
-    ? transformSource(article.source.toLowerCase())
-    : '';
+  let source = '';
+  article.source.forEach((s) => {
+    if (['arxiv', 'medrxiv', 'biorxiv'].includes(s.trim().toLowerCase())) {
+      source += transformPreprintSource(s.trim().toLowerCase());
+    }
+  });
 
   return (
     <>
