@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import Request
 
 
@@ -10,8 +12,11 @@ def get_request_ip(request: Request):
     return request_ip
 
 
-def get_doc_url(doc):
+def get_doc_url(doc) -> str:
     doi = doc.get('doi')
-    url = doc.get('url').split('; ')[0]
-    url = url if url else f'https://doi.org/{doi}'
-    return url
+    if doi:
+        return f'https://doi.org/{doi}'
+    return doc.get('url')
+
+def get_multivalued_field(doc, field) -> List[str]:
+    return [field.stringValue() for field in doc.getFields(field)]

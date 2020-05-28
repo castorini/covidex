@@ -3,8 +3,8 @@
 echo "Updating Anserini index..."
 
 CORD19_INDEX_NAME=lucene-index-cord19-paragraph
-CORD19_INDEX_DATE=2020-05-19
-CORD19_INDEX_URL=https://www.dropbox.com/s/7z8szogu5neuhqe/lucene-index-cord19-paragraph-2020-05-19.tar.gz
+CORD19_INDEX_DATE=2020-05-26
+CORD19_INDEX_URL=https://www.dropbox.com/s/ng4hwlr9414o4ju/lucene-index-cord19-paragraph-2020-05-26.tar.gz
 
 TRIALSTREAMER_INDEX_NAME=lucene-index-trialstreamer
 TRIALSTREAMER_INDEX_DATE=2020-04-15

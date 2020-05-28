@@ -4,7 +4,7 @@ export interface BaseArticle {
   authors: Array<string>;
   journal: string;
   publish_time: string;
-  source: string;
+  source: Array<string>;
   title: string;
   url: string;
 }
