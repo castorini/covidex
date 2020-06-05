@@ -49,7 +49,7 @@ conda activate covidex
 
 Install Python dependencies
 ```
-pip install -r requirements.txt
+pip install -r api/requirements.txt
 ```
 
 Run the server
