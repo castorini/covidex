@@ -34,7 +34,7 @@ sh scripts/update-index.sh
 
 Set up environment variables by copying over the defaults and modifying as needed
 ```
-cp .env.sample .env
+cp api/.env.sample api/.env
 ```
 
 Create an Anaconda environment for Python 3.7
