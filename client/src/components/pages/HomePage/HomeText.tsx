@@ -19,11 +19,11 @@ const HomeText = () => {
         <Link href="https://allenai.org/" target="_blank" rel="noopener noreferrer">
           Allen Institute for AI
         </Link>{' '}
-        (data release of June 12, 2020), which currently contains over 47,000 scholarly articles,
-        including over 36,000 with full text, about COVID-19 and coronavirus-related research, drawn
-        from a variety of sources including PubMed, a curated list of articles from the WHO, as well
-        as preprints from bioRxiv and medRxiv. In addition, we also support search on 100+
-        randomized controlled trials (published and ongoing) related to COVID-19 provided by{' '}
+        (data release of June 12, 2020), which currently contains over 50,000 scholarly articles
+        about COVID-19 and coronavirus-related research, drawn from a variety of sources including
+        PubMed, a curated list of articles from the WHO, as well as preprints from bioRxiv and
+        medRxiv. In addition, we also support search on 100+ randomized controlled trials (published
+        and ongoing) related to COVID-19 provided by{' '}
         <Link
           href="https://trialstreamer.robotreviewer.net/"
           target="_blank"
@@ -144,7 +144,11 @@ const HomeText = () => {
           Ralph Tang
         </Link>
         ,{' '}
-        <Link href="https://scholar.google.com/citations?user=xD32wZ8AAAAJ&hl=en" target="_blank" rel="noopener noreferrer">
+        <Link
+          href="https://scholar.google.com/citations?user=xD32wZ8AAAAJ&hl=en"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           Rodrigo Nogueira
         </Link>
         , and{' '}
