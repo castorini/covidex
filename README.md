@@ -30,7 +30,7 @@ Build the [latest Anserini indices](https://github.com/castorini/anserini/blob/m
 sh scripts/update-anserini.sh
 ```
 
-Build the latest HNSW index
+Build the latest HNSW index for related article search
 ```
 sh scripts/update-hnsw.sh
 ```
@@ -92,7 +92,7 @@ Build the [latest Anserini indices](https://github.com/castorini/anserini/blob/m
 sh scripts/update-anserini.sh [DATE]
 ```
 
-Build the latest HNSW index
+Build the latest HNSW index for related article search
 ```
 sh scripts/update-hnsw.sh
 ```
