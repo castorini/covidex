@@ -19,11 +19,11 @@ const HomeText = () => {
         <Link href="https://allenai.org/" target="_blank" rel="noopener noreferrer">
           Allen Institute for AI
         </Link>{' '}
-        (data release of June 12, 2020), which currently contains over 140,000 scholarly articles,
-        including over 70,000 with full text, about COVID-19 and coronavirus-related research, drawn
-        from a variety of sources including PubMed, a curated list of articles from the WHO, as well
-        as preprints from bioRxiv and medRxiv. In addition, we also support search on 100+
-        randomized controlled trials (published and ongoing) related to COVID-19 provided by{' '}
+        , which currently contains over 140,000 scholarly articles, including over 70,000 with full
+        text, about COVID-19 and coronavirus-related research, drawn from a variety of sources
+        including PubMed, a curated list of articles from the WHO, as well as preprints from bioRxiv
+        and medRxiv. In addition, we also support search on 100+ randomized controlled trials
+        (published and ongoing) related to COVID-19 provided by{' '}
         <Link
           href="https://trialstreamer.robotreviewer.net/"
           target="_blank"

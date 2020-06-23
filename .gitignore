@@ -4,8 +4,8 @@ __pycache__
 .pytest_cache/
 
 # Anserini index
-lucene-index*
-cord19-hnsw-index*
+anserini/
+api/index/
 
 # TensorFlow SavedModel
 *.pb
