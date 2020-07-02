@@ -27,12 +27,12 @@ sudo apt-get install openjdk-11-jre openjdk-11-jdk
 
 Build the [latest Anserini indices](https://github.com/castorini/anserini/blob/master/docs/experiments-cord19.md)
 ```
-sh scripts/update-anserini.sh
+sh scripts/update-anserini-index.sh
 ```
 
 Build the latest HNSW index for related article search
 ```
-sh scripts/update-hnsw.sh
+sh scripts/update-hnsw-index.sh
 ```
 
 Set up environment variables by copying over the defaults and modifying as needed
@@ -89,12 +89,12 @@ sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8000
 
 Build the [latest Anserini indices](https://github.com/castorini/anserini/blob/master/docs/experiments-cord19.md)
 ```
-sh scripts/update-anserini.sh [DATE]
+sh scripts/update-anserini-index.sh [DATE]
 ```
 
 Build the latest HNSW index for related article search
 ```
-sh scripts/update-hnsw.sh
+sh scripts/update-hnsw-index.sh
 ```
 
 Start the server (deploys to port 8000 by default):
