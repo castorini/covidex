@@ -21,11 +21,13 @@ echo "Updating CORD-19 index for $1..."
 
 python3 -m pip install tqdm # required for indexing script
 [ -d anserini ] && echo "Found Anserini folder..." || git clone https://github.com/castorini/anserini.git
-cd anserini && \
-    git pull && \
-    mvn clean package appassembler:assemble -Dmaven.javadoc.skip=true && \
-    python3 src/main/python/trec-covid/index_cord19.py --date $CORD19_DATE --all && \
-    cd ..
+
+cd anserini
+git pull && git submodule update --init --recursive
+mvn clean package appassembler:assemble -Dmaven.javadoc.skip=true && \
+    python3 src/main/python/trec-covid/index_cord19.py --date $CORD19_DATE --all
+cd ..
+
 rm -rf $COVIDEX_CORD19_INDEX_PATH
 mkdir $COVIDEX_CORD19_INDEX_PATH
 mv anserini/indexes/$CORD19_INDEX_NAME-$CORD19_DATE/* $COVIDEX_CORD19_INDEX_PATH/
