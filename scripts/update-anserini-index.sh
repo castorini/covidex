@@ -31,7 +31,7 @@ cd ..
 rm -rf $COVIDEX_CORD19_INDEX_PATH
 mkdir $COVIDEX_CORD19_INDEX_PATH
 mv anserini/indexes/$CORD19_INDEX_NAME-$CORD19_DATE/* $COVIDEX_CORD19_INDEX_PATH/
-
+rm -rf anserini/indexes/*
 
 echo "Updating Trialstreamer index..."
 wget ${TRIALSTREAMER_INDEX_URL}
