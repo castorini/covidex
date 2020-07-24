@@ -11,8 +11,6 @@ class Searcher:
         self.searchers: List[pysearch.SimpleSearcher] = {}
         self.searchers[SearchVertical.cord19] = self.build_searcher(
             settings.cord19_index_path)
-        self.searchers[SearchVertical.trialstreamer] = self.build_searcher(
-            settings.trialstreamer_index_path)
 
     def build_searcher(self, index_path):
         searcher = pysearch.SimpleSearcher(index_path)

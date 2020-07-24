@@ -2,10 +2,12 @@
 *.pyc
 __pycache__
 .pytest_cache/
+api/.DS_Store
+.DS_Store
 
 # Anserini index
 anserini/
-api/index/
+# api/index/
 
 # TensorFlow SavedModel
 *.pb

@@ -19,7 +19,7 @@ app = FastAPI()
 if not settings.testing:
     app.state.highlighter = Highlighter()
     app.state.ranker = Ranker()
-    app.state.related_searcher = RelatedSearcher()
+    #app.state.related_searcher = RelatedSearcher()
     app.state.searcher = Searcher()
 
 # Disable CORS in development mode

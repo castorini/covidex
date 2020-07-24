@@ -145,7 +145,7 @@ def build_article(hit, id: str, score: float, paragraphs: List[str],
                   highlighted_abstract: bool, vertical: SearchVertical):
     doc = hit.lucene_document
     return SearchArticle(id=id,
-                         abstract=doc.get('abstract'),
+                         abstract=doc.get('abstract_html'),
                          authors=get_multivalued_field(doc, 'authors'),
                          journal=doc.get('journal'),
                          publish_time=doc.get('publish_time'),
