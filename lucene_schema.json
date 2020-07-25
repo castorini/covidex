@@ -1,0 +1,30 @@
+{
+    "id": {
+        "type": "str",
+        "default": "..."
+    },
+    "abstract": {
+        "type": "str",
+        "default": "None"
+    },
+    "authors": {
+        "type": "List[str]",
+        "default": "[]"
+    },
+    "publish_time": {
+        "type": "str",
+        "default": "None"
+    },
+    "title": {
+        "type": "str",
+        "default": "..."
+    },
+    "source": {
+        "type": "List[str]",
+        "default": "..."
+    },
+    "url": {
+        "type": "str",
+        "default": "..."
+    }
+}

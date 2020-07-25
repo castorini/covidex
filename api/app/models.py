@@ -1,20 +1,22 @@
 from typing import List
+import json
 
-from pydantic import BaseModel
+from pydantic import BaseModel, create_model
 from pydantic.class_validators import validator
 from enum import Enum
 
 
-class BaseArticle(BaseModel):
-    id: str
-    abstract: str = None
-    authors: List[str] = []
-    journal: str = None
-    publish_time: str = None
-    title: str
-    source: List[str] = []
-    url: str
+def gettype(name):
+    t = getattr(__builtins__, name)
+    if isinstance(t, type):
+        return t
+    raise ValueError(name)
 
+
+lucene_schema = json.load(open("../lucene_schema.json"))
+schema_dict = {key: (eval(lucene_schema[key]["type"]), eval(lucene_schema[key]["default"])) for key in lucene_schema}
+
+BaseArticle = create_model("BaseArticle", **schema_dict)
 
 class SearchArticle(BaseArticle):
     score: float
