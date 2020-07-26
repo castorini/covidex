@@ -9,6 +9,11 @@ class Settings(BaseSettings):
     development: bool = True
     log_path: str = 'logs/'
 
+    # related searcher stuff
+    related_bin_paths: str = "index/cord19-hnsw-index/cord19-hnsw.bin"
+    related_index_to_uid_path: str = "index/cord19-hnsw-index/cord19-hnsw.txt"
+    related_specter_csv_path: str = "index/cord19-hnsw-index/specter.csv"
+
     # Anserini searcher settings
     index_path: str = "index/acl"
     schema_path: str = "../schema/acl_schema.json"
