@@ -10,7 +10,8 @@ class Settings(BaseSettings):
     log_path: str = 'logs/'
 
     # Anserini searcher settings
-    index_path: str
+    index_path: str = "index/acl"
+    schema_path: str = "../schema/acl_schema.json"
     max_docs: int = 96
     bm25_k1: float = 0.4
     bm25_b: float = 0.9

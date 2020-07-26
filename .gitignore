@@ -7,7 +7,7 @@ api/.DS_Store
 
 # Anserini index
 anserini/
-# api/index/
+api/index/
 
 # TensorFlow SavedModel
 *.pb

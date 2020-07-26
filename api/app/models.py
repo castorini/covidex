@@ -4,19 +4,17 @@ import json
 from pydantic import BaseModel, create_model
 from pydantic.class_validators import validator
 from enum import Enum
+from app.settings import settings
 
+schema = json.load(open(settings.schema_path))
+lucene_schema = schema["document_fields"]
+verticals = schema["SearchVertical"]
 
-def gettype(name):
-    t = getattr(__builtins__, name)
-    if isinstance(t, type):
-        return t
-    raise ValueError(name)
-
-
-lucene_schema = json.load(open("../lucene_schema.json"))
 schema_dict = {key: (eval(lucene_schema[key]["type"]), eval(lucene_schema[key]["default"])) for key in lucene_schema}
 
 BaseArticle = create_model("BaseArticle", **schema_dict)
+SearchVertical = Enum("SearchVertical", [(vertical, verticals[vertical]) for vertical in verticals], type=str)
+
 
 class SearchArticle(BaseArticle):
     score: float
@@ -58,8 +56,3 @@ class SearchLogType(str, Enum):
     collapsed = 'collapsed'
     expanded = 'expanded'
     clicked = 'clicked'
-
-
-class SearchVertical(str, Enum):
-    cord19 = 'cord19'
-    trialstreamer = 'trialstreamer'
