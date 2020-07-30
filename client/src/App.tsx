@@ -5,7 +5,7 @@ import styled, { ThemeProvider } from 'styled-components';
 import Navbar from './components/navigation/Navbar';
 import Footer from './components/navigation/Footer';
 import HomePage from './components/pages/HomePage/HomePage';
-import RelatedPage from './components/pages/RelatedPage/RelatedPage';
+// import RelatedPage from './components/pages/RelatedPage/RelatedPage';
 import NotFoundPage from './components/pages/NotFoundPage';
 
 import { HOME_ROUTE, RELATED_ROUTE } from './shared/Constants';
@@ -20,9 +20,6 @@ const App = () => {
           <Switch>
             <Route exact path={HOME_ROUTE}>
               <HomePage />
-            </Route>
-            <Route path={`${RELATED_ROUTE}/:articleId`}>
-              <RelatedPage />
             </Route>
             <Route>
               <NotFoundPage />

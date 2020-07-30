@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Link as LinkIcon } from 'react-feather';
 
 import { RelatedArticle } from '../../../shared/Models';
-import BaseArticleResult from '../../common/BaseArticleResult';
+import AclBaseArticleResult from '../../common/AclBaseArticleResult';
 import { BodySmall, LinkStyle } from '../../../shared/Styles';
 import { parseAbstract, makePOSTRequest } from '../../../shared/Util';
 import { RELATED_ROUTE, API_BASE, RELATED_CLICKED_ENDPOINT } from '../../../shared/Constants';
@@ -20,7 +20,7 @@ const RelatedResult: React.FC<RelatedResultProps> = ({ article, position, queryI
 
   return (
     <RelatedResultWrapper>
-      <BaseArticleResult
+      <AclBaseArticleResult
         article={article}
         position={position}
         onClickTitle={() =>
@@ -28,10 +28,10 @@ const RelatedResult: React.FC<RelatedResultProps> = ({ article, position, queryI
         }
       />
       {/* Display abstract */}
-      {article.abstract && (
+      {article.abstract_html && (
         <>
           <AbstractTitle className="hideCollapsed">Abstract</AbstractTitle>
-          <Paragraph>{parseAbstract(article.abstract)}</Paragraph>
+          <Paragraph>{parseAbstract(article.abstract_html)}</Paragraph>
         </>
       )}
       <RelatedLink to={`${RELATED_ROUTE}/${article.id}`}>

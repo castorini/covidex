@@ -18,7 +18,7 @@ import { API_BASE, RELATED_ENDPOINT, HOME_ROUTE } from '../../../shared/Constant
 import Loading from '../../common/Loading';
 import RelatedResult from './RelatedResult';
 import { FileText, ArrowLeft } from 'react-feather';
-import BaseArticleResult from '../../common/BaseArticleResult';
+import AclBaseArticleResult from '../../common/AclBaseArticleResult';
 import { parseAbstract } from '../../../shared/Util';
 import { Link as RouterLink } from 'react-router-dom';
 
@@ -121,11 +121,11 @@ const RelatedPage = () => {
                 {TitleRow}
                 <OriginalArticle>
                   <SmallTitle>Showing articles related to:</SmallTitle>
-                  <BaseArticleResult article={originalArticle} boldTitle />
-                  {originalArticle.abstract && (
+                  <AclBaseArticleResult article={originalArticle} boldTitle />
+                  {originalArticle.abstract_html && (
                     <>
                       <AbstractTitle className="hideCollapsed">Abstract</AbstractTitle>
-                      <Paragraph>{parseAbstract(originalArticle.abstract)}</Paragraph>
+                      <Paragraph>{parseAbstract(originalArticle.abstract_html)}</Paragraph>
                     </>
                   )}
                 </OriginalArticle>

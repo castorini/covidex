@@ -5,7 +5,7 @@ import ErrorBoundary from 'react-error-boundary';
 
 import { PageWrapper, PageContent, Heading2 } from '../../../shared/Styles';
 import Loading from '../../common/Loading';
-import SearchResult from './SearchResult';
+import AclSearchResult from './AclSearchResult';
 import HomeText from './HomeText';
 import SearchBar from './SearchBar';
 
@@ -52,9 +52,9 @@ const getSearchFilters = (searchResults: SearchArticle[] | null): SearchFilters 
       article.source.forEach((s) => sources.add(s));
     }
 
-    if (article.journal) {
+    /*if (article.journal) {
       journals.add(article.journal);
-    }
+    }*/
   });
 
   return {
@@ -157,9 +157,9 @@ const HomePage = () => {
                 Number(article.publish_time.substr(0, 7).replace('-', '')) <=
                   selectedFilters.yearRange[1])) &&
             (selectedFilters.authors.size === 0 ||
-              article.authors.some((a) => selectedFilters.authors.has(a))) &&
+              article.authors.some((a) => selectedFilters.authors.has(a))) /*&&
             (selectedFilters.journals.size === 0 ||
-              selectedFilters.journals.has(article.journal)) &&
+              selectedFilters.journals.has(article.journal))*/ &&
             (selectedFilters.sources.size === 0 ||
               article.source.some((s) => selectedFilters.sources.has(s))),
         );
@@ -192,7 +192,7 @@ const HomePage = () => {
                 <>
                   <SearchResults>
                     {filteredResults.map((article, i) => (
-                      <SearchResult
+                      <AclSearchResult
                         key={i}
                         article={article}
                         position={i}

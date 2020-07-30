@@ -1,4 +1,3 @@
-//@ts-nocheck
 import React from 'react';
 import styled from 'styled-components';
 
@@ -12,7 +11,7 @@ interface BaseArticleResultProps {
   boldTitle?: boolean;
 }
 
-const BaseArticleResult: React.FC<BaseArticleResultProps> = ({
+const AclBaseArticleResult: React.FC<BaseArticleResultProps> = ({
   article,
   position,
   onClickTitle = () => {},
@@ -57,7 +56,6 @@ const BaseArticleResult: React.FC<BaseArticleResultProps> = ({
       </Title>
       <Subtitle>
         {authorString && <Authors>{authorString}</Authors>}
-        {article.journal && <Journal>{article.journal}</Journal>}
         {source && <Journal>{source}</Journal>}
         {article.publish_time && <PublishTime>({article.publish_time})</PublishTime>}
       </Subtitle>
@@ -65,7 +63,7 @@ const BaseArticleResult: React.FC<BaseArticleResultProps> = ({
   );
 };
 
-export default BaseArticleResult;
+export default AclBaseArticleResult;
 
 const Title = styled.div<{ bold?: boolean }>`
   ${Heading3}

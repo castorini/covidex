@@ -5,7 +5,7 @@
             "default": "...",
             "fieldSize": "single"
         },
-        "abstract": {
+        "abstract_html": {
             "type": "str",
             "default": "None",
             "fieldSize": "single"
