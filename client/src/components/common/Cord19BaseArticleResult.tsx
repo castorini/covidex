@@ -1,18 +1,18 @@
-//@ts-nocheck
+// //@ts-nocheck
 import React from 'react';
 import styled from 'styled-components';
 
-import { BaseAclArticle } from '../../shared/Models';
+import { BaseCord19Article } from '../../shared/Models';
 import { Heading3, Link } from '../../shared/Styles';
 
 interface BaseArticleResultProps {
-  article: BaseAclArticle;
+  article: BaseCord19Article;
   position?: number;
   onClickTitle?: () => void;
   boldTitle?: boolean;
 }
 
-const BaseArticleResult: React.FC<BaseArticleResultProps> = ({
+const Cord19BaseArticleResult: React.FC<BaseArticleResultProps> = ({
   article,
   position,
   onClickTitle = () => {},
@@ -65,7 +65,7 @@ const BaseArticleResult: React.FC<BaseArticleResultProps> = ({
   );
 };
 
-export default BaseArticleResult;
+export default Cord19BaseArticleResult;
 
 const Title = styled.div<{ bold?: boolean }>`
   ${Heading3}

@@ -1,4 +1,4 @@
-//@ts-nocheck
+// //@ts-nocheck
 import React, { useState, ReactNode, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { ChevronsDown, Link as LinkIcon } from 'react-feather';
@@ -14,11 +14,11 @@ import {
   RELATED_ROUTE,
 } from '../../../shared/Constants';
 import { makePOSTRequest, parseAbstract } from '../../../shared/Util';
-import { SearchArticle } from '../../../shared/Models';
-import BaseArticleResult from '../../common/BaseArticleResult';
+import { Cord19SearchArticle } from '../../../shared/Models';
+import Cord19BaseArticleResult from '../../common/Cord19BaseArticleResult';
 
 interface SearchResultProps {
-  article: SearchArticle;
+  article: Cord19SearchArticle;
   position: number;
   queryId: string;
   queryTokens: Array<string>;
@@ -96,12 +96,12 @@ const adjustHighlights = (
   return highlights.map((highlight) => [highlight[0] + adjustment, highlight[1] + adjustment]);
 };
 
-const SearchResult = ({ article, position, queryId, queryTokens }: SearchResultProps) => {
+const Cord19SearchResult = ({ article, position, queryId, queryTokens }: SearchResultProps) => {
   const fullTextRef = useRef(null);
   const [collapsed, setCollapsed] = useState<boolean>(true);
 
   // Separate abstract from other paragraphs if it was highlighted
-  const originalAbstract = article.abstract_html || '';
+  const originalAbstract = article.abstract || '';
 
   const abstract = parseAbstract(originalAbstract);
   const abstractHighlights = article.highlighted_abstract
@@ -119,7 +119,7 @@ const SearchResult = ({ article, position, queryId, queryTokens }: SearchResultP
 
   return (
     <SearchResultWrapper>
-      <BaseArticleResult
+      <Cord19BaseArticleResult
         article={article}
         position={position}
         onClickTitle={() =>
@@ -179,7 +179,7 @@ const SearchResult = ({ article, position, queryId, queryTokens }: SearchResultP
   );
 };
 
-export default SearchResult;
+export default Cord19SearchResult;
 
 const SearchResultWrapper = styled.div`
   display: flex;

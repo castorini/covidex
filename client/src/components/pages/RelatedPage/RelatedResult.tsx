@@ -3,14 +3,14 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Link as LinkIcon } from 'react-feather';
 
-import { RelatedArticle } from '../../../shared/Models';
+import { AclRelatedArticle } from '../../../shared/Models';
 import AclBaseArticleResult from '../../common/AclBaseArticleResult';
 import { BodySmall, LinkStyle } from '../../../shared/Styles';
 import { parseAbstract, makePOSTRequest } from '../../../shared/Util';
 import { RELATED_ROUTE, API_BASE, RELATED_CLICKED_ENDPOINT } from '../../../shared/Constants';
 
 interface RelatedResultProps {
-  article: RelatedArticle;
+  article: AclRelatedArticle;
   position: number;
   queryId: string;
 }

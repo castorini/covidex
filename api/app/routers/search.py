@@ -149,7 +149,11 @@ def build_article(hit, id: str, score: float, paragraphs: List[str],
 
     # adding lucene fields
     for field in lucene_schema:
-        if lucene_schema[field]["fieldSize"] == "single":
+        if field == "publish_time":
+            year = doc.get("year")
+            month = doc.get("month")
+            input_dict[field] = (year if year else "") + "-" + (month if month else "")
+        elif lucene_schema[field]["fieldSize"] == "single":
             input_dict[field] = doc.get(field)
         else:
             input_dict[field] = get_multivalued_field(doc, field)

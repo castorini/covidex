@@ -1,4 +1,5 @@
 import { OptionTypeBase } from 'react-select';
+import json_schema from './acl_filter.json'
 
 /* Routes */
 export const HOME_ROUTE = '/';
@@ -32,6 +33,9 @@ export interface SearchVerticalOption extends OptionTypeBase {
 export const SEARCH_VERTICAL_OPTIONS: Array<SearchVerticalOption> = [
   { value: 'cord19', label: 'ACL' },
 ];
+
+/* JSON schema */
+export const filter_schema = json_schema ;
 
 /* NLTK Stopwords */
 export const STOP_WORDS = new Set([

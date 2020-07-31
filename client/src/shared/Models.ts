@@ -19,7 +19,7 @@ export interface BaseAclArticle {
   url: string;
 }
 
-export interface SearchArticle extends BaseAclArticle {
+export interface AclSearchArticle extends BaseAclArticle {
   highlights: Array<Array<[number, number]>>;
   highlighted_abstract: boolean;
   paragraphs: Array<string>;
@@ -27,9 +27,22 @@ export interface SearchArticle extends BaseAclArticle {
   has_related_articles: boolean;
 }
 
-export interface RelatedArticle extends BaseAclArticle {
+export interface Cord19SearchArticle extends BaseCord19Article {
+  highlights: Array<Array<[number, number]>>;
+  highlighted_abstract: boolean;
+  paragraphs: Array<string>;
+  score: number;
+  has_related_articles: boolean;
+}
+
+export interface AclRelatedArticle extends BaseAclArticle {
   distance: number;
 }
+
+export interface Cord19RelatedArticle extends BaseCord19Article {
+  distance: number;
+}
+
 
 export interface SearchFilters {
   yearMinMax: number[];

@@ -13,7 +13,7 @@ import {
   BodySmall,
   LinkStyle,
 } from '../../../shared/Styles';
-import { RelatedArticle } from '../../../shared/Models';
+import { AclRelatedArticle } from '../../../shared/Models';
 import { API_BASE, RELATED_ENDPOINT, HOME_ROUTE } from '../../../shared/Constants';
 import Loading from '../../common/Loading';
 import RelatedResult from './RelatedResult';
@@ -35,8 +35,8 @@ const RelatedPage = () => {
   const [page, setPage] = useState<number>(1);
   const [queryId, setQueryId] = useState<string>('');
 
-  const [originalArticle, setOriginalArticle] = useState<RelatedArticle | null>(null);
-  const [relatedArticles, setRelatedArticles] = useState<RelatedArticle[] | null>(null);
+  const [originalArticle, setOriginalArticle] = useState<AclRelatedArticle | null>(null);
+  const [relatedArticles, setRelatedArticles] = useState<AclRelatedArticle[] | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -59,12 +59,12 @@ const RelatedPage = () => {
         let data = await response.json();
         const { query_id, response: responseArticles } = data;
         const originalArticle = responseArticles
-          ? responseArticles.find((a: RelatedArticle) => a.id === articleId)
+          ? responseArticles.find((a: AclRelatedArticle) => a.id === articleId)
           : null;
 
         setQueryId(query_id);
         setOriginalArticle(originalArticle);
-        setRelatedArticles(responseArticles.filter((a: RelatedArticle) => a.id !== articleId));
+        setRelatedArticles(responseArticles.filter((a: AclRelatedArticle) => a.id !== articleId));
         setPage(2);
       } catch {
         setLoading(false);

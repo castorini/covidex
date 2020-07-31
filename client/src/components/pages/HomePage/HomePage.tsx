@@ -15,9 +15,10 @@ import {
   SEARCH_ENDPOINT,
   SEARCH_VERTICAL_OPTIONS,
   SearchVerticalOption,
+  filter_schema
 } from '../../../shared/Constants';
 import Filters from './Filters';
-import { SearchArticle, SearchFilters, SelectedSearchFilters } from '../../../shared/Models';
+import { AclSearchArticle, SearchFilters, SelectedSearchFilters } from '../../../shared/Models';
 
 const defaultFilter = {
   yearMinMax: [0, 0],
@@ -26,7 +27,7 @@ const defaultFilter = {
   sources: [],
 };
 
-const getSearchFilters = (searchResults: SearchArticle[] | null): SearchFilters => {
+const getSearchFilters = (searchResults: AclSearchArticle[] | null): SearchFilters => {
   if (searchResults === null || searchResults.length === 0) {
     return defaultFilter;
   }
@@ -85,7 +86,7 @@ const HomePage = () => {
   });
 
   const [queryId, setQueryId] = useState<string>('');
-  const [searchResults, setSearchResults] = useState<SearchArticle[] | null>(null);
+  const [searchResults, setSearchResults] = useState<AclSearchArticle[] | null>(null);
 
   useEffect(() => {
     setQueryInputText(query);

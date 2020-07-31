@@ -13,11 +13,11 @@ import {
   RELATED_ROUTE,
 } from '../../../shared/Constants';
 import { makePOSTRequest, parseAbstract } from '../../../shared/Util';
-import { SearchArticle } from '../../../shared/Models';
+import { AclSearchArticle } from '../../../shared/Models';
 import AclBaseArticleResult from '../../common/AclBaseArticleResult';
 
 interface SearchResultProps {
-  article: SearchArticle;
+  article: AclSearchArticle;
   position: number;
   queryId: string;
   queryTokens: Array<string>;
