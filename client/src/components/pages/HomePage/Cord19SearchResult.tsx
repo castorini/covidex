@@ -101,7 +101,9 @@ const Cord19SearchResult = ({ article, position, queryId, queryTokens }: SearchR
   const [collapsed, setCollapsed] = useState<boolean>(true);
 
   // Separate abstract from other paragraphs if it was highlighted
-  const originalAbstract = article.abstract || '';
+  const originalAbstract = article.highlighted_abstract
+    ? article.paragraphs[0]
+    : article.abstract || '';
 
   const abstract = parseAbstract(originalAbstract);
   const abstractHighlights = article.highlighted_abstract
