@@ -152,6 +152,7 @@ def build_article(hit, id: str, score: float, paragraphs: List[str],
         if field == "publish_time":
             year = doc.get("year")
             month = doc.get("month")
+            print(year)
             input_dict[field] = (year if year else "") + "-" + (month if month else "")
         elif lucene_schema[field]["fieldSize"] == "single":
             input_dict[field] = doc.get(field)

@@ -34,8 +34,11 @@ export const SEARCH_VERTICAL_OPTIONS: Array<SearchVerticalOption> = [
   { value: 'cord19', label: 'ACL' },
 ];
 
-/* JSON schema */
-export const filter_schema = json_schema ;
+/* filter schema */
+export interface Schema {
+  [key: string]: any;
+}
+export const filter_schema = json_schema as Schema;
 
 /* NLTK Stopwords */
 export const STOP_WORDS = new Set([

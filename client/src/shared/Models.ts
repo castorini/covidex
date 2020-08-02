@@ -7,6 +7,7 @@ export interface BaseCord19Article {
   title: string;
   source: Array<string>;
   url: string;
+  [key: string]: any;
 }
 
 export interface BaseAclArticle {
@@ -17,6 +18,7 @@ export interface BaseAclArticle {
   source: Array<string>;
   title: string;
   url: string;
+  [key: string]: any;
 }
 
 export interface AclSearchArticle extends BaseAclArticle {
