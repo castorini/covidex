@@ -15,7 +15,7 @@ import {
   SEARCH_ENDPOINT,
   SEARCH_VERTICAL_OPTIONS,
   SearchVerticalOption,
-  filter_schema
+  filterSchema
 } from '../../../shared/Constants';
 import Filters from './Filters';
 import { AclSearchArticle, SearchFilters, SelectedSearchFilters } from '../../../shared/Models';
@@ -33,12 +33,12 @@ const getSearchFilters = (searchResults: AclSearchArticle[] | null): any => {
   }
 
   let filterDictionary: any = {};
-  const fields = Object.keys(filter_schema);
+  const fields = Object.keys(filterSchema);
 
   // iterating through the fields in json
   fields.forEach(filter => {
     // checking the type of the field
-    if (filter_schema[filter] == "slider"){
+    if (filterSchema[filter] == "slider"){
       let min = Number.MAX_VALUE;
       let max = -1;
       // filtering through each article
@@ -51,7 +51,7 @@ const getSearchFilters = (searchResults: AclSearchArticle[] | null): any => {
         }
       })
       filterDictionary[filter] = min === max ? [min * 100 + 1, min * 100 + 12] : [min, max];
-    } else if (filter_schema[filter] == "selection") {
+    } else if (filterSchema[filter] == "selection") {
       // initializing the list to store the selections
       filterDictionary[filter] = new Set([]);
       // filtering through each article
@@ -72,10 +72,10 @@ const filterArticles = (selectedFilters: any, article: AclSearchArticle): Boolea
   let article_status = true;
   const fields = Object.keys(selectedFilters);
   fields.forEach(field => {
-    if (filter_schema[field] == "slider") {
+    if (filterSchema[field] == "slider") {
       article_status = article_status && Number(article[field].substr(0, 4)) >= selectedFilters[field][0] 
                        && Number(article[field].substr(0, 4)) <= selectedFilters[field][1]
-    } else if (filter_schema[field] == "selection") {
+    } else if (filterSchema[field] == "selection") {
       article_status = article_status && (selectedFilters[field].size == 0 || 
                        article[field].some((a: String) => selectedFilters[field].has(a)))
     }

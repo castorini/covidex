@@ -4,7 +4,7 @@ import RangeSlider from '../../common/RangeSlider';
 import { Heading2, Body } from '../../../shared/Styles';
 import SelectionFilter from '../../common/SelectionFilter';
 import { SearchFilters, SelectedSearchFilters } from '../../../shared/Models';
-import { filter_schema } from '../../../shared/Constants';
+import { filterSchema } from '../../../shared/Constants';
 
 
 interface FiltersProps {
@@ -30,7 +30,7 @@ const Filters: React.FC<FiltersProps> = ({ filters, selectedFilters, setSelected
       <FilterTitle>Filter your search</FilterTitle>
       {fields.map((filter, i) => {
         if (filters[filter]) {
-          if (filter_schema[filter] == "slider") {
+          if (filterSchema[filter] == "slider") {
             return <FilterComponent>
                     <FilterSubtitle>{filter}</FilterSubtitle>
                       <RangeSlider
@@ -46,7 +46,7 @@ const Filters: React.FC<FiltersProps> = ({ filters, selectedFilters, setSelected
                         }
                       />
                     </FilterComponent>
-          } else if (filter_schema[filter] == "selection" && filter == "authors") {
+          } else if (filterSchema[filter] == "selection" && filter == "authors") {
             return <FilterComponent>
                     <FilterSubtitle>{filter}</FilterSubtitle>
                     <SelectionFilter
