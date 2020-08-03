@@ -13,7 +13,7 @@ const Navbar = ({ history }: RouteComponentProps) => {
       <PageContent>
         <Row>
           <NavbarLogo tabIndex={0} onClick={() => history.push(HOME_ROUTE)}>
-            Neural Covidex
+            ACLdex
           </NavbarLogo>
           <NavbarLinks>
             <Link

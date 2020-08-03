@@ -1,4 +1,5 @@
 import io
+import json
 
 import pkg_resources
 from fastapi import Depends, FastAPI
@@ -14,12 +15,11 @@ from app.services.searcher import Searcher
 from app.settings import settings
 
 app = FastAPI()
-
 # Set global state for reusable services
 if not settings.testing:
     app.state.highlighter = Highlighter()
     app.state.ranker = Ranker()
-    app.state.related_searcher = RelatedSearcher()
+    #app.state.related_searcher = RelatedSearcher()
     app.state.searcher = Searcher()
 
 # Disable CORS in development mode

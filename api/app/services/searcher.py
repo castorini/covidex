@@ -10,11 +10,10 @@ class Searcher:
     def __init__(self):
         self.searchers: List[pysearch.SimpleSearcher] = {}
         self.searchers[SearchVertical.cord19] = self.build_searcher(
-            settings.cord19_index_path)
-        self.searchers[SearchVertical.trialstreamer] = self.build_searcher(
-            settings.trialstreamer_index_path)
+            settings.index_path)
 
     def build_searcher(self, index_path):
+        print(index_path)
         searcher = pysearch.SimpleSearcher(index_path)
         searcher.set_bm25_similarity(settings.bm25_k1, settings.bm25_b)
         print(f'Initializing BM25 {index_path}, '

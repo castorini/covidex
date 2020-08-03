@@ -1,17 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { BaseArticle } from '../../shared/Models';
+import { BaseAclArticle } from '../../shared/Models';
 import { Heading3, Link } from '../../shared/Styles';
 
 interface BaseArticleResultProps {
-  article: BaseArticle;
+  article: BaseAclArticle;
   position?: number;
   onClickTitle?: () => void;
   boldTitle?: boolean;
 }
 
-const BaseArticleResult: React.FC<BaseArticleResultProps> = ({
+const AclBaseArticleResult: React.FC<BaseArticleResultProps> = ({
   article,
   position,
   onClickTitle = () => {},
@@ -56,7 +56,6 @@ const BaseArticleResult: React.FC<BaseArticleResultProps> = ({
       </Title>
       <Subtitle>
         {authorString && <Authors>{authorString}</Authors>}
-        {article.journal && <Journal>{article.journal}</Journal>}
         {source && <Journal>{source}</Journal>}
         {article.publish_time && <PublishTime>({article.publish_time})</PublishTime>}
       </Subtitle>
@@ -64,7 +63,7 @@ const BaseArticleResult: React.FC<BaseArticleResultProps> = ({
   );
 };
 
-export default BaseArticleResult;
+export default AclBaseArticleResult;
 
 const Title = styled.div<{ bold?: boolean }>`
   ${Heading3}

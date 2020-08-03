@@ -16,13 +16,8 @@ import { BoxShadow } from '../../../shared/Styles';
 import Keycodes from '../../../shared/Keycodes';
 
 const CORD_EXAMPLES = [
-  'What is the incubation period of COVID-19?',
-  'What is the effectiveness of chloroquine for COVID-19?',
-  'What is the duration of viral shedding for COVID-19?',
-  'How does COVID-19 bind to the ACE2 receptor?',
-  'How do weather conditions affect the transmission of COVID-19?',
-  'Tell me about IgG and IgM tests for COVID-19.',
-  'What is the prognostic value of IL-6 levels in COVID-19?',
+  'When to use transformers?',
+  'What is BERT?'
 ];
 
 const TRIALSTREAMER_EXAMPLES = [
@@ -103,7 +98,7 @@ const SearchBar = ({ query, vertical, setQuery, setVertical, history }: SearchBa
       <Section>
         <SearchInputWrapper>
           <SearchBarInput
-            placeholder="something about COVID-19..."
+            placeholder="something about ACL..."
             value={query}
             onChange={handleInput}
             onSubmit={() => submitQuery()}

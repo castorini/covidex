@@ -4,11 +4,13 @@ import RangeSlider from '../../common/RangeSlider';
 import { Heading2, Body } from '../../../shared/Styles';
 import SelectionFilter from '../../common/SelectionFilter';
 import { SearchFilters, SelectedSearchFilters } from '../../../shared/Models';
+import { filterSchema } from '../../../shared/Constants';
+
 
 interface FiltersProps {
-  filters: SearchFilters;
-  selectedFilters: SelectedSearchFilters;
-  setSelectedFilters: (value: SelectedSearchFilters) => void;
+  filters: any;
+  selectedFilters: any;
+  setSelectedFilters: (value: any) => void;
 }
 
 const updateSelectionFilter = (selectedFilter: Set<string>, value: string): Set<string> => {
@@ -22,71 +24,45 @@ const updateSelectionFilter = (selectedFilter: Set<string>, value: string): Set<
 };
 
 const Filters: React.FC<FiltersProps> = ({ filters, selectedFilters, setSelectedFilters }) => {
+  const fields = Object.keys(filters);
   return (
     <FiltersWrapper>
       <FilterTitle>Filter your search</FilterTitle>
-      {filters.yearMinMax[0] < filters.yearMinMax[1] && (
-        <FilterComponent>
-          <FilterSubtitle>Publication Time</FilterSubtitle>
-          <RangeSlider
-            min={filters.yearMinMax[0]}
-            max={filters.yearMinMax[1]}
-            values={selectedFilters.yearRange}
-            setValues={(values) =>
-              setSelectedFilters({
-                ...selectedFilters,
-                yearRange: values,
-              })
-            }
-          />
-        </FilterComponent>
-      )}
-      {filters.sources.length > 0 && (
-        <FilterComponent>
-          <FilterSubtitle>Source</FilterSubtitle>
-          <SelectionFilter
-            options={filters.sources}
-            selectedOptions={selectedFilters.sources}
-            maxDisplayed={10}
-            setSelectedOptions={(source) => {
-              setSelectedFilters({
-                ...selectedFilters,
-                sources: updateSelectionFilter(selectedFilters.sources, source),
-              });
-            }}
-          />
-        </FilterComponent>
-      )}
-      {filters.authors.length > 0 && (
-        <FilterComponent>
-          <FilterSubtitle>Author</FilterSubtitle>
-          <SelectionFilter
-            options={filters.authors}
-            selectedOptions={selectedFilters.authors}
-            setSelectedOptions={(author) => {
-              setSelectedFilters({
-                ...selectedFilters,
-                authors: updateSelectionFilter(selectedFilters.authors, author),
-              });
-            }}
-          />
-        </FilterComponent>
-      )}
-      {filters.journals.length > 0 && (
-        <FilterComponent>
-          <FilterSubtitle>Journal</FilterSubtitle>
-          <SelectionFilter
-            options={filters.journals}
-            selectedOptions={selectedFilters.journals}
-            setSelectedOptions={(journal) => {
-              setSelectedFilters({
-                ...selectedFilters,
-                journals: updateSelectionFilter(selectedFilters.journals, journal),
-              });
-            }}
-          />
-        </FilterComponent>
-      )}
+      {fields.map((filter, i) => {
+        if (filters[filter]) {
+          if (filterSchema[filter] == "slider") {
+            return <FilterComponent>
+                    <FilterSubtitle>{filter}</FilterSubtitle>
+                      <RangeSlider
+                        min={filters[filter][0]}
+                        max={filters[filter][1]}
+                        values={selectedFilters[filter]}
+                        setValues={(values) => {
+                          selectedFilters[filter] = values
+                          setSelectedFilters({
+                            ...selectedFilters
+                          })
+                         }
+                        }
+                      />
+                    </FilterComponent>
+          } else if (filterSchema[filter] == "selection" && filter == "authors") {
+            return <FilterComponent>
+                    <FilterSubtitle>{filter}</FilterSubtitle>
+                    <SelectionFilter
+                      options={filters[filter]}
+                      selectedOptions={selectedFilters[filter]}
+                      setSelectedOptions={(author) => {
+                        setSelectedFilters({
+                          ...selectedFilters,
+                          authors: updateSelectionFilter(selectedFilters[filter], author),
+                        });
+                      }}
+                    />
+                  </FilterComponent>
+          }
+        }
+      })}
     </FiltersWrapper>
   );
 };

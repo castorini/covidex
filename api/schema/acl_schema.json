@@ -1,0 +1,43 @@
+{
+    "document_fields": {
+        "id": {
+            "type": "str",
+            "default": "...",
+            "fieldSize": "single"
+        },
+        "abstract_html": {
+            "type": "str",
+            "default": "None",
+            "fieldSize": "single"
+        },
+        "authors": {
+            "type": "List[str]",
+            "default": "[]",
+            "fieldSize": "multi"
+        },
+        "publish_time": {
+            "type": "str",
+            "default": "None",
+            "fieldSize": "single"
+        },
+        "title": {
+            "type": "str",
+            "default": "...",
+            "fieldSize": "single"
+        },
+        "source": {
+            "type": "List[str]",
+            "default": "...",
+            "fieldSize": "multi"
+        },
+        "url": {
+            "type": "str",
+            "default": "...",
+            "fieldSize": "single"
+        }
+    },
+    "SearchVertical": {
+        "cord19": "cord19",
+        "trialstreamer": "trialstreamer"
+    }
+}

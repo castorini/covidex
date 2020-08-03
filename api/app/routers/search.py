@@ -144,15 +144,18 @@ async def post_clicked(data: SearchLogData):
 def build_article(hit, id: str, score: float, paragraphs: List[str],
                   highlighted_abstract: bool, vertical: SearchVertical):
     doc = hit.lucene_document
-    return SearchArticle(id=id,
-                         abstract=doc.get('abstract'),
-                         authors=get_multivalued_field(doc, 'authors'),
-                         journal=doc.get('journal'),
-                         publish_time=doc.get('publish_time'),
-                         source=get_multivalued_field(doc, 'source_x'),
-                         title=doc.get('title'),
-                         url=get_doc_url(doc),
-                         score=score,
-                         paragraphs=paragraphs,
-                         highlighted_abstract=highlighted_abstract,
-                         has_related_articles=vertical == SearchVertical.cord19)
+    lucene_schema = json.load(open(settings.schema_path))["document_fields"]
+    input_dict = {"score": score, "paragraphs": paragraphs, "highlighted_abstract": highlighted_abstract, "has_related_articles": vertical == SearchVertical.cord19}
+
+    # adding lucene fields
+    for field in lucene_schema:
+        if field == "publish_time":
+            year = doc.get("year")
+            month = doc.get("month")
+            input_dict[field] = (year if year else "") + "-" + (month if month else "")
+        elif lucene_schema[field]["fieldSize"] == "single":
+            input_dict[field] = doc.get(field)
+        else:
+            input_dict[field] = get_multivalued_field(doc, field)
+
+    return SearchArticle(**input_dict)
