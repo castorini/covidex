@@ -26,21 +26,13 @@ const AclBaseArticleResult: React.FC<BaseArticleResultProps> = ({
     });
   }
 
-  const transformPreprintSource = (source: string) => {
-    if (source === 'arxiv') {
-      return source.replace('x', 'X');
-    } else {
-      return source.replace('r', 'R');
-    }
-  };
-
-  // Indicate if arXiv, medRxiv, or bioRxiv is the source
-  let source = '';
-  article.source.forEach((s) => {
-    if (['arxiv', 'medrxiv', 'biorxiv'].includes(s.trim().toLowerCase())) {
-      source += transformPreprintSource(s.trim().toLowerCase());
-    }
-  });
+  // generating the venue
+  let venues = '';
+  if (article.venues.length > 0) {
+    article.venues.forEach((venue: String, idx: Number) => {
+      venues += idx === article.venues.length - 1 ? `${venue}.` : `${venue}, `; 
+    })
+  }
 
   return (
     <>
@@ -56,7 +48,8 @@ const AclBaseArticleResult: React.FC<BaseArticleResultProps> = ({
       </Title>
       <Subtitle>
         {authorString && <Authors>{authorString}</Authors>}
-        {source && <Journal>{source}</Journal>}
+        {venues && <Journal>{venues}</Journal>}
+        {article.sigs && <Journal>{article.sigs}</Journal>}
         {article.publish_time && <PublishTime>({article.publish_time})</PublishTime>}
       </Subtitle>
     </>
