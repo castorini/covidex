@@ -144,7 +144,6 @@ const HomePage = () => {
             defaultSelectionFilter[field] = new Set([]);
           }
         });
-
         setQueryId(query_id);
         setSearchResults(searchResults);
         setSelectedFilters(defaultSelectionFilter);

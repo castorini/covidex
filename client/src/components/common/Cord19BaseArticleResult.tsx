@@ -34,8 +34,6 @@ const Cord19BaseArticleResult: React.FC<BaseArticleResultProps> = ({
       return source.replace('r', 'R');
     }
   };
-
-
   // Indicate if arXiv, medRxiv, or bioRxiv is the source
   let source = '';
   article.source.forEach((s) => {
