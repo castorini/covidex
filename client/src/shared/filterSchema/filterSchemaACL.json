@@ -1,4 +1,6 @@
 {
-    "publish_time": "slider",
-    "authors": "selection"
+    "year": "slider",
+    "authors": "selection",
+    "venues": "selection",
+    "sigs": "selection"
 }

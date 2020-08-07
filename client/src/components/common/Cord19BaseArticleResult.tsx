@@ -20,7 +20,7 @@ const Cord19BaseArticleResult: React.FC<BaseArticleResultProps> = ({
 }) => {
   let authorString = '';
   if (article.authors.length > 0) {
-    article.authors.forEach((author, idx) => {
+    article.authors.forEach((author: String, idx: Number) => {
       if (author !== '') {
         authorString += idx === article.authors.length - 1 ? `${author}.` : `${author}, `;
       }
@@ -34,10 +34,9 @@ const Cord19BaseArticleResult: React.FC<BaseArticleResultProps> = ({
       return source.replace('r', 'R');
     }
   };
-
   // Indicate if arXiv, medRxiv, or bioRxiv is the source
   let source = '';
-  article.source.forEach((s) => {
+  article.source.forEach((s: String) => {
     if (['arxiv', 'medrxiv', 'biorxiv'].includes(s.trim().toLowerCase())) {
       source += transformPreprintSource(s.trim().toLowerCase());
     }

@@ -46,16 +46,16 @@ const Filters: React.FC<FiltersProps> = ({ filters, selectedFilters, setSelected
                         }
                       />
                     </FilterComponent>
-          } else if (filterSchema[filter] == "selection" && filter == "authors") {
+          } else if (filterSchema[filter] == "selection") {
             return <FilterComponent>
                     <FilterSubtitle>{filter}</FilterSubtitle>
                     <SelectionFilter
                       options={filters[filter]}
                       selectedOptions={selectedFilters[filter]}
-                      setSelectedOptions={(author) => {
+                      setSelectedOptions={(value) => {
+                        selectedFilters[filter] = updateSelectionFilter(selectedFilters[filter], value)
                         setSelectedFilters({
-                          ...selectedFilters,
-                          authors: updateSelectionFilter(selectedFilters[filter], author),
+                          ...selectedFilters
                         });
                       }}
                     />

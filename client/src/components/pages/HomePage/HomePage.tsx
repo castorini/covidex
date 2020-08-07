@@ -34,7 +34,6 @@ const getSearchFilters = (searchResults: AclSearchArticle[] | null): any => {
 
   let filterDictionary: any = {};
   const fields = Object.keys(filterSchema);
-
   // iterating through the fields in json
   fields.forEach(filter => {
     // checking the type of the field
@@ -63,7 +62,6 @@ const getSearchFilters = (searchResults: AclSearchArticle[] | null): any => {
       filterDictionary[filter] = Array.from(filterDictionary[filter].values()).filter((a: any) => a.length > 0);
     }
   })
-
   // console.log(filterDictionary);
   return filterDictionary;
 };
@@ -137,10 +135,15 @@ const HomePage = () => {
         const { query_id, response: searchResults } = data;
         const filters = getSearchFilters(searchResults);
 
-        let defaultSelectionFilter = {
-          "publish_time": filters["publish_time"],
-          "authors": new Set([])
-        }
+        let defaultSelectionFilter: any = {}
+        const fields = Object.keys(filterSchema);
+        fields.forEach(field => {
+          if (filterSchema[field] == "slider") {
+            defaultSelectionFilter[field] = filters[field];
+          }else if (filterSchema[field] == "selection") {
+            defaultSelectionFilter[field] = new Set([]);
+          }
+        });
         setQueryId(query_id);
         setSearchResults(searchResults);
         setSelectedFilters(defaultSelectionFilter);
