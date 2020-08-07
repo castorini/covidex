@@ -1,23 +1,8 @@
 export interface BaseCord19Article {
-  id: string;
-  abstract: string;
-  authors: Array<string>;
-  journal: string;
-  publish_time: string;
-  title: string;
-  source: Array<string>;
-  url: string;
   [key: string]: any;
 }
 
 export interface BaseAclArticle {
-  id: string;
-  abstract_html: string;
-  authors: Array<string>;
-  publish_time: string;
-  source: Array<string>;
-  title: string;
-  url: string;
   [key: string]: any;
 }
 

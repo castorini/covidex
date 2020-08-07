@@ -15,7 +15,7 @@
             "default": "[]",
             "fieldSize": "multi"
         },
-        "publish_time": {
+        "year": {
             "type": "str",
             "default": "None",
             "fieldSize": "single"
@@ -27,22 +27,22 @@
         },
         "source": {
             "type": "List[str]",
-            "default": "...",
+            "default": "None",
             "fieldSize": "multi"
         },
         "url": {
             "type": "str",
-            "default": "...",
+            "default": "None",
             "fieldSize": "single"
         },
         "venues": {
             "type": "List[str]",
-            "default": "...",
+            "default": "None",
             "fieldSize": "multi"
         }, 
         "sigs": {
             "type": "List[str]",
-            "default": "...",
+            "default": "None",
             "fieldSize": "multi"
         }
     },

@@ -19,7 +19,7 @@ const AclBaseArticleResult: React.FC<BaseArticleResultProps> = ({
 }) => {
   let authorString = '';
   if (article.authors.length > 0) {
-    article.authors.forEach((author, idx) => {
+    article.authors.forEach((author: String, idx: Number) => {
       if (author !== '') {
         authorString += idx === article.authors.length - 1 ? `${author}.` : `${author}, `;
       }
@@ -50,7 +50,7 @@ const AclBaseArticleResult: React.FC<BaseArticleResultProps> = ({
         {authorString && <Authors>{authorString}</Authors>}
         {venues && <Journal>{venues}</Journal>}
         {article.sigs && <Journal>{article.sigs}</Journal>}
-        {article.publish_time && <PublishTime>({article.publish_time})</PublishTime>}
+        {article.year && <PublishTime>({article.year})</PublishTime>}
       </Subtitle>
     </>
   );
