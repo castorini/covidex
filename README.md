@@ -1,10 +1,11 @@
-# COVID-19 Open Research Dataset Search
+# Covidex: A Search Engine for the COVID-19 Open Research Dataset
 
 [![Build Status](https://api.travis-ci.com/castorini/covidex.svg?branch=master)](https://travis-ci.org/castorini/covidex)
 [![LICENSE](https://img.shields.io/badge/license-Apache-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
 
 This repository contains the API server, neural models, and UI client for [Covidex](https://covidex.ai), a neural search engine for the [COVID-19 Open Research Dataset (CORD-19)](https://pages.semanticscholar.org/coronavirus-research).
 
+For a description of our system, check out this paper: [Covidex: Neural Ranking Models and Keyword Search Infrastructure for the COVID-19 Open Research Dataset](https://arxiv.org/pdf/2007.07846.pdf).
 
 ## Local Deployment
 
@@ -115,4 +116,15 @@ Log files are available under `api/logs`, where new files are created daily base
 To run all API tests
 ```
 TESTING=true pytest api
+```
+
+
+## How do I cite this work?
+```
+@article{zhang2020covidex,
+  title={Covidex: Neural Ranking Models and Keyword Search Infrastructure for the COVID-19 Open Research Dataset},
+  author={Zhang, Edwin and Gupta, Nikhil and Tang, Raphael and Han, Xiao and Pradeep, Ronak and Lu, Kuang and Zhang, Yue and Nogueira, Rodrigo and Cho, Kyunghyun and Fang, Hui and others},
+  journal={arXiv preprint arXiv:2007.07846},
+  year={2020}
+}
 ```
