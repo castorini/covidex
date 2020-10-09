@@ -23,14 +23,6 @@ const Navbar = ({ history }: RouteComponentProps) => {
             >
               <GithubLogo src={GithubImg} alt="Github logo" />
             </Link>
-
-            <Link
-              href="https://docs.google.com/forms/d/e/1FAIpQLSe4_5imtXsvPHGRPFfRaXPaohEpJZAYz8OmDaDe0a4pLsTUdg/viewform?usp=sf_link"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Feedback
-            </Link>
           </NavbarLinks>
         </Row>
       </PageContent>
