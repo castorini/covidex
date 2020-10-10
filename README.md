@@ -21,24 +21,15 @@ wget https://repo.anaconda.com/archive/Anaconda3-2020.02-Linux-x86_64.sh
 bash Anaconda3-2020.02-Linux-x86_64.sh
 ```
 
-Install Java 11
+Install Java 11 and Maven
 ```
-sudo apt-get install openjdk-11-jre openjdk-11-jdk
+sudo apt-get install openjdk-11-jre openjdk-11-jdk maven
 ```
+
 
 Build the [latest Anserini indices](https://github.com/castorini/anserini/blob/master/docs/experiments-cord19.md)
 ```
 sh scripts/update-anserini-index.sh
-```
-
-Build the latest HNSW index for related article search
-```
-sh scripts/update-hnsw-index.sh
-```
-
-Set up environment variables by copying over the defaults and modifying as needed
-```
-cp api/.env.sample api/.env
 ```
 
 Create an Anaconda environment for Python 3.7
@@ -54,6 +45,16 @@ conda activate covidex
 Install Python dependencies
 ```
 pip install -r api/requirements.txt
+```
+
+Build the latest HNSW index for related article search
+```
+sh scripts/update-hnsw-index.sh
+```
+
+Set up environment variables by copying over the defaults and modifying as needed
+```
+cp api/.env.sample api/.env
 ```
 
 Run the server (make sure you are in the `api/` folder)
