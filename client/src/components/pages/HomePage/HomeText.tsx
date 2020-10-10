@@ -6,8 +6,8 @@ const HomeText = () => {
   return (
     <HomeTextWrapper>
       <Paragraph>
-        <Bold>ACLDex</Bold> applies state-of-the-art neural network models and artificial
-        intelligence (AI) techniques to answer questions about ACL journals
+        <Bold>Cydex</Bold> applies state-of-the-art neural network models and artificial
+        intelligence (AI) techniques to searching scholarly literature. 
       </Paragraph>
     </HomeTextWrapper>
   );
