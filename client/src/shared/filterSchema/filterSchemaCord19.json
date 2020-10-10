@@ -1,6 +1,18 @@
 {
-    "publish_time": "slider",
-    "authors": "selection",
-    "source": "selection",
-    "journal": "selection"
+    "publish_time": {
+        "type": "slider",
+        "displayText": "Publish Time"
+    },
+    "authors": {
+        "type": "selection",
+        "displayText": "Authors"
+    },
+    "source": {
+        "type": "selection",
+        "displayText": "Source"
+    },
+    "journal": {
+        "type": "selection",
+        "displayText": "Journal"
+    }
 }

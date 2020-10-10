@@ -36,8 +36,12 @@ export const SEARCH_VERTICAL_OPTIONS: Array<SearchVerticalOption> = [
 
 /* filter schema */
 export interface Schema {
-  [key: string]: any;
+  [key: string]: {
+    type: "slider" | "selection";
+    displayText: string;
+  };
 }
+
 export const filterSchema = schema as Schema;
 
 /* NLTK Stopwords */
