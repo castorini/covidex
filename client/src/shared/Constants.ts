@@ -31,7 +31,7 @@ export interface SearchVerticalOption extends OptionTypeBase {
 }
 
 export const SEARCH_VERTICAL_OPTIONS: Array<SearchVerticalOption> = [
-  { value: 'cord19', label: 'ACL' },
+  { value: 'cord19', label: 'ACL Anthology' },
 ];
 
 /* filter schema */
