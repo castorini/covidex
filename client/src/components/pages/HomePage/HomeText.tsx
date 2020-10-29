@@ -61,26 +61,6 @@ const HomeText = () => {
       <Paragraph>Beyond the search application above, our efforts include the following:</Paragraph>
       <List>
         <ListItem>
-          A{' '}
-          <Link href="https://basic.covidex.ai" target="_blank" rel="noopener noreferrer">
-            baseline keyword search interface
-          </Link>{' '}
-          that provides keyword search and faceted browsing capabilities. Under the covers, the
-          interface is powered by{' '}
-          <Link href="https://projectblacklight.org" target="_blank" rel="noopener noreferrer">
-            Blacklight
-          </Link>
-          ,{' '}
-          <Link href="https://lucene.apache.org/solr" target="_blank" rel="noopener noreferrer">
-            Solr
-          </Link>
-          , and the{' '}
-          <Link href="http://anserini.io/" target="_blank" rel="noopener noreferrer">
-            Anserini
-          </Link>{' '}
-          IR toolkit (via Solrini, which is Anserini's Solr adaptor).
-        </ListItem>
-        <ListItem>
           Backend components (code as well as pre-built indexes) for directly searching and
           manipulating the collection via{' '}
           <Link href="http://pyserini.io/" target="_blank" rel="noopener noreferrer">
