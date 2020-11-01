@@ -31,13 +31,17 @@ export interface SearchVerticalOption extends OptionTypeBase {
 }
 
 export const SEARCH_VERTICAL_OPTIONS: Array<SearchVerticalOption> = [
-  { value: 'cord19', label: 'ACL' },
+  { value: 'cord19', label: 'ACL Anthology' },
 ];
 
 /* filter schema */
 export interface Schema {
-  [key: string]: any;
+  [key: string]: {
+    type: "slider" | "selection";
+    displayText: string;
+  };
 }
+
 export const filterSchema = schema as Schema;
 
 /* NLTK Stopwords */

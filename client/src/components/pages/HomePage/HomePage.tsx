@@ -18,7 +18,7 @@ import {
   filterSchema
 } from '../../../shared/Constants';
 import Filters from './Filters';
-import { AclSearchArticle, SearchFilters, SelectedSearchFilters } from '../../../shared/Models';
+import { AclSearchArticle } from '../../../shared/Models';
 
 const defaultFilter = {
   yearMinMax: [0, 0],
@@ -37,7 +37,7 @@ const getSearchFilters = (searchResults: AclSearchArticle[] | null): any => {
   // iterating through the fields in json
   fields.forEach(filter => {
     // checking the type of the field
-    if (filterSchema[filter] == "slider"){
+    if (filterSchema[filter].type == "slider"){
       let min = Number.MAX_VALUE;
       let max = -1;
       // filtering through each article
@@ -50,7 +50,7 @@ const getSearchFilters = (searchResults: AclSearchArticle[] | null): any => {
         }
       })
       filterDictionary[filter] = min === max ? [min * 100 + 1, min * 100 + 12] : [min, max];
-    } else if (filterSchema[filter] == "selection") {
+    } else if (filterSchema[filter].type == "selection") {
       // initializing the list to store the selections
       filterDictionary[filter] = new Set([]);
       // filtering through each article
@@ -70,10 +70,10 @@ const filterArticles = (selectedFilters: any, article: AclSearchArticle): Boolea
   let article_status = true;
   const fields = Object.keys(selectedFilters);
   fields.forEach(field => {
-    if (filterSchema[field] == "slider") {
+    if (filterSchema[field].type == "slider") {
       article_status = article_status && Number(article[field].substr(0, 4)) >= selectedFilters[field][0] 
                        && Number(article[field].substr(0, 4)) <= selectedFilters[field][1]
-    } else if (filterSchema[field] == "selection") {
+    } else if (filterSchema[field].type == "selection") {
       article_status = article_status && (selectedFilters[field].size == 0 || 
                        article[field].some((a: String) => selectedFilters[field].has(a)))
     }
@@ -138,9 +138,9 @@ const HomePage = () => {
         let defaultSelectionFilter: any = {}
         const fields = Object.keys(filterSchema);
         fields.forEach(field => {
-          if (filterSchema[field] == "slider") {
+          if (filterSchema[field].type == "slider") {
             defaultSelectionFilter[field] = filters[field];
-          }else if (filterSchema[field] == "selection") {
+          }else if (filterSchema[field].type == "selection") {
             defaultSelectionFilter[field] = new Set([]);
           }
         });
