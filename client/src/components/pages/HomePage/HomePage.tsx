@@ -144,6 +144,7 @@ const HomePage = () => {
             defaultSelectionFilter[field] = new Set([]);
           }
         });
+
         setQueryId(query_id);
         setSearchResults(searchResults);
         setSelectedFilters(defaultSelectionFilter);
@@ -164,6 +165,7 @@ const HomePage = () => {
       : searchResults.filter(
           (article) => filterArticles(selectedFilters, article)
         );
+  console.log(searchResults)
   return (
     <PageWrapper>
       <PageContent>

@@ -1,0 +1,14 @@
+{
+    "year": {
+        "type": "slider",
+        "displayText": "Publish Time"
+    },
+    "author": {
+        "type": "selection",
+        "displayText": "Authors"
+    },
+    "journal": {
+        "type": "selection",
+        "displayText": "Journal"
+    }
+}

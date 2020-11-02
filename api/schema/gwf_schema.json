@@ -1,0 +1,43 @@
+{
+    "document_fields": {
+        "id": {
+            "type": "str",
+            "default": "...",
+            "fieldSize": "single"
+        },
+        "abstract": {
+            "type": "str",
+            "default": "None",
+            "fieldSize": "single"
+        },
+        "author": {
+            "type": "List[str]",
+            "default": "[]",
+            "fieldSize": "multi"
+        },
+        "year": {
+            "type": "str",
+            "default": "None",
+            "fieldSize": "single"
+        },
+        "title": {
+            "type": "str",
+            "default": "...",
+            "fieldSize": "single"
+        },
+        "journal": {
+            "type": "List[str]",
+            "default": "None",
+            "fieldSize": "multi"
+        },
+        "url": {
+            "type": "str",
+            "default": "None",
+            "fieldSize": "single"
+        }
+    },
+    "SearchVertical": {
+        "cord19": "cord19",
+        "trialstreamer": "trialstreamer"
+    }
+}

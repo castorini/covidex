@@ -1,0 +1,43 @@
+{
+    "document_fields": {
+        "id": {
+            "type": "str",
+            "default": "...",
+            "fieldSize": "single"
+        },
+        "abstract": {
+            "type": "str",
+            "default": "None",
+            "fieldSize": "single"
+        },
+        "responsible_party": {
+            "type": "List[str]",
+            "default": "[]",
+            "fieldSize": "multi"
+        },
+        "publish_time": {
+            "type": "str",
+            "default": "None",
+            "fieldSize": "single"
+        },
+        "title": {
+            "type": "str",
+            "default": "...",
+            "fieldSize": "single"
+        },
+        "organisation": {
+            "type": "List[str]",
+            "default": "None",
+            "fieldSize": "multi"
+        },
+        "url": {
+            "type": "str",
+            "default": "None",
+            "fieldSize": "single"
+        }
+    },
+    "SearchVertical": {
+        "cord19": "cord19",
+        "trialstreamer": "trialstreamer"
+    }
+}
