@@ -31,8 +31,10 @@ async def get_search(request: Request, query: str, vertical: SearchVertical):
     paragraphs = [hit.lucene_document.get("abstract") for hit in searcher_hits]
 
     # Get predictions from T5.
-    t5_scores = request.app.state.ranker.rerank(query, paragraphs)
-
+    # CHANGED BECAUSE OF ONLY USING BM25
+    #t5_scores = request.app.state.ranker.rerank(query, paragraphs)
+    t5_scores = [0 for i in range(len(searcher_hits))]
+    
     # Sort results by T5 scores.
     results = list(zip(searcher_hits, t5_scores))
     results.sort(key=lambda x: x[1], reverse=True)

@@ -25,7 +25,6 @@ const AclBaseArticleResult: React.FC<BaseArticleResultProps> = ({
       }
     });
   }
-  console.log(article.title)
   return (
     <>
       <Title bold={boldTitle}>

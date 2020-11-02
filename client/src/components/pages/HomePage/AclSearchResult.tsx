@@ -20,7 +20,6 @@ const AclSearchResult = ({ article, position, queryId, queryTokens }: SearchResu
   const originalAbstract = article.abstract || '';
   const abstract = parseAbstract(originalAbstract);
   const interactionRequestBody = { query_id: queryId, result_id: article.id, position };
-  console.log(article.abstract)
   return (
     <SearchResultWrapper>
       <AclBaseArticleResult

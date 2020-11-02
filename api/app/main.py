@@ -8,17 +8,18 @@ from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
 from app.routers import related, search
-from app.services.highlighter import Highlighter
-from app.services.ranker import Ranker
-from app.services.related_searcher import RelatedSearcher
+#from app.services.highlighter import Highlighter
+#from app.services.ranker import Ranker
+#from app.services.related_searcher import RelatedSearcher
 from app.services.searcher import Searcher
 from app.settings import settings
 
 app = FastAPI()
 # Set global state for reusable services
 if not settings.testing:
-    app.state.highlighter = Highlighter()
-    app.state.ranker = Ranker()
+    # COMMENTED OUT
+    #app.state.highlighter = Highlighter()
+    #app.state.ranker = Ranker()
     #app.state.related_searcher = RelatedSearcher()
     app.state.searcher = Searcher()
 
