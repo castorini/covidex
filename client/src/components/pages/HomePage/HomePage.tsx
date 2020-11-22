@@ -49,7 +49,7 @@ const getSearchFilters = (searchResults: AclSearchArticle[] | null): any => {
           max = Math.max(year, max);
         }
       })
-      filterDictionary[filter] = min === max ? [min * 100 + 1, min * 100 + 12] : [min, max];
+      filterDictionary[filter] = min === max ? [min - 0.001, min + 0.001] : [min, max];
     } else if (filterSchema[filter].type == "selection") {
       // initializing the list to store the selections
       filterDictionary[filter] = new Set([]);
