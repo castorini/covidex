@@ -109,14 +109,6 @@ const HomeTextWrapper = styled.div`
   margin-top: 16px;
 `;
 
-const List = styled.ul`
-  ${Body}
-`;
-
-const ListItem = styled.li`
-  ${Body}
-`;
-
 const Paragraph = styled.div`
   ${Body}
   margin-bottom: 24px;
