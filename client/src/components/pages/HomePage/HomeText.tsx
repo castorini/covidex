@@ -6,7 +6,7 @@ const HomeText = () => {
   return (
     <HomeTextWrapper>
       <Paragraph>
-        <Bold>Neural Covidex</Bold> applies state-of-the-art neural network models and artificial
+        <Bold>Covidex</Bold> applies state-of-the-art neural network models and artificial
         intelligence (AI) techniques to answer questions using the{' '}
         <Link
           href="https://pages.semanticscholar.org/coronavirus-research"
@@ -19,76 +19,29 @@ const HomeText = () => {
         <Link href="https://allenai.org/" target="_blank" rel="noopener noreferrer">
           Allen Institute for AI
         </Link>
-        , which currently contains over 140,000 scholarly articles, including over 70,000 with full
-        text, about COVID-19 and coronavirus-related research, drawn from a variety of sources
-        including PubMed, a curated list of articles from the WHO, as well as preprints from bioRxiv
-        and medRxiv.
-      </Paragraph>
-      <Paragraph>
-        We hope that our service can contribute to the fight against this global pandemic by helping
+        , which is curated dataset of scientific articles about COVID-19 and coronavirus-related research drawn 
+        from a variety of sources including PubMed, a curated list of articles from the WHO, as well as preprints from bioRxiv
+        and medRxiv. We hope that our technologies can contribute to the fight against this global pandemic by helping
         policy makers and clinicians make better-informed decisions and by helping researchers
         generate new insights.
       </Paragraph>
+      <Paragraph>Our system has been evaluated in the{' '}
+        <Link href="https://ir.nist.gov/covidSubmit/" target="_blank" rel="noopener noreferrer">TREC-COVID</Link>{' '}
+        challenge organized by the National Institute of Standards and Technology (NIST). Submissions based on Covidex components
+        were the highest-scoring "automatic" runs in rounds 4 and 5 of the evaluation. We provide here as a working prototype
+        a simplified version of complete architecture described in the following paper:</Paragraph>
+      <blockquote>
+      Edwin Zhang, Nikhil Gupta, Raphael Tang, Xiao Han, Ronak Pradeep, Kuang Lu, Yue Zhang, Rodrigo Nogueira, Kyunghyun Cho, Hui Fang, and Jimmy Lin. 
+      {' '}<Link href="https://www.aclweb.org/anthology/2020.sdp-1.5/" target="_blank" rel="noopener noreferrer">Covidex: Neural Ranking Models and Keyword Search Infrastructure for the COVID-19 Open Research Dataset.</Link>{' '}
+      <i>Proceedings of the 1st Workshop on Scholarly Document Processing</i>, pages 31-41, November 2020.
+      </blockquote>
       <Paragraph>
-        To properly calibrate expectations, our system relies on inference using
-        computationally-expensive neural models at search time, and thus the interface is not as
-        responsive as we'd like. We're working hard on making the system more robust and faster, so
-        please be patient! In terms of answer quality, the results are better than keyword search
-        overall (at least in our opinion), but as is often the case with neural networks, sometimes
-        the output can leave users scratching their heads. We're also working hard on improving the
-        answers!
+        Since the conclusion of the TREC-COVID challenge in August 2020, our team has not had sufficient resources to fully 
+        keep pace with releases of the CORD-19 dataset. The prototype here still uses the CORD-19 version
+        used in round 5 of the TREC-COVID challenge, dating from July 16, 2020 (and we have no intention of updating it).
+        As a result, the system returns results that are outdated and thus should <b>not</b> be used for making medical, 
+        public health, and other decisions.
       </Paragraph>
-      <Paragraph>
-        For more details about how the Neural Covidex works, please refer to this{' '}
-        <Link href="https://arxiv.org/abs/2004.05125" target="_blank" rel="noopener noreferrer">
-          system description
-        </Link>{' '}
-        and our{' '}
-        <Link href="https://arxiv.org/abs/2004.11339" target="_blank" rel="noopener noreferrer">
-          initial question answering experiments
-        </Link>
-        .
-      </Paragraph>
-      <Paragraph>Beyond the search application above, our efforts include the following:</Paragraph>
-      <List>
-        <ListItem>
-          Backend components (code as well as pre-built indexes) for directly searching and
-          manipulating the collection via{' '}
-          <Link href="http://pyserini.io/" target="_blank" rel="noopener noreferrer">
-            Pyserini
-          </Link>{' '}
-          (Python bindings for Anserini), along with sample integration of search with{' '}
-          <Link
-            href="https://huggingface.co/transformers"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            HuggingFace's neural models
-          </Link>
-          . Example Python notebooks and other resources for getting started can be found{' '}
-          <Link
-            href="https://github.com/castorini/anserini/blob/master/docs/experiments-covid.md"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            here
-          </Link>
-          .
-        </ListItem>
-        <ListItem>
-          The entire software stack behind the Neural Covidex is available open-source on{' '}
-          <Link
-            href="https://github.com/castorini/covidex"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Github
-          </Link>{' '}
-          which means that in addition to using our search application on the web above, individual
-          components such as the searcher, neural reranker, and passage highlighter can be reused
-          elsewhere as well. We'd love other researchers to build on these components!
-        </ListItem>
-      </List>
       <Paragraph>
         This project is led by{' '}
         <Link href="https://cs.uwaterloo.ca/~jimmylin/" target="_blank" rel="noopener noreferrer">
@@ -123,18 +76,28 @@ const HomeText = () => {
           Rodrigo Nogueira
         </Link>
         , and{' '}
-        <Link href="https://linkedin.com/in/rpradeep42" target="_blank" rel="noopener noreferrer">
+        <Link href="https://github.com/ronakice" target="_blank" rel="noopener noreferrer">
           Ronak Pradeep
         </Link>
         . Special thanks to{' '}
         <Link href="https://colinraffel.com/" target="_blank" rel="noopener noreferrer">
           Colin Raffel
         </Link>{' '}
-        for his help in pretraining T5 models for the biomedical domain and to{' '}
+        for his help in pretraining T5 models for the biomedical domain.
+        We are grateful for support from{' '}
         <Link href="https://www.cifar.ca/" target="_blank" rel="noopener noreferrer">
           CIFAR
         </Link>{' '}
-        for their AI and COVID-19 Catalyst Grants.
+        for an{' '} 
+        <Link href="https://cifar.ca/action-on-covid-19/ai-and-covid-19-catalyst-grants/" target="_blank" rel="noopener noreferrer">
+          AI and COVID-19 Catalyst Grants
+        </Link>, Microsoft for an{' '}
+        <Link href="https://blogs.microsoft.com/on-the-issues/2020/04/09/ai-for-health-covid-19/" target="_blank" rel="noopener noreferrer">
+          AI for Good COVID-19 Grant
+        </Link>, and{' '}
+        <Link href="https://www.computecanada.ca/" target="_blank" rel="noopener noreferrer">
+        Compute Canada
+        </Link> for computational resources that are sustaining this prototype.
       </Paragraph>
     </HomeTextWrapper>
   );
@@ -144,14 +107,6 @@ export default HomeText;
 
 const HomeTextWrapper = styled.div`
   margin-top: 16px;
-`;
-
-const List = styled.ul`
-  ${Body}
-`;
-
-const ListItem = styled.li`
-  ${Body}
 `;
 
 const Paragraph = styled.div`
