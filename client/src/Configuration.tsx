@@ -2,7 +2,7 @@
   This file provides configuration options for searching different datasets
 */
 // Modify this value to load components for another dataset
-const DATASET = 'acl';
+const DATASET = 'cord19';
 
 export const ARTICLE_RESULT = 'ArticleResult';
 export const SEARCH_RESULT = 'SearchResult';
