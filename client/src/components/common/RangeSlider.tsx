@@ -14,7 +14,7 @@ interface RangeSliderProps {
 
 const RangeSlider: React.FC<RangeSliderProps> = ({
   min = 0,
-  max = 0,
+  max = 1,
   step = 1,
   values,
   setValues,
@@ -23,11 +23,16 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
   const minString = String(values[0]);
   const maxString = String(values[1]);
 
+  let adjustedMin = min;
+  if (min === max) {
+    adjustedMin = max - 1;
+  }
+
   return (
     <RangeWrapper>
       <Range
         step={step}
-        min={min}
+        min={adjustedMin}
         max={max}
         values={values}
         onChange={setValues}

@@ -2,9 +2,10 @@
   This file provides configuration options for searching different datasets
 */
 // Modify this value to load components for another dataset
-const DATASET = 'cord19';
+const DATASET = 'acl';
 
-export const ARTICLE_RESULT = 'FilterSchema';
+export const ARTICLE_RESULT = 'ArticleResult';
+export const SEARCH_RESULT = 'SearchResult';
 export const HOME_TEXT = 'HomeText';
 export const METADATA = 'Metadata';
 
@@ -12,6 +13,10 @@ const config = [
   {
     name: ARTICLE_RESULT,
     path: `./components/dataset/${DATASET}/ArticleResult`,
+  },
+  {
+    name: SEARCH_RESULT,
+    path: `./components/dataset/${DATASET}/SearchResult`,
   },
   {
     name: HOME_TEXT,

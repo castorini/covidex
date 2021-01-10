@@ -5,7 +5,6 @@ import ErrorBoundary from 'react-error-boundary';
 
 import { PageWrapper, PageContent, Heading2 } from '../../../shared/Styles';
 import Loading from '../../common/Loading';
-import SearchResult from '../../dataset/cord19/SearchResult';
 import SearchBar from './SearchBar';
 
 import { tokenize } from '../../../shared/Util';
@@ -17,9 +16,10 @@ import {
 } from '../../../shared/Constants';
 import Filters from './Filters';
 import { SearchArticle, SearchFilters } from '../../../shared/Models';
-import Configuration, { HOME_TEXT, METADATA } from '../../../Configuration';
+import Configuration, { HOME_TEXT, METADATA, SEARCH_RESULT } from '../../../Configuration';
 
 const filterSchema = Configuration[METADATA]['filters'];
+const SearchResult = Configuration[SEARCH_RESULT];
 
 const getSearchFilters = (searchResults: SearchArticle[] | null): SearchFilters => {
   // Iterate through JSON fields
@@ -74,7 +74,7 @@ const filterArticle = (selectedFilters: any, article: SearchArticle): Boolean =>
       includeArticle =
         includeArticle &&
         (!val ||
-          (article.publish_time.length >= 7 &&
+          (val.length >= 7 &&
             Number(val.substr(0, 7).replace('-', '')) >= selectedFilters[field][0] &&
             Number(val.substr(0, 7).replace('-', '')) <= selectedFilters[field][1]) ||
           (Number(val.substr(0, 4)) >= selectedFilters[field][0] &&
