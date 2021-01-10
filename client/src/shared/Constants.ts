@@ -29,10 +29,6 @@ export interface SearchVerticalOption extends OptionTypeBase {
   label: string;
 }
 
-export const SEARCH_VERTICAL_OPTIONS: Array<SearchVerticalOption> = [
-  { value: 'cord19', label: 'CORD-19' },
-];
-
 /* NLTK Stopwords */
 export const STOP_WORDS = new Set([
   'i',

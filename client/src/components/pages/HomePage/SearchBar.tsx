@@ -8,7 +8,6 @@ import Select from 'react-select';
 import Theme from '../../../shared/Theme';
 import {
   HOME_ROUTE,
-  SEARCH_VERTICAL_OPTIONS,
   SearchVerticalOption,
   LARGE_MOBILE_BREAKPOINT,
 } from '../../../shared/Constants';
@@ -70,7 +69,12 @@ const SearchBar = ({ query, vertical, setQuery, setVertical, history }: SearchBa
           styles={dropdownStyles}
           className="dropdown"
           width="200px"
-          options={SEARCH_VERTICAL_OPTIONS}
+          options={[
+            {
+              value: 'dataset',
+              label: Configuration[METADATA]['dataset'],
+            },
+          ]}
           isSearchable={false}
           value={vertical}
           onChange={(value: SearchVerticalOption) => setVertical(value)}
@@ -80,7 +84,7 @@ const SearchBar = ({ query, vertical, setQuery, setVertical, history }: SearchBa
       <Section>
         <SearchInputWrapper>
           <SearchBarInput
-            placeholder={Configuration[METADATA]["searchPlaceholder"]}
+            placeholder={Configuration[METADATA]['searchPlaceholder']}
             value={query}
             onChange={handleInput}
             onSubmit={() => submitQuery()}

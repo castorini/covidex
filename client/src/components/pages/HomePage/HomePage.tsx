@@ -8,12 +8,7 @@ import Loading from '../../common/Loading';
 import SearchBar from './SearchBar';
 
 import { tokenize } from '../../../shared/Util';
-import {
-  API_BASE,
-  SEARCH_ENDPOINT,
-  SEARCH_VERTICAL_OPTIONS,
-  SearchVerticalOption,
-} from '../../../shared/Constants';
+import { API_BASE, SEARCH_ENDPOINT, SearchVerticalOption } from '../../../shared/Constants';
 import Filters from './Filters';
 import { SearchArticle, SearchFilters } from '../../../shared/Models';
 import Configuration, { HOME_TEXT, METADATA, SEARCH_RESULT } from '../../../Configuration';
@@ -101,9 +96,10 @@ const HomePage = () => {
 
   const [loading, setLoading] = useState<Boolean>(false);
   const [queryInputText, setQueryInputText] = useState<string>(query || '');
-  const [selectedVertical, setSelectedVertical] = useState<SearchVerticalOption>(
-    SEARCH_VERTICAL_OPTIONS[0],
-  );
+  const [selectedVertical, setSelectedVertical] = useState<SearchVerticalOption>({
+    value: 'dataset',
+    label: Configuration[METADATA]['dataset'],
+  });
 
   const [filters, setFilters] = useState<SearchFilters>({});
   const [selectedFilters, setSelectedFilters] = useState<SearchFilters>({});
