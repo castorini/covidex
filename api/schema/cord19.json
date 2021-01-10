@@ -1,0 +1,42 @@
+{
+  "id": {
+    "type": "str",
+    "default": "...",
+    "fieldSize": "single"
+  },
+  "abstract": {
+    "type": "str",
+    "default": "None",
+    "fieldSize": "single"
+  },
+  "authors": {
+    "type": "List[str]",
+    "default": "[]",
+    "fieldSize": "multi"
+  },
+  "journal": {
+    "type": "str",
+    "default": "None",
+    "fieldSize": "single"
+  },
+  "publish_time": {
+    "type": "str",
+    "default": "None",
+    "fieldSize": "single"
+  },
+  "title": {
+    "type": "str",
+    "default": "...",
+    "fieldSize": "single"
+  },
+  "source_x": {
+    "type": "List[str]",
+    "default": "[]",
+    "fieldSize": "multi"
+  },
+  "url": {
+    "type": "str",
+    "default": "None",
+    "fieldSize": "single"
+  }
+}

@@ -1,17 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { BaseArticle } from '../../shared/Models';
-import { Heading3, Link } from '../../shared/Styles';
+import { Heading3, Link } from '../../../shared/Styles';
+import { ArticleResultProps } from '../../common/BaseSearchResult';
 
-interface BaseArticleResultProps {
-  article: BaseArticle;
-  position?: number;
-  onClickTitle?: () => void;
-  boldTitle?: boolean;
-}
 
-const BaseArticleResult: React.FC<BaseArticleResultProps> = ({
+const ArticleResult: React.FC<ArticleResultProps> = ({
   article,
   position,
   onClickTitle = () => {},
@@ -19,7 +13,7 @@ const BaseArticleResult: React.FC<BaseArticleResultProps> = ({
 }) => {
   let authorString = '';
   if (article.authors.length > 0) {
-    article.authors.forEach((author, idx) => {
+    article.authors.forEach((author: string, idx: number) => {
       if (author !== '') {
         authorString += idx === article.authors.length - 1 ? `${author}.` : `${author}, `;
       }
@@ -36,7 +30,7 @@ const BaseArticleResult: React.FC<BaseArticleResultProps> = ({
 
   // Indicate if arXiv, medRxiv, or bioRxiv is the source
   let source = '';
-  article.source.forEach((s) => {
+  article.source_x.forEach((s: string) => {
     if (['arxiv', 'medrxiv', 'biorxiv'].includes(s.trim().toLowerCase())) {
       source += transformPreprintSource(s.trim().toLowerCase());
     }
@@ -64,25 +58,25 @@ const BaseArticleResult: React.FC<BaseArticleResultProps> = ({
   );
 };
 
-export default BaseArticleResult;
+export default ArticleResult;
 
-const Title = styled.div<{ bold?: boolean }>`
+export const Title = styled.div<{ bold?: boolean }>`
   ${Heading3}
   margin-bottom: 16px;
   font-weight: ${({ bold }) => (bold ? 700 : 400)};
 `;
 
-const Subtitle = styled.div`
+export const Subtitle = styled.div`
   font-size: 16px;
   margin-bottom: 16px;
   color: ${({ theme }) => theme.black};
 `;
 
-const Authors = styled.span`
+export const Authors = styled.span`
   margin-right: 4px;
 `;
 
-const Journal = styled.span`
+export const Journal = styled.span`
   font-style: italic;
   margin-right: 4px;
 `;

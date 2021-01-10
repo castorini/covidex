@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useRouteMatch } from 'react-router';
+import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
 import ErrorBoundary from 'react-error-boundary';
 import InfiniteScroll from 'react-infinite-scroller';
+import { FileText, ArrowLeft } from 'react-feather';
 
 import {
   Heading2,
@@ -17,10 +19,10 @@ import { RelatedArticle } from '../../../shared/Models';
 import { API_BASE, RELATED_ENDPOINT, HOME_ROUTE } from '../../../shared/Constants';
 import Loading from '../../common/Loading';
 import RelatedResult from './RelatedResult';
-import { FileText, ArrowLeft } from 'react-feather';
-import BaseArticleResult from '../../common/BaseArticleResult';
 import { parseAbstract } from '../../../shared/Util';
-import { Link as RouterLink } from 'react-router-dom';
+import Configuration, { ARTICLE_RESULT } from '../../../Configuration';
+
+const ArticleResult = Configuration[ARTICLE_RESULT];
 
 const NotFoundComponent = () => <NotFound>Article not found</NotFound>;
 
@@ -121,7 +123,7 @@ const RelatedPage = () => {
                 {TitleRow}
                 <OriginalArticle>
                   <SmallTitle>Showing articles related to:</SmallTitle>
-                  <BaseArticleResult article={originalArticle} boldTitle />
+                  <ArticleResult article={originalArticle} boldTitle />
                   {originalArticle.abstract && (
                     <>
                       <AbstractTitle className="hideCollapsed">Abstract</AbstractTitle>

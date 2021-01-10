@@ -50,10 +50,11 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
       />
       <Values>
         <ValueText>
-          {minString.length > 4 ? `${minString.substr(4, 6)}/${minString.substr(0, 4)}` : minString}
+          {/* TODO: clean up this logic */}
+          {false  ? `${minString.substr(4, 6)}/${minString.substr(0, 4)}` : minString.substr(0, 4)}
         </ValueText>
         <ValueText>
-          {maxString.length > 4 ? `${maxString.substr(4, 6)}/${maxString.substr(0, 4)}` : maxString}
+          {false ? `${maxString.substr(4, 6)}/${maxString.substr(0, 4)}` : maxString.substr(0, 4)}
         </ValueText>
       </Values>
     </RangeWrapper>

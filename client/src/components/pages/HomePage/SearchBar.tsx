@@ -25,14 +25,6 @@ const CORD_EXAMPLES = [
   'What is the prognostic value of IL-6 levels in COVID-19?',
 ];
 
-const TRIALSTREAMER_EXAMPLES = [
-  'chloroquine',
-  'lopinavir',
-  'remdesivir',
-  'abidol hydrochloride',
-  'methylprednisolone',
-];
-
 interface SearchBarProps extends RouteComponentProps {
   query: string;
   vertical: SearchVerticalOption;
@@ -44,17 +36,11 @@ const SearchBar = ({ query, vertical, setQuery, setVertical, history }: SearchBa
   const [typeaheadIndex, setTypeaheadIndex] = useState<number>(-1);
   const [inputFocused, setInputFocused] = useState<boolean>(false);
 
-  let examples: Array<string>;
-  if (vertical.value === 'cord19') {
-    examples = CORD_EXAMPLES;
-  } else {
-    examples = TRIALSTREAMER_EXAMPLES;
-  }
+  const examples: Array<string> = CORD_EXAMPLES;
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => setQuery(event.target.value);
 
-  const submitQuery = (q: string = query, v: string = vertical.value) =>
-    history.push(`${HOME_ROUTE}?query=${encodeURI(q)}&vertical=${v}`);
+  const submitQuery = (q: string = query) => history.push(`${HOME_ROUTE}?query=${encodeURI(q)}`);
 
   const handleUserKeyPress = useCallback(
     (event: KeyboardEvent) => {

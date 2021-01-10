@@ -5,8 +5,7 @@ import ErrorBoundary from 'react-error-boundary';
 
 import { PageWrapper, PageContent, Heading2 } from '../../../shared/Styles';
 import Loading from '../../common/Loading';
-import SearchResult from './SearchResult';
-import HomeText from './HomeText';
+import SearchResult from '../../dataset/cord19/SearchResult';
 import SearchBar from './SearchBar';
 
 import { tokenize } from '../../../shared/Util';
@@ -17,58 +16,84 @@ import {
   SearchVerticalOption,
 } from '../../../shared/Constants';
 import Filters from './Filters';
-import { SearchArticle, SearchFilters, SelectedSearchFilters } from '../../../shared/Models';
+import { SearchArticle, SearchFilters } from '../../../shared/Models';
+import Configuration, { HOME_TEXT, METADATA } from '../../../Configuration';
 
-const defaultFilter = {
-  yearMinMax: [0, 0],
-  authors: [],
-  journals: [],
-  sources: [],
-};
+const filterSchema = Configuration[METADATA]['filters'];
 
 const getSearchFilters = (searchResults: SearchArticle[] | null): SearchFilters => {
-  if (searchResults === null || searchResults.length === 0) {
-    return defaultFilter;
-  }
-
-  let min = Number.MAX_VALUE;
-  let max = -1;
-  let authors: Set<string> = new Set([]);
-  let journals: Set<string> = new Set([]);
-  let sources: Set<string> = new Set([]);
-
-  searchResults.forEach((article) => {
-    if (article.publish_time) {
-      const year = Number(article.publish_time.substr(0, 4));
-      min = Math.min(year, min);
-      max = Math.max(year, max);
-    }
-
-    if (article.authors) {
-      article.authors.forEach((a) => authors.add(a));
-    }
-
-    if (article.source) {
-      article.source.forEach((s) => sources.add(s));
-    }
-
-    if (article.journal) {
-      journals.add(article.journal);
+  // Iterate through JSON fields
+  const fields = Object.keys(filterSchema);
+  let filterValues: SearchFilters = {};
+  fields.forEach((filter) => {
+    // Handle year filter values
+    if (filterSchema[filter].type === 'year_slider') {
+      if (searchResults === null || searchResults.length === 0) {
+        filterValues[filter] = [0, 0]; // Dummy range
+      } else {
+        let min = Number.MAX_VALUE;
+        let max = -1;
+        searchResults.forEach((article) => {
+          if (article[filter]) {
+            const year = Number(article[filter].substr(0, 4));
+            min = Math.min(year, min);
+            max = Math.max(year, max);
+          }
+        });
+        // Hack to get around slider with only 1 possible value
+        filterValues[filter] = min === max ? [min - 0.001, min + 0.001] : [min, max];
+      }
+    } else if (filterSchema[filter].type === 'selection') {
+      filterValues[filter] = new Set([]);
+      if (searchResults !== null && searchResults.length > 0) {
+        searchResults.forEach((article) => {
+          const val = article[filter];
+          if (!val) {
+            return;
+          } else if (typeof val === 'string' || val instanceof String) {
+            filterValues[filter].add(val);
+          } else if (Array.isArray(val)) {
+            article[filter].forEach((a: String) => filterValues[filter].add(a));
+          }
+        });
+        filterValues[filter] = Array.from(filterValues[filter].values()).filter(
+          (a: any) => a.length > 0,
+        );
+      }
     }
   });
-
-  return {
-    yearMinMax: min === max ? [min * 100 + 1, min * 100 + 12] : [min, max],
-    authors: Array.from(authors.values()).filter((a) => a.length > 0),
-    journals: Array.from(journals.values()),
-    sources: Array.from(sources.values()),
-  };
+  return filterValues;
 };
+
+const filterArticle = (selectedFilters: any, article: SearchArticle): Boolean => {
+  let includeArticle = true;
+  const fields = Object.keys(selectedFilters);
+  fields.forEach((field) => {
+    const val = article[field];
+    if (filterSchema[field].type === 'year_slider') {
+      includeArticle =
+        includeArticle &&
+        Number(val.substr(0, 4)) >= selectedFilters[field][0] &&
+        Number(val.substr(0, 4)) <= selectedFilters[field][1];
+    } else if (filterSchema[field].type === 'selection') {
+      if (typeof val === 'string' || val instanceof String) {
+        includeArticle =
+          includeArticle && (selectedFilters[field].size === 0 || selectedFilters[field].has(val));
+      } else if (Array.isArray(val)) {
+        includeArticle =
+          includeArticle &&
+          (selectedFilters[field].size === 0 ||
+            val.some((a: String) => selectedFilters[field].has(a)));
+      }
+    }
+  });
+  return includeArticle;
+};
+const HomeText = Configuration[HOME_TEXT];
 
 const HomePage = () => {
   const urlParams = new URLSearchParams(useLocation().search);
   const query = urlParams.get('query') || '';
-  const vertical = urlParams.get('vertical') || 'cord19';
 
   const [loading, setLoading] = useState<Boolean>(false);
   const [queryInputText, setQueryInputText] = useState<string>(query || '');
@@ -76,13 +101,8 @@ const HomePage = () => {
     SEARCH_VERTICAL_OPTIONS[0],
   );
 
-  const [filters, setFilters] = useState<SearchFilters>(defaultFilter);
-  const [selectedFilters, setSelectedFilters] = useState<SelectedSearchFilters>({
-    yearRange: [0, 0],
-    authors: new Set([]),
-    journals: new Set([]),
-    sources: new Set([]),
-  });
+  const [filters, setFilters] = useState<SearchFilters>({});
+  const [selectedFilters, setSelectedFilters] = useState<SearchFilters>({});
 
   const [queryId, setQueryId] = useState<string>('');
   const [searchResults, setSearchResults] = useState<SearchArticle[] | null>(null);
@@ -92,20 +112,7 @@ const HomePage = () => {
   }, [query]);
 
   useEffect(() => {
-    switch (vertical) {
-      case 'cord19':
-        setSelectedVertical(SEARCH_VERTICAL_OPTIONS[0]);
-        break;
-      case 'trialstreamer':
-        setSelectedVertical(SEARCH_VERTICAL_OPTIONS[1]);
-        break;
-      default:
-        setSelectedVertical(SEARCH_VERTICAL_OPTIONS[0]);
-    }
-  }, [vertical]);
-
-  useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async (query: string | null) => {
       if (query === null || query === '') {
         setLoading(false);
         setSearchResults([]);
@@ -116,53 +123,42 @@ const HomePage = () => {
         setLoading(true);
         setSearchResults(null);
 
-        let response = await fetch(
-          `${API_BASE}${SEARCH_ENDPOINT}?query=${query.toLowerCase()}&vertical=${vertical}`,
-        );
+        let response = await fetch(`${API_BASE}${SEARCH_ENDPOINT}?query=${query.toLowerCase()}`);
         setLoading(false);
 
         let data = await response.json();
         const { query_id, response: searchResults } = data;
         const filters = getSearchFilters(searchResults);
 
+        // Set default filters
+        let defaultSelectedFilters: SearchFilters = {};
+        const fields = Object.keys(filterSchema);
+        fields.forEach((field) => {
+          if (filterSchema[field].type === 'year_slider') {
+            // Default to maximum range
+            defaultSelectedFilters[field] = filters[field];
+          } else if (filterSchema[field].type === 'selection') {
+            defaultSelectedFilters[field] = new Set([]);
+          }
+        });
+
         setQueryId(query_id);
         setSearchResults(searchResults);
-        setSelectedFilters({
-          yearRange: filters.yearMinMax,
-          authors: new Set([]),
-          journals: new Set([]),
-          sources: new Set([]),
-        });
+        setSelectedFilters(defaultSelectedFilters);
         setFilters(filters);
-      } catch {
+      } catch (err) {
         setLoading(false);
         setSearchResults([]);
       }
     };
-    fetchData();
-  }, [query, vertical]);
+    fetchData(query);
+  }, [query]);
 
   const queryTokens = tokenize(query);
   const filteredResults =
     searchResults === null
       ? null
-      : searchResults.filter(
-          (article) =>
-            (!article.publish_time ||
-              (Number(article.publish_time.substr(0, 4)) >= selectedFilters.yearRange[0] &&
-                Number(article.publish_time.substr(0, 4)) <= selectedFilters.yearRange[1]) ||
-              (article.publish_time.length >= 7 &&
-                Number(article.publish_time.substr(0, 7).replace('-', '')) >=
-                  selectedFilters.yearRange[0] &&
-                Number(article.publish_time.substr(0, 7).replace('-', '')) <=
-                  selectedFilters.yearRange[1])) &&
-            (selectedFilters.authors.size === 0 ||
-              article.authors.some((a) => selectedFilters.authors.has(a))) &&
-            (selectedFilters.journals.size === 0 ||
-              selectedFilters.journals.has(article.journal)) &&
-            (selectedFilters.sources.size === 0 ||
-              article.source.some((s) => selectedFilters.sources.has(s))),
-        );
+      : searchResults.filter((article) => filterArticle(selectedFilters, article));
 
   return (
     <PageWrapper>
@@ -173,7 +169,7 @@ const HomePage = () => {
           setQuery={setQueryInputText}
           setVertical={setSelectedVertical}
         />
-        <ErrorBoundary FallbackComponent={() => <NoResults>No results found</NoResults>}>
+        <ErrorBoundary FallbackComponent={() => <NoResults>Error retrieving results</NoResults>}>
           {loading && <Loading />}
           <HomeContent>
             {!query && <HomeText />}

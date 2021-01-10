@@ -4,10 +4,12 @@ import { Link } from 'react-router-dom';
 import { Link as LinkIcon } from 'react-feather';
 
 import { RelatedArticle } from '../../../shared/Models';
-import BaseArticleResult from '../../common/BaseArticleResult';
 import { BodySmall, LinkStyle } from '../../../shared/Styles';
 import { parseAbstract, makePOSTRequest } from '../../../shared/Util';
 import { RELATED_ROUTE, API_BASE, RELATED_CLICKED_ENDPOINT } from '../../../shared/Constants';
+import Configuration, { ARTICLE_RESULT } from '../../../Configuration';
+
+const ArticleResult = Configuration[ARTICLE_RESULT];
 
 interface RelatedResultProps {
   article: RelatedArticle;
@@ -20,7 +22,7 @@ const RelatedResult: React.FC<RelatedResultProps> = ({ article, position, queryI
 
   return (
     <RelatedResultWrapper>
-      <BaseArticleResult
+      <ArticleResult
         article={article}
         position={position}
         onClickTitle={() =>

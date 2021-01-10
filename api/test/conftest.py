@@ -6,7 +6,6 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app.main import app
-from app.models import SearchVertical
 from app.services.highlighter import Highlighter
 from app.services.ranker import Ranker
 from app.services.related_searcher import RelatedSearcher

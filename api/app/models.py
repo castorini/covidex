@@ -1,20 +1,22 @@
+import json
+from enum import Enum
 from typing import List
 
-from pydantic import BaseModel
+from pydantic import BaseModel, create_model
 from pydantic.class_validators import validator
-from enum import Enum
 
+from app.settings import settings
 
-class BaseArticle(BaseModel):
-    id: str
-    abstract: str = None
-    authors: List[str] = []
-    journal: str = None
-    publish_time: str = None
-    title: str
-    source: List[str] = []
-    url: str
+# Dynamically create model class from schema
+schema = json.load(open(settings.schema_path))
+schema_dict = {
+    key: (
+        eval(schema[key]["type"]),
+        eval(schema[key]["default"])
+    ) for key in schema
+}
 
+BaseArticle = create_model("BaseArticle", **schema_dict)
 
 class SearchArticle(BaseArticle):
     score: float
@@ -56,8 +58,3 @@ class SearchLogType(str, Enum):
     collapsed = 'collapsed'
     expanded = 'expanded'
     clicked = 'clicked'
-
-
-class SearchVertical(str, Enum):
-    cord19 = 'cord19'
-    trialstreamer = 'trialstreamer'

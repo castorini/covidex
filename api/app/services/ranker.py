@@ -14,16 +14,19 @@ class Ranker:
         self.ranker = self.build_ranker()
 
     def build_ranker(self) -> T5Reranker:
-        loader = CachedT5ModelLoader(settings.t5_model_dir,
-                                     settings.cache_dir,
-                                     'ranker',
-                                     settings.t5_model_type,
-                                     settings.flush_cache)
+        loader = CachedT5ModelLoader(
+            settings.t5_model_dir,
+            settings.cache_dir,
+            "ranker",
+            settings.t5_model_type,
+            settings.flush_cache,
+        )
         device = torch.device(settings.t5_device)
         model = loader.load().to(device).eval()
         tokenizer = T5Tokenizer.from_pretrained(settings.t5_model_type)
-        batch_tokenizer = T5BatchTokenizer(tokenizer, settings.t5_batch_size,
-                                           max_length=settings.t5_max_length)
+        batch_tokenizer = T5BatchTokenizer(
+            tokenizer, settings.t5_batch_size, max_length=settings.t5_max_length
+        )
         return T5Reranker(model, batch_tokenizer)
 
     def rerank(self, query: str, texts: List[str]) -> List[float]:
