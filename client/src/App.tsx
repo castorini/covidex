@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
+import { Helmet } from 'react-helmet';
 
 import Navbar from './components/navigation/Navbar';
 import Footer from './components/navigation/Footer';
@@ -10,10 +11,18 @@ import NotFoundPage from './components/pages/NotFoundPage';
 
 import { HOME_ROUTE, RELATED_ROUTE } from './shared/Constants';
 import Theme from './shared/Theme';
+import Configuration, { METADATA } from './Configuration';
 
 const App = () => {
   return (
     <ThemeProvider theme={Theme}>
+      {/* Dynamically load metadata for HTML header */}
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>{Configuration[METADATA]['title']}</title>
+        <meta name="description" content={Configuration[METADATA]['description']} />
+        <link rel="icon" href={`/${Configuration[METADATA]['favicon']}`} />
+      </Helmet>
       <Router>
         <AppContainer>
           <Navbar />

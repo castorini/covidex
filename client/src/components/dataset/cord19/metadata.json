@@ -1,6 +1,7 @@
 {
   "title": "Covidex",
   "description": "A neural search engine for the COVID-19 Open Research Dataset (CORD-19)",
+  "favicon": "cord19.ico",
   "searchPlaceholder": "something about COVID-19...",
   "searchExamples": [
     "What is the incubation period of COVID-19?",

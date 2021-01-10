@@ -8,15 +8,16 @@ from pydantic.class_validators import validator
 from app.settings import settings
 
 # Dynamically create model class from schema
-schema = json.load(open(settings.schema_path))
-schema_dict = {
-    key: (
-        eval(schema[key]["type"]),
-        eval(schema[key]["default"])
-    ) for key in schema
-}
+if not settings.testing:
+    schema = json.load(open(settings.schema_path))
+    schema_dict = {
+        key: (eval(schema[key]["type"]), eval(schema[key]["default"])) for key in schema
+    }
+else:
+    schema_dict = {}
 
 BaseArticle = create_model("BaseArticle", **schema_dict)
+
 
 class SearchArticle(BaseArticle):
     score: float
@@ -26,10 +27,10 @@ class SearchArticle(BaseArticle):
     highlighted_abstract: bool = False
     has_related_articles: bool = False
 
-    @validator('highlights')
+    @validator("highlights")
     def validate_highlights(cls, v, values):
         if v:
-            assert len(v) == len(values['paragraphs'])
+            assert len(v) == len(values["paragraphs"])
         return v
 
 
@@ -54,7 +55,7 @@ class SearchLogData(BaseModel):
 
 
 class SearchLogType(str, Enum):
-    query = 'query'
-    collapsed = 'collapsed'
-    expanded = 'expanded'
-    clicked = 'clicked'
+    query = "query"
+    collapsed = "collapsed"
+    expanded = "expanded"
+    clicked = "clicked"

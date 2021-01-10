@@ -1,6 +1,7 @@
 {
   "title": "Cydex",
   "description": "A neural search engine for research literature",
+  "favicon": "acl.ico",
   "searchPlaceholder": "something in the ACL anthology...",
   "searchExamples": [
     "When should transformers be used?",

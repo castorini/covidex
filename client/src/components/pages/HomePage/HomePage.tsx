@@ -40,8 +40,8 @@ const getSearchFilters = (searchResults: SearchArticle[] | null): SearchFilters 
             max = Math.max(year, max);
           }
         });
-        // Hack to get around slider with only 1 possible value
-        filterValues[filter] = min === max ? [min - 0.001, min + 0.001] : [min, max];
+        //  Show monthly granularity if only 1 year range
+        filterValues[filter] = min === max ? [min * 100 + 1, min * 100 + 12] : [min, max];
       }
     } else if (filterSchema[filter].type === 'selection') {
       filterValues[filter] = new Set([]);
@@ -73,8 +73,12 @@ const filterArticle = (selectedFilters: any, article: SearchArticle): Boolean =>
     if (filterSchema[field].type === 'year_slider') {
       includeArticle =
         includeArticle &&
-        Number(val.substr(0, 4)) >= selectedFilters[field][0] &&
-        Number(val.substr(0, 4)) <= selectedFilters[field][1];
+        (!val ||
+          (article.publish_time.length >= 7 &&
+            Number(val.substr(0, 7).replace('-', '')) >= selectedFilters[field][0] &&
+            Number(val.substr(0, 7).replace('-', '')) <= selectedFilters[field][1]) ||
+          (Number(val.substr(0, 4)) >= selectedFilters[field][0] &&
+            Number(val.substr(0, 4)) <= selectedFilters[field][1]));
     } else if (filterSchema[field].type === 'selection') {
       if (typeof val === 'string' || val instanceof String) {
         includeArticle =

@@ -6,6 +6,7 @@ import GithubImg from '../../img/github.png';
 
 import { TABLET_BREAKPOINT, HOME_ROUTE } from '../../shared/Constants';
 import { PageContent, Heading1, Link } from '../../shared/Styles';
+import Configuration, { METADATA } from '../../Configuration';
 
 const Navbar = ({ history }: RouteComponentProps) => {
   return (
@@ -13,7 +14,7 @@ const Navbar = ({ history }: RouteComponentProps) => {
       <PageContent>
         <Row>
           <NavbarLogo tabIndex={0} onClick={() => history.push(HOME_ROUTE)}>
-            Covidex
+            {Configuration[METADATA]['title']}
           </NavbarLogo>
           <NavbarLinks>
             <Link
