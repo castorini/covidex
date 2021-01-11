@@ -21,9 +21,9 @@ const SelectionFilter: React.FC<SelectionFilterProps> = ({
   const [numberDisplayed, setNumberDisplayed] = useState<number>(maxDisplayed);
   const [optionQuery, setOptionQuery] = useState<string>('');
 
-  const notSelected = options
-    .filter((option) => !selectedOptions.has(option) && option !== '')
-    .sort();
+  const notSelected = options.length > 0
+    ? options.filter((option) => !selectedOptions.has(option) && option !== '').sort()
+    : [];
   const sortedOptions: string[] = [...Array.from(selectedOptions).sort(), ...notSelected];
   const filteredOptions = sortedOptions.filter(
     (option) => optionQuery === '' || option.toLowerCase().includes(optionQuery.toLowerCase()),

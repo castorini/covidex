@@ -8,30 +8,12 @@ import Select from 'react-select';
 import Theme from '../../../shared/Theme';
 import {
   HOME_ROUTE,
-  SEARCH_VERTICAL_OPTIONS,
   SearchVerticalOption,
   LARGE_MOBILE_BREAKPOINT,
 } from '../../../shared/Constants';
 import { BoxShadow } from '../../../shared/Styles';
 import Keycodes from '../../../shared/Keycodes';
-
-const CORD_EXAMPLES = [
-  'What is the incubation period of COVID-19?',
-  'What is the effectiveness of chloroquine for COVID-19?',
-  'What is the duration of viral shedding for COVID-19?',
-  'How does COVID-19 bind to the ACE2 receptor?',
-  'How do weather conditions affect the transmission of COVID-19?',
-  'Tell me about IgG and IgM tests for COVID-19.',
-  'What is the prognostic value of IL-6 levels in COVID-19?',
-];
-
-const TRIALSTREAMER_EXAMPLES = [
-  'chloroquine',
-  'lopinavir',
-  'remdesivir',
-  'abidol hydrochloride',
-  'methylprednisolone',
-];
+import Configuration, { METADATA } from '../../../Configuration';
 
 interface SearchBarProps extends RouteComponentProps {
   query: string;
@@ -44,17 +26,11 @@ const SearchBar = ({ query, vertical, setQuery, setVertical, history }: SearchBa
   const [typeaheadIndex, setTypeaheadIndex] = useState<number>(-1);
   const [inputFocused, setInputFocused] = useState<boolean>(false);
 
-  let examples: Array<string>;
-  if (vertical.value === 'cord19') {
-    examples = CORD_EXAMPLES;
-  } else {
-    examples = TRIALSTREAMER_EXAMPLES;
-  }
+  const examples: Array<string> = Configuration[METADATA]['searchExamples'];
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => setQuery(event.target.value);
 
-  const submitQuery = (q: string = query, v: string = vertical.value) =>
-    history.push(`${HOME_ROUTE}?query=${encodeURI(q)}&vertical=${v}`);
+  const submitQuery = (q: string = query) => history.push(`${HOME_ROUTE}?query=${encodeURI(q)}`);
 
   const handleUserKeyPress = useCallback(
     (event: KeyboardEvent) => {
@@ -93,7 +69,12 @@ const SearchBar = ({ query, vertical, setQuery, setVertical, history }: SearchBa
           styles={dropdownStyles}
           className="dropdown"
           width="200px"
-          options={SEARCH_VERTICAL_OPTIONS}
+          options={[
+            {
+              value: 'dataset',
+              label: Configuration[METADATA]['dataset'],
+            },
+          ]}
           isSearchable={false}
           value={vertical}
           onChange={(value: SearchVerticalOption) => setVertical(value)}
@@ -103,7 +84,7 @@ const SearchBar = ({ query, vertical, setQuery, setVertical, history }: SearchBa
       <Section>
         <SearchInputWrapper>
           <SearchBarInput
-            placeholder="something about COVID-19..."
+            placeholder={Configuration[METADATA]['searchPlaceholder']}
             value={query}
             onChange={handleInput}
             onSubmit={() => submitQuery()}

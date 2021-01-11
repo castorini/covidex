@@ -1,0 +1,29 @@
+{
+  "title": "Cydex",
+  "description": "A neural search engine for research literature",
+  "favicon": "acl.ico",
+  "dataset": "ACL Anthology",
+  "searchPlaceholder": "something in the ACL anthology...",
+  "searchExamples": [
+    "When should transformers be used?",
+    "What are biomedical applications of BERT?"
+  ],
+  "filters": {
+    "year": {
+      "type": "year_slider",
+      "displayText": "Year"
+    },
+    "authors": {
+      "type": "selection",
+      "displayText": "Authors"
+    },
+    "venues": {
+      "type": "selection",
+      "displayText": "Venues"
+    },
+    "sigs": {
+      "type": "selection",
+      "displayText": "SIGs"
+    }
+  }
+}

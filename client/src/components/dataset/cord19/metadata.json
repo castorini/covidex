@@ -1,0 +1,34 @@
+{
+  "title": "Covidex",
+  "description": "A neural search engine for the COVID-19 Open Research Dataset (CORD-19)",
+  "favicon": "cord19.ico",
+  "dataset": "CORD-19",
+  "searchPlaceholder": "something about COVID-19...",
+  "searchExamples": [
+    "What is the incubation period of COVID-19?",
+    "What is the effectiveness of chloroquine for COVID-19?",
+    "What is the duration of viral shedding for COVID-19?",
+    "How does COVID-19 bind to the ACE2 receptor?",
+    "How do weather conditions affect the transmission of COVID-19?",
+    "Tell me about IgG and IgM tests for COVID-19.",
+    "What is the prognostic value of IL-6 levels in COVID-19?"
+  ],
+  "filters": {
+    "publish_time": {
+      "type": "year_slider",
+      "displayText": "Publish Time"
+    },
+    "authors": {
+      "type": "selection",
+      "displayText": "Authors"
+    },
+    "source_x": {
+      "type": "selection",
+      "displayText": "Source"
+    },
+    "journal": {
+      "type": "selection",
+      "displayText": "Journal"
+    }
+  }
+}

@@ -10,13 +10,14 @@ class Settings(BaseSettings):
     log_path: str = 'logs/'
 
     # Related searcher settings
+    related_search: bool = True
     related_bin_path: str = "index/cord19-hnsw-index/cord19-hnsw.bin"
     related_index_to_uid_path: str = "index/cord19-hnsw-index/cord19-hnsw.txt"
     related_specter_csv_path: str = "index/cord19-hnsw-index/specter.csv"
 
     # Anserini searcher settings
-    cord19_index_path: str = 'index/lucene-index-cord19-paragraph'
-    trialstreamer_index_path: str = 'index/lucene-index-trialstreamer'
+    index_path: str = 'index/lucene-index-cord19-paragraph'
+    schema_path: str = 'schema/cord19.json'
     max_docs: int = 96
     bm25_k1: float = 0.4
     bm25_b: float = 0.9
@@ -26,6 +27,7 @@ class Settings(BaseSettings):
     rm3_original_query_weight: float = 0.5
 
     # T5 model settings
+    neural_ranking: bool = True
     t5_model_dir: str = 'gs://neuralresearcher_data/covid/data/model_exp304'
     t5_batch_size: int = 96
     t5_max_length: int = 256
@@ -39,6 +41,7 @@ class Settings(BaseSettings):
 
     # Paragraph highlighting
     highlight = True
+    highlight_model: str = 'monologg/biobert_v1.1_pubmed'
     highlight_max_paragraphs: int = 30
     highlight_device: str = 'cuda:1'
 

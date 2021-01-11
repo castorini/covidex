@@ -1,7 +1,5 @@
-import io
-
 import pkg_resources
-from fastapi import Depends, FastAPI
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -17,21 +15,31 @@ app = FastAPI()
 
 # Set global state for reusable services
 if not settings.testing:
-    app.state.highlighter = Highlighter()
-    app.state.ranker = Ranker()
-    app.state.related_searcher = RelatedSearcher()
+    if settings.highlight:
+        app.state.highlighter = Highlighter()
+
+    if settings.neural_ranking:
+        app.state.ranker = Ranker()
+
+    if settings.related_search:
+        app.state.related_searcher = RelatedSearcher()
+
     app.state.searcher = Searcher()
 
-# Disable CORS in development mode
+# Disable CORS in development mode to interact with frontend locally
 if settings.development:
-    app.add_middleware(CORSMiddleware,
-                       allow_origin_regex="http://localhost:*",
-                       allow_credentials=True,
-                       allow_headers=['*'])
+    origins = ["http://localhost:3000", "http://localhost"]
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
 # API endpoints
-app.include_router(search.router, tags=['search'], prefix="/api")
-app.include_router(related.router, tags=['related'], prefix="/api")
+app.include_router(search.router, tags=["search"], prefix="/api")
+app.include_router(related.router, tags=["related"], prefix="/api")
 
 
 @app.get("/api/status", status_code=200)
@@ -46,27 +54,38 @@ def invalid_api():
 
 # Serve static files and client build if not running in development mode
 if not settings.development:
-    app.mount("/static",
-              StaticFiles(directory=pkg_resources.resource_filename(
-                  __name__, 'static')),
-              name="static")
+    app.mount(
+        "/static",
+        StaticFiles(directory=pkg_resources.resource_filename(__name__, "static")),
+        name="static",
+    )
 
     @app.get("/manifest.json", include_in_schema=False)
     def manifest():
-        return FileResponse(pkg_resources.resource_filename(__name__, 'static/manifest.json'))
+        return FileResponse(
+            pkg_resources.resource_filename(__name__, "static/manifest.json")
+        )
 
     @app.get("/favicon.ico", include_in_schema=False)
     def favicon():
-        return FileResponse(pkg_resources.resource_filename(__name__, 'static/favicon.ico'))
+        return FileResponse(
+            pkg_resources.resource_filename(__name__, "static/favicon.ico")
+        )
 
     @app.get("/logo192.png", include_in_schema=False)
     def favicon():
-        return FileResponse(pkg_resources.resource_filename(__name__, 'static/logo192.png'))
+        return FileResponse(
+            pkg_resources.resource_filename(__name__, "static/logo192.png")
+        )
 
     @app.get("/logo512.png", include_in_schema=False)
     def favicon():
-        return FileResponse(pkg_resources.resource_filename(__name__, 'static/logo512.png'))
+        return FileResponse(
+            pkg_resources.resource_filename(__name__, "static/logo512.png")
+        )
 
     @app.get("/.*", include_in_schema=False)
     def root():
-        return HTMLResponse(pkg_resources.resource_string(__name__, 'static/index.html'))
+        return HTMLResponse(
+            pkg_resources.resource_string(__name__, "static/index.html")
+        )

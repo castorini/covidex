@@ -56,6 +56,16 @@ export const Link = styled.a`
   ${LinkStyle}
 `;
 
+export const Paragraph = styled.div`
+  ${Body}
+  margin-bottom: 24px;
+`;
+
+export const Bold = styled.span`
+  ${Body}
+  font-weight: 600;
+`;
+
 export const PageWrapper = styled.div`
   height: 100%;
   width: 100%;

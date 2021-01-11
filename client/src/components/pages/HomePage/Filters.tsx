@@ -1,14 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
+
 import RangeSlider from '../../common/RangeSlider';
 import { Heading2, Body } from '../../../shared/Styles';
 import SelectionFilter from '../../common/SelectionFilter';
-import { SearchFilters, SelectedSearchFilters } from '../../../shared/Models';
+import { SearchFilters } from '../../../shared/Models';
+import Configuration, { METADATA } from '../../../Configuration';
 
 interface FiltersProps {
   filters: SearchFilters;
-  selectedFilters: SelectedSearchFilters;
-  setSelectedFilters: (value: SelectedSearchFilters) => void;
+  selectedFilters: SearchFilters;
+  setSelectedFilters: (value: SearchFilters) => void;
 }
 
 const updateSelectionFilter = (selectedFilter: Set<string>, value: string): Set<string> => {
@@ -22,71 +24,51 @@ const updateSelectionFilter = (selectedFilter: Set<string>, value: string): Set<
 };
 
 const Filters: React.FC<FiltersProps> = ({ filters, selectedFilters, setSelectedFilters }) => {
+  const fields = Object.keys(filters);
+  const filterSchema = Configuration[METADATA]['filters'];
+
   return (
     <FiltersWrapper>
       <FilterTitle>Filter your search</FilterTitle>
-      {filters.yearMinMax[0] < filters.yearMinMax[1] && (
-        <FilterComponent>
-          <FilterSubtitle>Publication Time</FilterSubtitle>
-          <RangeSlider
-            min={filters.yearMinMax[0]}
-            max={filters.yearMinMax[1]}
-            values={selectedFilters.yearRange}
-            setValues={(values) =>
-              setSelectedFilters({
-                ...selectedFilters,
-                yearRange: values,
-              })
-            }
-          />
-        </FilterComponent>
-      )}
-      {filters.sources.length > 0 && (
-        <FilterComponent>
-          <FilterSubtitle>Source</FilterSubtitle>
-          <SelectionFilter
-            options={filters.sources}
-            selectedOptions={selectedFilters.sources}
-            maxDisplayed={10}
-            setSelectedOptions={(source) => {
-              setSelectedFilters({
-                ...selectedFilters,
-                sources: updateSelectionFilter(selectedFilters.sources, source),
-              });
-            }}
-          />
-        </FilterComponent>
-      )}
-      {filters.authors.length > 0 && (
-        <FilterComponent>
-          <FilterSubtitle>Author</FilterSubtitle>
-          <SelectionFilter
-            options={filters.authors}
-            selectedOptions={selectedFilters.authors}
-            setSelectedOptions={(author) => {
-              setSelectedFilters({
-                ...selectedFilters,
-                authors: updateSelectionFilter(selectedFilters.authors, author),
-              });
-            }}
-          />
-        </FilterComponent>
-      )}
-      {filters.journals.length > 0 && (
-        <FilterComponent>
-          <FilterSubtitle>Journal</FilterSubtitle>
-          <SelectionFilter
-            options={filters.journals}
-            selectedOptions={selectedFilters.journals}
-            setSelectedOptions={(journal) => {
-              setSelectedFilters({
-                ...selectedFilters,
-                journals: updateSelectionFilter(selectedFilters.journals, journal),
-              });
-            }}
-          />
-        </FilterComponent>
-      )}
+      {/* eslint-disable-next-line */}
+      {fields.map((filter, i) => {
+        if (filters[filter]) {
+          if (filterSchema[filter].type === 'year_slider') {
+            return (
+              <FilterComponent key={i}>
+                <FilterSubtitle>{filterSchema[filter].displayText}</FilterSubtitle>
+                <RangeSlider
+                  min={filters[filter][0]}
+                  max={filters[filter][1]}
+                  values={selectedFilters[filter]}
+                  setValues={(values) => {
+                    selectedFilters[filter] = values;
+                    setSelectedFilters({
+                      ...selectedFilters,
+                    });
+                  }}
+                />
+              </FilterComponent>
+            );
+          } else if (filterSchema[filter].type === 'selection') {
+            return (
+              <FilterComponent key={i}>
+                <FilterSubtitle>{filterSchema[filter].displayText}</FilterSubtitle>
+                <SelectionFilter
+                  options={filters[filter]}
+                  selectedOptions={selectedFilters[filter]}
+                  setSelectedOptions={(value) => {
+                    selectedFilters[filter] = updateSelectionFilter(selectedFilters[filter], value);
+                    setSelectedFilters({
+                      ...selectedFilters,
+                    });
+                  }}
+                />
+              </FilterComponent>
+            );
+          }
+        }
+      })}
     </FiltersWrapper>
   );
 };

@@ -1,33 +1,35 @@
+import json
+from enum import Enum
 from typing import List
 
-from pydantic import BaseModel
+from pydantic import BaseModel, create_model
 from pydantic.class_validators import validator
-from enum import Enum
 
+from app.settings import settings
 
-class BaseArticle(BaseModel):
-    id: str
-    abstract: str = None
-    authors: List[str] = []
-    journal: str = None
-    publish_time: str = None
-    title: str
-    source: List[str] = []
-    url: str
+# Dynamically create model class from schema
+if not settings.testing:
+    schema = json.load(open(settings.schema_path))
+    schema_dict = {
+        key: (eval(schema[key]["type"]), eval(schema[key]["default"])) for key in schema
+    }
+else:
+    schema_dict = {}
+
+BaseArticle = create_model("BaseArticle", **schema_dict)
 
 
 class SearchArticle(BaseArticle):
     score: float
     paragraphs: List[str] = []
-    paragraphs: List[str] = []
     highlights: List[List[tuple]] = []
     highlighted_abstract: bool = False
     has_related_articles: bool = False
 
-    @validator('highlights')
+    @validator("highlights")
     def validate_highlights(cls, v, values):
         if v:
-            assert len(v) == len(values['paragraphs'])
+            assert len(v) == len(values["paragraphs"])
         return v
 
 
@@ -52,12 +54,7 @@ class SearchLogData(BaseModel):
 
 
 class SearchLogType(str, Enum):
-    query = 'query'
-    collapsed = 'collapsed'
-    expanded = 'expanded'
-    clicked = 'clicked'
-
-
-class SearchVertical(str, Enum):
-    cord19 = 'cord19'
-    trialstreamer = 'trialstreamer'
+    query = "query"
+    collapsed = "collapsed"
+    expanded = "expanded"
+    clicked = "clicked"

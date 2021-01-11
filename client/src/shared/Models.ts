@@ -1,12 +1,5 @@
 export interface BaseArticle {
-  id: string;
-  abstract: string;
-  authors: Array<string>;
-  journal: string;
-  publish_time: string;
-  source: Array<string>;
-  title: string;
-  url: string;
+  [key: string]: any;
 }
 
 export interface SearchArticle extends BaseArticle {
@@ -22,15 +15,5 @@ export interface RelatedArticle extends BaseArticle {
 }
 
 export interface SearchFilters {
-  yearMinMax: number[];
-  authors: string[];
-  journals: string[];
-  sources: string[];
-}
-
-export interface SelectedSearchFilters {
-  yearRange: number[];
-  authors: Set<string>;
-  journals: Set<string>;
-  sources: Set<string>;
+  [key: string]: any;
 }
