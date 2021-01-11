@@ -31,7 +31,7 @@ def populate_article(doc, article_fields, lucene_schema):
     for field in lucene_schema:
         if lucene_schema[field]["fieldSize"] == "single":
             if field == "url":
-                article_fields[field] = get_doc_url(field)
+                article_fields[field] = get_doc_url(doc)
             else:
                 article_fields[field] = doc.get(field)
         else:

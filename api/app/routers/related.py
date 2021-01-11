@@ -49,7 +49,7 @@ async def get_related(
         hit = searcher.doc(uid)
         if hit.lucene_document() is None:
             continue
-        result = build_related_result(hit, uid, dist)
+        result = build_related_result(hit, dist)
         related_results.append(result)
 
     # Generate UUID for query.
@@ -87,7 +87,7 @@ async def post_clicked(data: SearchLogData):
     )
 
 
-def build_related_result(hit, id: str, dist: float):
+def build_related_result(hit, dist: float):
     doc = hit.lucene_document()
     lucene_schema = json.load(open(settings.schema_path))
     article_fields = { "distance": dist }
