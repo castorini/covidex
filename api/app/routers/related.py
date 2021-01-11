@@ -3,17 +3,12 @@ from datetime import datetime
 from typing import List
 from uuid import uuid4
 
-from fastapi import APIRouter, HTTPException, Request
-
-from app.models import (
-    RelatedArticle,
-    RelatedQueryResponse,
-    SearchLogData,
-    SearchLogType,
-)
+from app.models import (RelatedArticle, RelatedQueryResponse, SearchLogData,
+                        SearchLogType)
 from app.settings import settings
 from app.util.logging import build_timed_logger
-from app.util.request import get_doc_url, get_multivalued_field, get_request_ip
+from app.util.request import get_request_ip, populate_article
+from fastapi import APIRouter, HTTPException, Request
 
 router = APIRouter()
 related_logger = build_timed_logger("related_logger", "related.log")
@@ -94,14 +89,7 @@ async def post_clicked(data: SearchLogData):
 
 def build_related_result(hit, id: str, dist: float):
     doc = hit.lucene_document()
-    return RelatedArticle(
-        id=id,
-        abstract=doc.get("abstract"),
-        authors=get_multivalued_field(doc, "authors"),
-        distance=dist,
-        journal=doc.get("journal"),
-        publish_time=doc.get("publish_time"),
-        source=get_multivalued_field(doc, "source_x"),
-        title=doc.get("title"),
-        url=get_doc_url(doc),
-    )
+    lucene_schema = json.load(open(settings.schema_path))
+    article_fields = { "distance": dist }
+    article_fields = populate_article(doc, article_fields, lucene_schema)
+    return RelatedArticle(**article_fields)

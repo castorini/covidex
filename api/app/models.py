@@ -22,7 +22,6 @@ BaseArticle = create_model("BaseArticle", **schema_dict)
 class SearchArticle(BaseArticle):
     score: float
     paragraphs: List[str] = []
-    paragraphs: List[str] = []
     highlights: List[List[tuple]] = []
     highlighted_abstract: bool = False
     has_related_articles: bool = False

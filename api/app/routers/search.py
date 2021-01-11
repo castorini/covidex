@@ -6,17 +6,11 @@ from typing import List
 from uuid import uuid4
 
 import dateparser
-from fastapi import APIRouter, Request
-
-from app.models import (
-    SearchArticle,
-    SearchLogData,
-    SearchLogType,
-    SearchQueryResponse,
-)
+from app.models import SearchArticle, SearchLogData, SearchLogType, SearchQueryResponse
 from app.settings import settings
 from app.util.logging import build_timed_logger
-from app.util.request import get_doc_url, get_multivalued_field, get_request_ip
+from app.util.request import get_request_ip, populate_article
+from fastapi import APIRouter, Request
 
 router = APIRouter()
 search_logger = build_timed_logger("search_logger", "search.log")
@@ -175,21 +169,12 @@ def build_article(
     hit, score: float, paragraphs: List[str], highlighted_abstract: bool,
 ):
     doc = hit.lucene_document
-
-    # Build article dynamically using provided JSON schema
     lucene_schema = json.load(open(settings.schema_path))
-    input_dict = {
+    article_fields = {
         "score": score,
         "paragraphs": paragraphs,
         "highlighted_abstract": highlighted_abstract,
         "has_related_articles": settings.related_search,
     }
-
-    # Add Lucene fields
-    for field in lucene_schema:
-        if lucene_schema[field]["fieldSize"] == "single":
-            input_dict[field] = doc.get(field)
-        else:
-            input_dict[field] = get_multivalued_field(doc, field)
-
-    return SearchArticle(**input_dict)
+    article_fields = populate_article(doc, article_fields, lucene_schema)
+    return SearchArticle(**article_fields)
