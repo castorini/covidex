@@ -1,4 +1,4 @@
-export default {
+const Theme = {
   primary: '#1857b6',
   secondary: '#0f3875',
   yellow: '#F4D35E',
@@ -18,3 +18,5 @@ export default {
     singleColumn: 720,
   },
 };
+
+export default Theme;
