@@ -7,7 +7,7 @@ export interface SearchResultProps {
   queryTokens: Array<string>;
 }
 
-export interface ArticleResultProps {
+export interface ArticleInfoProps {
   article: BaseArticle;
   position?: number;
   onClickTitle?: () => void;

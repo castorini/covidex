@@ -20,9 +20,9 @@ import { API_BASE, RELATED_ENDPOINT, HOME_ROUTE } from '../../../shared/Constant
 import Loading from '../../common/Loading';
 import RelatedResult from './RelatedResult';
 import { parseAbstract } from '../../../shared/Util';
-import Configuration, { ARTICLE_RESULT } from '../../../Configuration';
+import Configuration, { ARTICLE_INFO } from '../../../Configuration';
 
-const ArticleResult = Configuration[ARTICLE_RESULT];
+const ArticleInfo = Configuration[ARTICLE_INFO];
 
 const NotFoundComponent = () => <NotFound>Article not found</NotFound>;
 
@@ -123,7 +123,7 @@ const RelatedPage = () => {
                 {TitleRow}
                 <OriginalArticle>
                   <SmallTitle>Showing articles related to:</SmallTitle>
-                  <ArticleResult article={originalArticle} boldTitle />
+                  <ArticleInfo article={originalArticle} boldTitle />
                   {originalArticle.abstract && (
                     <>
                       <AbstractTitle className="hideCollapsed">Abstract</AbstractTitle>

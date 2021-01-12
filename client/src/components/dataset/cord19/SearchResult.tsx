@@ -13,7 +13,7 @@ import {
   RELATED_ROUTE,
 } from '../../../shared/Constants';
 import { makePOSTRequest, parseAbstract } from '../../../shared/Util';
-import ArticleResult from './ArticleResult';
+import ArticleInfo from './ArticleInfo';
 import { SearchResultProps } from '../../common/BaseSearchResult';
 
 const highlightText = (
@@ -113,7 +113,7 @@ const SearchResult = ({ article, position, queryId, queryTokens }: SearchResultP
 
   return (
     <SearchResultWrapper>
-      <ArticleResult
+      <ArticleInfo
         article={article}
         position={position}
         onClickTitle={() =>

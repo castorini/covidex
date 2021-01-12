@@ -4,15 +4,15 @@
 // Modify this value to load components for another dataset
 const DATASET = 'cord19';
 
-export const ARTICLE_RESULT = 'ArticleResult';
+export const ARTICLE_INFO = 'ArticleInfo';
 export const SEARCH_RESULT = 'SearchResult';
 export const HOME_TEXT = 'HomeText';
 export const METADATA = 'Metadata';
 
 const config = [
   {
-    name: ARTICLE_RESULT,
-    path: `./components/dataset/${DATASET}/ArticleResult`,
+    name: ARTICLE_INFO,
+    path: `./components/dataset/${DATASET}/ArticleInfo`,
   },
   {
     name: SEARCH_RESULT,
