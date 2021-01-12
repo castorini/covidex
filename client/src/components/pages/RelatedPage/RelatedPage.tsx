@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouteMatch } from 'react-router';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
-import ErrorBoundary from 'react-error-boundary';
+import { ErrorBoundary } from 'react-error-boundary';
 import InfiniteScroll from 'react-infinite-scroller';
 import { FileText, ArrowLeft } from 'react-feather';
 
