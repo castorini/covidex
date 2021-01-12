@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouteMatch } from 'react-router';
 import { Link as RouterLink } from 'react-router-dom';
 import styled from 'styled-components';
-import ErrorBoundary from 'react-error-boundary';
+import { ErrorBoundary } from 'react-error-boundary';
 import InfiniteScroll from 'react-infinite-scroller';
 import { FileText, ArrowLeft } from 'react-feather';
 
@@ -20,9 +20,9 @@ import { API_BASE, RELATED_ENDPOINT, HOME_ROUTE } from '../../../shared/Constant
 import Loading from '../../common/Loading';
 import RelatedResult from './RelatedResult';
 import { parseAbstract } from '../../../shared/Util';
-import Configuration, { ARTICLE_RESULT } from '../../../Configuration';
+import Configuration, { ARTICLE_INFO } from '../../../Configuration';
 
-const ArticleResult = Configuration[ARTICLE_RESULT];
+const ArticleInfo = Configuration[ARTICLE_INFO];
 
 const NotFoundComponent = () => <NotFound>Article not found</NotFound>;
 
@@ -123,7 +123,7 @@ const RelatedPage = () => {
                 {TitleRow}
                 <OriginalArticle>
                   <SmallTitle>Showing articles related to:</SmallTitle>
-                  <ArticleResult article={originalArticle} boldTitle />
+                  <ArticleInfo article={originalArticle} boldTitle />
                   {originalArticle.abstract && (
                     <>
                       <AbstractTitle className="hideCollapsed">Abstract</AbstractTitle>

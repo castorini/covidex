@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useLocation } from 'react-router';
-import ErrorBoundary from 'react-error-boundary';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import { PageWrapper, PageContent, Heading2 } from '../../../shared/Styles';
 import Loading from '../../common/Loading';

@@ -6,7 +6,7 @@ import { BodySmall } from '../../../shared/Styles';
 import { API_BASE, SEARCH_CLICKED_ENDPOINT } from '../../../shared/Constants';
 import { makePOSTRequest, parseAbstract } from '../../../shared/Util';
 import { SearchResultProps } from '../../common/BaseSearchResult';
-import ArticleResult from './ArticleResult';
+import ArticleInfo from './ArticleInfo';
 
 const SearchResult = ({ article, position, queryId, queryTokens }: SearchResultProps) => {
   const fullTextRef = useRef(null);
@@ -16,7 +16,7 @@ const SearchResult = ({ article, position, queryId, queryTokens }: SearchResultP
 
   return (
     <SearchResultWrapper>
-      <ArticleResult
+      <ArticleInfo
         article={article}
         position={position}
         onClickTitle={() =>

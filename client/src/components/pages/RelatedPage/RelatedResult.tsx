@@ -7,9 +7,9 @@ import { RelatedArticle } from '../../../shared/Models';
 import { BodySmall, LinkStyle } from '../../../shared/Styles';
 import { parseAbstract, makePOSTRequest } from '../../../shared/Util';
 import { RELATED_ROUTE, API_BASE, RELATED_CLICKED_ENDPOINT } from '../../../shared/Constants';
-import Configuration, { ARTICLE_RESULT } from '../../../Configuration';
+import Configuration, { ARTICLE_INFO } from '../../../Configuration';
 
-const ArticleResult = Configuration[ARTICLE_RESULT];
+const ArticleInfo = Configuration[ARTICLE_INFO];
 
 interface RelatedResultProps {
   article: RelatedArticle;
@@ -22,7 +22,7 @@ const RelatedResult: React.FC<RelatedResultProps> = ({ article, position, queryI
 
   return (
     <RelatedResultWrapper>
-      <ArticleResult
+      <ArticleInfo
         article={article}
         position={position}
         onClickTitle={() =>

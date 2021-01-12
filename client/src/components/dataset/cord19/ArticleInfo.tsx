@@ -2,9 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Heading3, Link } from '../../../shared/Styles';
-import { ArticleResultProps } from '../../common/BaseSearchResult';
+import { ArticleInfoProps } from '../../common/BaseSearchResult';
 
-const ArticleResult: React.FC<ArticleResultProps> = ({
+
+const ArticleInfo: React.FC<ArticleInfoProps> = ({
   article,
   position,
   onClickTitle = () => {},
@@ -19,13 +20,21 @@ const ArticleResult: React.FC<ArticleResultProps> = ({
     });
   }
 
-  // generating the venue
-  let venues = '';
-  if (article.venues.length > 0) {
-    article.venues.forEach((venue: string, idx: number) => {
-      venues += idx === article.venues.length - 1 ? `${venue}.` : `${venue}, `;
-    });
-  }
+  const transformPreprintSource = (source: string) => {
+    if (source === 'arxiv') {
+      return source.replace('x', 'X');
+    } else {
+      return source.replace('r', 'R');
+    }
+  };
+
+  // Indicate if arXiv, medRxiv, or bioRxiv is the source
+  let source = '';
+  article.source_x.forEach((s: string) => {
+    if (['arxiv', 'medrxiv', 'biorxiv'].includes(s.trim().toLowerCase())) {
+      source += transformPreprintSource(s.trim().toLowerCase());
+    }
+  });
 
   return (
     <>
@@ -41,33 +50,33 @@ const ArticleResult: React.FC<ArticleResultProps> = ({
       </Title>
       <Subtitle>
         {authorString && <Authors>{authorString}</Authors>}
-        {venues && <Journal>{venues}</Journal>}
-        {article.sigs && <Journal>{article.sigs}</Journal>}
-        {article.year && <PublishTime>({article.year})</PublishTime>}
+        {article.journal && <Journal>{article.journal}</Journal>}
+        {source && <Journal>{source}</Journal>}
+        {article.publish_time && <PublishTime>({article.publish_time})</PublishTime>}
       </Subtitle>
     </>
   );
 };
 
-export default ArticleResult;
+export default ArticleInfo;
 
-const Title = styled.div<{ bold?: boolean }>`
+export const Title = styled.div<{ bold?: boolean }>`
   ${Heading3}
   margin-bottom: 16px;
   font-weight: ${({ bold }) => (bold ? 700 : 400)};
 `;
 
-const Subtitle = styled.div`
+export const Subtitle = styled.div`
   font-size: 16px;
   margin-bottom: 16px;
   color: ${({ theme }) => theme.black};
 `;
 
-const Authors = styled.span`
+export const Authors = styled.span`
   margin-right: 4px;
 `;
 
-const Journal = styled.span`
+export const Journal = styled.span`
   font-style: italic;
   margin-right: 4px;
 `;
