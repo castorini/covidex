@@ -9,12 +9,12 @@ export DEVELOPMENT=False
 
 # kill running servers
 echo "Stopping existing servers..."
-pkill -9 uvicorn
+pkill -9 python
 sleep 10 # Buffer to make sure servers stop
 
 echo "Starting server..."
 PORT=${PORT:-8000}
-nohup uvicorn app.main:app --port=$PORT --host 0.0.0.0 &
+nohup python -m uvicorn app.main:app --port=$PORT --host 0.0.0.0 &
 
 echo "Waiting for server availability..."
 status_code=$(curl --write-out %{http_code} --silent --output /dev/null http://localhost:$PORT/api/status)
