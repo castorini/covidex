@@ -94,6 +94,23 @@ _Optional:_ set the environment variable `PORT` to use a different port:
 PORT=8080 sh scripts/deploy-prod.sh
 ```
 
+Route port 80 to 8000 (or whatever port we deploy to). By default, the deployment
+script will use 8000.
+
+```
+sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8000
+```
+
+If we're having trouble accessing the service, check that there aren't any conflicting
+rules:
+```
+sudo iptables -t nat -L -n -v
+```
+If there are conflicting rules, we should delete them:
+```
+sudo iptables -t nat -D PREROUTING -p tcp --dport 80 -j REDIRECT --to-port UNWANTED_PORT
+```
+
 Log files are available under `api/logs`. New files are created daily based on UTC time. All filenames have the date appended, except for the current one, which will be named `search.log` or `related.log`.
 
 ## Testing
