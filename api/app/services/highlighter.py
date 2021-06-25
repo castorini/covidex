@@ -22,7 +22,7 @@ class Highlighter:
 
         print("Loading sentence tokenizer...")
         self.nlp = spacy.blank("en")
-        self.nlp.add_pipe(self.nlp.create_pipe("sentencizer"))
+        self.nlp.add_pipe("sentencizer")
 
         self.highlight_token = "[HIGHLIGHT]"
         self.max_paragraph_length = 10000
@@ -43,7 +43,8 @@ class Highlighter:
                 text_ids_ = torch.cat([text_ids_, text_ids[-1].unsqueeze(0)])
 
             with torch.no_grad():
-                state, _ = self.model(text_ids_.unsqueeze(0))
+                state = self.model(text_ids_.unsqueeze(0))
+                state=state[0]
                 state = state[0, 1:-1, :]
             states.append(state)
         state = torch.cat(states, axis=0)
@@ -135,7 +136,7 @@ class Highlighter:
         tagged_paragraph = self.adjust_highlights(original_paragraph, tagged_paragraph)
 
         tagged_sentences = [
-            sent.string.strip()
+            sent.text.strip()
             for sent in self.nlp(tagged_paragraph[: self.max_paragraph_length]).sents
         ]
 
