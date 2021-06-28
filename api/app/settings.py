@@ -28,16 +28,11 @@ class Settings(BaseSettings):
 
     # T5 model settings
     neural_ranking: bool = True
-    t5_model_dir: str = 'gs://neuralresearcher_data/covid/data/model_exp304'
+    t5_pretrained_model: str = 'castorini/monot5-base-msmarco-10k'
     t5_batch_size: int = 96
     t5_max_length: int = 256
     t5_device: str = 'cuda:0'
     t5_model_type: str = 't5-base'
-
-    # Cache settings
-    cache_dir: Path = Path(
-        os.getenv('XDG_CACHE_HOME', str(Path.home() / '.cache'))) / 'covidex'
-    flush_cache: bool = False
 
     # Paragraph highlighting
     highlight = True

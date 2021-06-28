@@ -30,7 +30,7 @@ async def get_search(request: Request, query: str):
 
     # Get predictions from T5.
     if settings.neural_ranking:
-        t5_scores = request.app.state.ranker.rerank(query, paragraphs)
+        t5_scores = request.app.state.ranker.rescore(query, paragraphs)
         # Sort results by T5 scores.
         results = list(zip(searcher_hits, t5_scores))
         results.sort(key=lambda x: x[1], reverse=True)
