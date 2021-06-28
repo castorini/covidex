@@ -1,7 +1,6 @@
 from typing import List
-
 import torch
-from pygaggle.model import CachedT5ModelLoader, T5BatchTokenizer
+from pygaggle.model import T5BatchTokenizer
 from pygaggle.rerank.base import Query, Text
 from pygaggle.rerank.transformer import MonoT5
 from transformers import T5Tokenizer
