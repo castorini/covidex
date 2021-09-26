@@ -1,15 +1,12 @@
-export interface BaseArticle {
-  id: string;
-  abstract: string;
-  authors: Array<string>;
-  journal: string;
-  publish_time: string;
-  source: Array<string>;
-  title: string;
-  url: string;
+export interface BaseCord19Article {
+  [key: string]: any;
 }
 
-export interface SearchArticle extends BaseArticle {
+export interface BaseAclArticle {
+  [key: string]: any;
+}
+
+export interface AclSearchArticle extends BaseAclArticle {
   highlights: Array<Array<[number, number]>>;
   highlighted_abstract: boolean;
   paragraphs: Array<string>;
@@ -17,9 +14,22 @@ export interface SearchArticle extends BaseArticle {
   has_related_articles: boolean;
 }
 
-export interface RelatedArticle extends BaseArticle {
+export interface Cord19SearchArticle extends BaseCord19Article {
+  highlights: Array<Array<[number, number]>>;
+  highlighted_abstract: boolean;
+  paragraphs: Array<string>;
+  score: number;
+  has_related_articles: boolean;
+}
+
+export interface AclRelatedArticle extends BaseAclArticle {
   distance: number;
 }
+
+export interface Cord19RelatedArticle extends BaseCord19Article {
+  distance: number;
+}
+
 
 export interface SearchFilters {
   yearMinMax: number[];

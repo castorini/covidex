@@ -15,9 +15,6 @@ const Footer = () => {
           <Link href="https://uwaterloo.ca/" target="_blank" rel="noopener noreferrer">
             <SchoolImage src={UWaterloo} alt="University of Waterloo Logo" marginRight={24} />
           </Link>
-          <Link href="https://www.nyu.edu/" target="_blank" rel="noopener noreferrer">
-            <SchoolImage src={NYU} alt="NYU Logo" />
-          </Link>
         </Images>
       </PageContent>
     </FooterWrapper>

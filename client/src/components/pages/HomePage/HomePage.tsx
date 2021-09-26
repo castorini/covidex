@@ -5,7 +5,7 @@ import ErrorBoundary from 'react-error-boundary';
 
 import { PageWrapper, PageContent, Heading2 } from '../../../shared/Styles';
 import Loading from '../../common/Loading';
-import SearchResult from './SearchResult';
+import AclSearchResult from './AclSearchResult';
 import HomeText from './HomeText';
 import SearchBar from './SearchBar';
 
@@ -15,77 +15,87 @@ import {
   SEARCH_ENDPOINT,
   SEARCH_VERTICAL_OPTIONS,
   SearchVerticalOption,
+  filterSchema
 } from '../../../shared/Constants';
 import Filters from './Filters';
-import { SearchArticle, SearchFilters, SelectedSearchFilters } from '../../../shared/Models';
+import { AclSearchArticle, SearchFilters, SelectedSearchFilters } from '../../../shared/Models';
 
 const defaultFilter = {
   yearMinMax: [0, 0],
   authors: [],
   journals: [],
-  sources: [],
+  sources: []
 };
 
-const getSearchFilters = (searchResults: SearchArticle[] | null): SearchFilters => {
+const getSearchFilters = (searchResults: AclSearchArticle[] | null): any => {
   if (searchResults === null || searchResults.length === 0) {
     return defaultFilter;
   }
 
-  let min = Number.MAX_VALUE;
-  let max = -1;
-  let authors: Set<string> = new Set([]);
-  let journals: Set<string> = new Set([]);
-  let sources: Set<string> = new Set([]);
-
-  searchResults.forEach((article) => {
-    if (article.publish_time) {
-      const year = Number(article.publish_time.substr(0, 4));
-      min = Math.min(year, min);
-      max = Math.max(year, max);
+  let filterDictionary: any = {};
+  const fields = Object.keys(filterSchema);
+  // iterating through the fields in json
+  fields.forEach(filter => {
+    // checking the type of the field
+    if (filterSchema[filter] == "slider"){
+      let min = Number.MAX_VALUE;
+      let max = -1;
+      // filtering through each article
+      searchResults.forEach(article => {
+        if (article[filter]) {
+          // year for now but can change to a more arbitrary measurement
+          const year = Number(article[filter].substr(0,4))
+          min = Math.min(year, min);
+          max = Math.max(year, max);
+        }
+      })
+      filterDictionary[filter] = min === max ? [min * 100 + 1, min * 100 + 12] : [min, max];
+    } else if (filterSchema[filter] == "selection") {
+      // initializing the list to store the selections
+      filterDictionary[filter] = new Set([]);
+      // filtering through each article
+      searchResults.forEach(article => {
+        if (article[filter]) {
+          article[filter].forEach((a: String) => filterDictionary[filter].add(a));
+        }
+      })
+      filterDictionary[filter] = Array.from(filterDictionary[filter].values()).filter((a: any) => a.length > 0);
     }
-
-    if (article.authors) {
-      article.authors.forEach((a) => authors.add(a));
-    }
-
-    if (article.source) {
-      article.source.forEach((s) => sources.add(s));
-    }
-
-    if (article.journal) {
-      journals.add(article.journal);
-    }
-  });
-
-  return {
-    yearMinMax: min === max ? [min * 100 + 1, min * 100 + 12] : [min, max],
-    authors: Array.from(authors.values()).filter((a) => a.length > 0),
-    journals: Array.from(journals.values()),
-    sources: Array.from(sources.values()),
-  };
+  })
+  // console.log(filterDictionary);
+  return filterDictionary;
 };
+
+const filterArticles = (selectedFilters: any, article: AclSearchArticle): Boolean => {
+  let article_status = true;
+  const fields = Object.keys(selectedFilters);
+  fields.forEach(field => {
+    if (filterSchema[field] == "slider") {
+      article_status = article_status && Number(article[field].substr(0, 4)) >= selectedFilters[field][0] 
+                       && Number(article[field].substr(0, 4)) <= selectedFilters[field][1]
+    } else if (filterSchema[field] == "selection") {
+      article_status = article_status && (selectedFilters[field].size == 0 || 
+                       article[field].some((a: String) => selectedFilters[field].has(a)))
+    }
+  })
+
+  return article_status;
+}
 
 const HomePage = () => {
   const urlParams = new URLSearchParams(useLocation().search);
   const query = urlParams.get('query') || '';
   const vertical = urlParams.get('vertical') || 'cord19';
-
   const [loading, setLoading] = useState<Boolean>(false);
   const [queryInputText, setQueryInputText] = useState<string>(query || '');
   const [selectedVertical, setSelectedVertical] = useState<SearchVerticalOption>(
     SEARCH_VERTICAL_OPTIONS[0],
   );
 
-  const [filters, setFilters] = useState<SearchFilters>(defaultFilter);
-  const [selectedFilters, setSelectedFilters] = useState<SelectedSearchFilters>({
-    yearRange: [0, 0],
-    authors: new Set([]),
-    journals: new Set([]),
-    sources: new Set([]),
-  });
-
+  const [filters, setFilters] = useState<any>({});
+  const [selectedFilters, setSelectedFilters] = useState<any>({});
   const [queryId, setQueryId] = useState<string>('');
-  const [searchResults, setSearchResults] = useState<SearchArticle[] | null>(null);
+  const [searchResults, setSearchResults] = useState<AclSearchArticle[] | null>(null);
 
   useEffect(() => {
     setQueryInputText(query);
@@ -125,15 +135,20 @@ const HomePage = () => {
         const { query_id, response: searchResults } = data;
         const filters = getSearchFilters(searchResults);
 
+        let defaultSelectionFilter: any = {}
+        const fields = Object.keys(filterSchema);
+        fields.forEach(field => {
+          if (filterSchema[field] == "slider") {
+            defaultSelectionFilter[field] = filters[field];
+          }else if (filterSchema[field] == "selection") {
+            defaultSelectionFilter[field] = new Set([]);
+          }
+        });
         setQueryId(query_id);
         setSearchResults(searchResults);
-        setSelectedFilters({
-          yearRange: filters.yearMinMax,
-          authors: new Set([]),
-          journals: new Set([]),
-          sources: new Set([]),
-        });
+        setSelectedFilters(defaultSelectionFilter);
         setFilters(filters);
+
       } catch {
         setLoading(false);
         setSearchResults([]);
@@ -147,23 +162,8 @@ const HomePage = () => {
     searchResults === null
       ? null
       : searchResults.filter(
-          (article) =>
-            (!article.publish_time ||
-              (Number(article.publish_time.substr(0, 4)) >= selectedFilters.yearRange[0] &&
-                Number(article.publish_time.substr(0, 4)) <= selectedFilters.yearRange[1]) ||
-              (article.publish_time.length >= 7 &&
-                Number(article.publish_time.substr(0, 7).replace('-', '')) >=
-                  selectedFilters.yearRange[0] &&
-                Number(article.publish_time.substr(0, 7).replace('-', '')) <=
-                  selectedFilters.yearRange[1])) &&
-            (selectedFilters.authors.size === 0 ||
-              article.authors.some((a) => selectedFilters.authors.has(a))) &&
-            (selectedFilters.journals.size === 0 ||
-              selectedFilters.journals.has(article.journal)) &&
-            (selectedFilters.sources.size === 0 ||
-              article.source.some((s) => selectedFilters.sources.has(s))),
+          (article) => filterArticles(selectedFilters, article)
         );
-
   return (
     <PageWrapper>
       <PageContent>
@@ -192,7 +192,7 @@ const HomePage = () => {
                 <>
                   <SearchResults>
                     {filteredResults.map((article, i) => (
-                      <SearchResult
+                      <AclSearchResult
                         key={i}
                         article={article}
                         position={i}

@@ -13,11 +13,11 @@ import {
   RELATED_ROUTE,
 } from '../../../shared/Constants';
 import { makePOSTRequest, parseAbstract } from '../../../shared/Util';
-import { SearchArticle } from '../../../shared/Models';
-import BaseArticleResult from '../../common/BaseArticleResult';
+import { AclSearchArticle } from '../../../shared/Models';
+import AclBaseArticleResult from '../../common/AclBaseArticleResult';
 
 interface SearchResultProps {
-  article: SearchArticle;
+  article: AclSearchArticle;
   position: number;
   queryId: string;
   queryTokens: Array<string>;
@@ -95,14 +95,12 @@ const adjustHighlights = (
   return highlights.map((highlight) => [highlight[0] + adjustment, highlight[1] + adjustment]);
 };
 
-const SearchResult = ({ article, position, queryId, queryTokens }: SearchResultProps) => {
+const AclSearchResult = ({ article, position, queryId, queryTokens }: SearchResultProps) => {
   const fullTextRef = useRef(null);
   const [collapsed, setCollapsed] = useState<boolean>(true);
 
   // Separate abstract from other paragraphs if it was highlighted
-  const originalAbstract = article.highlighted_abstract
-    ? article.paragraphs[0]
-    : article.abstract || '';
+  const originalAbstract = article.abstract_html || '';
 
   const abstract = parseAbstract(originalAbstract);
   const abstractHighlights = article.highlighted_abstract
@@ -120,7 +118,7 @@ const SearchResult = ({ article, position, queryId, queryTokens }: SearchResultP
 
   return (
     <SearchResultWrapper>
-      <BaseArticleResult
+      <AclBaseArticleResult
         article={article}
         position={position}
         onClickTitle={() =>
@@ -170,17 +168,12 @@ const SearchResult = ({ article, position, queryId, queryTokens }: SearchResultP
             <Chevron collapsed={collapsed} />
           </TextLink>
         )}
-        {article.has_related_articles && (
-          <RelatedLink to={`${RELATED_ROUTE}/${article.id}`}>
-            Related articles <LinkIcon size={12} style={{ marginLeft: '4px' }} />
-          </RelatedLink>
-        )}
       </LinkContainer>
     </SearchResultWrapper>
   );
 };
 
-export default SearchResult;
+export default AclSearchResult;
 
 const SearchResultWrapper = styled.div`
   display: flex;

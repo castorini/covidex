@@ -12,7 +12,6 @@ from app.services.ranker import Ranker
 from app.services.related_searcher import RelatedSearcher
 from app.services.searcher import Searcher
 
-
 @pytest.fixture(scope="module")
 def client():
     '''Client for testing endpoints'''

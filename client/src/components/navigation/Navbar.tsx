@@ -13,7 +13,7 @@ const Navbar = ({ history }: RouteComponentProps) => {
       <PageContent>
         <Row>
           <NavbarLogo tabIndex={0} onClick={() => history.push(HOME_ROUTE)}>
-            Neural Covidex
+            ACLdex
           </NavbarLogo>
           <NavbarLinks>
             <Link
@@ -22,14 +22,6 @@ const Navbar = ({ history }: RouteComponentProps) => {
               rel="noopener noreferrer"
             >
               <GithubLogo src={GithubImg} alt="Github logo" />
-            </Link>
-
-            <Link
-              href="https://docs.google.com/forms/d/e/1FAIpQLSe4_5imtXsvPHGRPFfRaXPaohEpJZAYz8OmDaDe0a4pLsTUdg/viewform?usp=sf_link"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Feedback
             </Link>
           </NavbarLinks>
         </Row>
