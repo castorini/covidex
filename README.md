@@ -3,42 +3,45 @@
 [![Build Status](https://api.travis-ci.com/castorini/covidex.svg?branch=master)](https://travis-ci.org/castorini/covidex)
 [![LICENSE](https://img.shields.io/badge/license-Apache-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
 
-This repository contains the API server, neural models, and UI client for [Covidex](https://covidex.ai), a neural search engine for the [COVID-19 Open Research Dataset (CORD-19)](https://pages.semanticscholar.org/coronavirus-research).
+This page documents the steps to create a [Cydex Instance](http://cydex.ai) for searching scholarly articles from a collection of bibtex records.
 
+## Indexing 
+
+- First, we need to index the Bibtex collection using [Anserini]('https://github.com/castorini/anserini'). [Follow these instructions]('https://github.com/castorini/anserini#getting-started') to clone and build Anserini.
+
+
+- We can now index these docs as a `BibtexCollection` using Anserini:
+
+    ```bash
+    sh target/appassembler/bin/IndexCollection \
+    -collection BibtexCollection -generator BibtexGenerator \
+    -threads 8 -input /path/to/bib_files/ \
+    -index /path/to/bibtex_indexes \
+    -storePositions -storeDocvectors -storeContents -storeRaw
+    ```
+
+The directory `/path/to/bib_files/` should be a directory containing `.bib` files that will be used for retrieval
+
+For additional details, see explanation of [common indexing options](common-indexing-options.md).
+
+- Copy the indexed files from `/path/to/bibtex_indexes` folder into `api/index` folder/
 
 ## Local Deployment
 
 #### API Server
 
-Install CUDA 10.1
-+ For Ubuntu, follow [these instructions](https://developer.nvidia.com/cuda-10.1-download-archive-update2)
-+ For Debian run `sudo apt-get install nvidia-cuda-toolkit`
 
-Install [Anaconda](https://docs.anaconda.com/anaconda/install/linux/) (currently version 2020.02)
+Install [Anaconda](https://docs.anaconda.com/anaconda/install) (currently version 2020.02)
 ```
 wget https://repo.anaconda.com/archive/Anaconda3-2020.02-Linux-x86_64.sh
 bash Anaconda3-2020.02-Linux-x86_64.sh
-```
-
-Install Java 11
-```
-sudo apt-get install openjdk-11-jre openjdk-11-jdk
-```
-
-Build the [latest Anserini indices](https://github.com/castorini/anserini/blob/master/docs/experiments-cord19.md)
-```
-sh scripts/update-anserini-index.sh
-```
-
-Build the latest HNSW index for related article search
-```
-sh scripts/update-hnsw-index.sh
 ```
 
 Set up environment variables by copying over the defaults and modifying as needed
 ```
 cp api/.env.sample api/.env
 ```
+Open the `.env` file and change the `T5_DEVICE` environment variable from cuda to cpu since there is no neural re-ranking involved. 
 
 Create an Anaconda environment for Python 3.7
 ```
@@ -80,34 +83,6 @@ yarn start
 The client will be running at [localhost:3000](http://localhost:3000)
 
 
-## Production Deployment
-
-Redirect port 80 to specified port since only root can bind to port 80 (the below command uses port 8000):
-```
-sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8000
-```
-
-Build the [latest Anserini indices](https://github.com/castorini/anserini/blob/master/docs/experiments-cord19.md)
-```
-sh scripts/update-anserini-index.sh [DATE]
-```
-
-Build the latest HNSW index for related article search
-```
-sh scripts/update-hnsw-index.sh
-```
-
-Start the server (deploys to port 8000 by default):
-```
-sh scripts/deploy-prod.sh
-```
-
-*Optional:* set the environment variable `$PORT`:
-```
-PORT=8000 sh scripts/deploy-prod.sh
-```
-
-Log files are available under `api/logs`, where new files are created daily based on UTC time. All filenames have the date appended except for the current one, which will be named `search.log` or `related.log`.
 
 
 ## Testing

@@ -18,10 +18,10 @@ const AclBaseArticleResult: React.FC<BaseArticleResultProps> = ({
   boldTitle = false,
 }) => {
   let authorString = '';
-  if (article.authors.length > 0) {
-    article.authors.forEach((author: String, idx: Number) => {
+  if (article.author.length > 0) {
+    article.author.forEach((author: String, idx: Number) => {
       if (author !== '') {
-        authorString += idx === article.authors.length - 1 ? `${author}.` : `${author}, `;
+        authorString += idx === article.author.length - 1 ? `${author}.` : `${author}, `;
       }
     });
   }
