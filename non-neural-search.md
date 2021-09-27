@@ -1,4 +1,4 @@
-# COVID-19 Open Research Dataset Search
+# Setting up an instance for searching Bibtext collection
 
 [![Build Status](https://api.travis-ci.com/castorini/covidex.svg?branch=master)](https://travis-ci.org/castorini/covidex)
 [![LICENSE](https://img.shields.io/badge/license-Apache-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
