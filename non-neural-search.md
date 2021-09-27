@@ -31,50 +31,50 @@ For additional details, see explanation of [common indexing options](common-inde
 #### API Server
 
 
-Install [Anaconda](https://docs.anaconda.com/anaconda/install) (currently version 2020.11)
+- Install [Anaconda](https://docs.anaconda.com/anaconda/install) (currently version 2020.11)
 
-Set up environment variables by copying over the defaults and modifying as needed
-```
-cp api/.env.sample api/.env
-```
-Open the `.env` file and change the `T5_DEVICE` environment variable from cuda to cpu since there is no neural re-ranking involved. 
+- Set up environment variables by copying over the defaults and modifying as needed
+    ```
+    cp api/.env.sample api/.env
+    ```
+- Open the `.env` file and change the `T5_DEVICE` environment variable from cuda to cpu since there is no neural re-ranking involved. 
 
-Create an Anaconda environment for Python 3.7
-```
-conda create -n covidex python=3.7
-```
+- Create an Anaconda environment for Python 3.7
+    ```
+    conda create -n covidex python=3.7
+    ```
 
-Activate the Anaconda environment
-```
-conda activate covidex
-```
+- Activate the Anaconda environment
+    ```
+    conda activate covidex
+    ```
 
-Install Python dependencies
-```
-pip install -r api/requirements.txt
-```
+- Install Python dependencies
+    ```
+    pip install -r api/requirements.txt
+    ```
 
-Run the server (make sure you are in the `api/` folder)
-```
-uvicorn app.main:app --reload --port=8000
-```
+- Run the server (make sure you are in the `api/` folder)
+    ```
+    uvicorn app.main:app --reload --port=8000
+    ```
 
 The server wil be running at [localhost:8000](http://localhost:8000) with API documentation at [/docs](http://localhost:8000/docs)
 
 
 #### UI Client
 
-Install  [Node.js 12+](https://nodejs.org/en/download/) and [Yarn](https://classic.yarnpkg.com/en/docs/install/).
+- Install  [Node.js 12+](https://nodejs.org/en/download/) and [Yarn](https://classic.yarnpkg.com/en/docs/install/).
 
-Install dependencies
-```
-yarn install
-```
+- Install dependencies
+    ```
+    yarn install
+    ```
 
-Start the server
-```
-yarn start
-```
+- Start the server
+    ```
+    yarn start
+    ```
 
 The client will be running at [localhost:3000](http://localhost:3000)
 
