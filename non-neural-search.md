@@ -31,7 +31,7 @@ For additional details, see explanation of [common indexing options](common-inde
 #### API Server
 
 
-Install [Anaconda](https://docs.anaconda.com/anaconda/install) (currently version 2020.02)
+Install [Anaconda](https://docs.anaconda.com/anaconda/install) (currently version 2020.11)
 
 Set up environment variables by copying over the defaults and modifying as needed
 ```
