@@ -38,6 +38,7 @@ For additional details, see explanation of [common indexing options](common-inde
     cp api/.env.sample api/.env
     ```
     - Open the `.env` file and change the `T5_DEVICE` environment variable from cuda to cpu since there is no neural re-ranking involved. 
+    - Also change the `INDEX_PATH` environment variable to the file path containing the index files
 
 - Create an Anaconda environment for Python 3.7
     ```
