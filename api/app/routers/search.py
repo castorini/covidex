@@ -28,11 +28,13 @@ async def get_search(request: Request, query: str, vertical: SearchVertical):
         searcher_hits = []
 
     # Get paragraph or abstract if original document was retrieved.
-    paragraphs = [hit.contents.split('\n')[-1] for hit in searcher_hits]
+    paragraphs = [hit.lucene_document.get("abstract") for hit in searcher_hits]
 
     # Get predictions from T5.
-    t5_scores = request.app.state.ranker.rerank(query, paragraphs)
-
+    # CHANGED BECAUSE OF ONLY USING BM25
+    #t5_scores = request.app.state.ranker.rerank(query, paragraphs)
+    t5_scores = [0 for i in range(len(searcher_hits))]
+    
     # Sort results by T5 scores.
     results = list(zip(searcher_hits, t5_scores))
     results.sort(key=lambda x: x[1], reverse=True)
@@ -59,7 +61,7 @@ async def get_search(request: Request, query: str, vertical: SearchVertical):
                 '.')[-1]) if hit.docid != base_docid else -1
             if paragraph_number == -1:
                 highlighted_abstract = True
-            paragraphs.append((hit.contents.split('\n')[-1], paragraph_number))
+            paragraphs.append((hit.lucene_document.get("abstract"), paragraph_number))
 
         # Sort top paragraphs by order of appearance in actual text.
         paragraphs.sort(key=lambda x: x[1])

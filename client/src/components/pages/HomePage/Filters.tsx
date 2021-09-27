@@ -6,7 +6,6 @@ import SelectionFilter from '../../common/SelectionFilter';
 import { SearchFilters, SelectedSearchFilters } from '../../../shared/Models';
 import { filterSchema } from '../../../shared/Constants';
 
-
 interface FiltersProps {
   filters: any;
   selectedFilters: any;
@@ -30,36 +29,39 @@ const Filters: React.FC<FiltersProps> = ({ filters, selectedFilters, setSelected
       <FilterTitle>Filter your search</FilterTitle>
       {fields.map((filter, i) => {
         if (filters[filter]) {
-          if (filterSchema[filter] == "slider") {
-            return <FilterComponent>
-                    <FilterSubtitle>{filter}</FilterSubtitle>
-                      <RangeSlider
-                        min={filters[filter][0]}
-                        max={filters[filter][1]}
-                        values={selectedFilters[filter]}
-                        setValues={(values) => {
-                          selectedFilters[filter] = values
-                          setSelectedFilters({
-                            ...selectedFilters
-                          })
-                         }
-                        }
-                      />
-                    </FilterComponent>
-          } else if (filterSchema[filter] == "selection") {
-            return <FilterComponent>
-                    <FilterSubtitle>{filter}</FilterSubtitle>
-                    <SelectionFilter
-                      options={filters[filter]}
-                      selectedOptions={selectedFilters[filter]}
-                      setSelectedOptions={(value) => {
-                        selectedFilters[filter] = updateSelectionFilter(selectedFilters[filter], value)
-                        setSelectedFilters({
-                          ...selectedFilters
-                        });
-                      }}
-                    />
-                  </FilterComponent>
+          if (filterSchema[filter].type == 'slider') {
+            return (
+              <FilterComponent>
+                <FilterSubtitle>{filterSchema[filter].displayText}</FilterSubtitle>
+                <RangeSlider
+                  min={filters[filter][0]}
+                  max={filters[filter][1]}
+                  values={selectedFilters[filter]}
+                  setValues={(values) => {
+                    selectedFilters[filter] = values;
+                    setSelectedFilters({
+                      ...selectedFilters,
+                    });
+                  }}
+                />
+              </FilterComponent>
+            );
+          } else if (filterSchema[filter].type == 'selection') {
+            return (
+              <FilterComponent>
+                <FilterSubtitle>{filterSchema[filter].displayText}</FilterSubtitle>
+                <SelectionFilter
+                  options={filters[filter]}
+                  selectedOptions={selectedFilters[filter]}
+                  setSelectedOptions={(value) => {
+                    selectedFilters[filter] = updateSelectionFilter(selectedFilters[filter], value);
+                    setSelectedFilters({
+                      ...selectedFilters,
+                    });
+                  }}
+                />
+              </FilterComponent>
+            );
           }
         }
       })}

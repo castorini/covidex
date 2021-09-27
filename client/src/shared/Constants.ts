@@ -1,5 +1,5 @@
 import { OptionTypeBase } from 'react-select';
-import schema from './filterSchema/filterSchemaACL.json'
+import schema from './filterSchema/filterSchemaGwf.json'
 
 /* Routes */
 export const HOME_ROUTE = '/';
@@ -31,13 +31,18 @@ export interface SearchVerticalOption extends OptionTypeBase {
 }
 
 export const SEARCH_VERTICAL_OPTIONS: Array<SearchVerticalOption> = [
-  { value: 'cord19', label: 'ACL' },
+  // { value: 'cord19', label: 'ACL Anthology' },
+  { value: 'cord19', label: 'GWF' },
 ];
 
 /* filter schema */
 export interface Schema {
-  [key: string]: any;
+  [key: string]: {
+    type: "slider" | "selection";
+    displayText: string;
+  };
 }
+
 export const filterSchema = schema as Schema;
 
 /* NLTK Stopwords */

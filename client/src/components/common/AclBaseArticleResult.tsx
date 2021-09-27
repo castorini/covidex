@@ -25,15 +25,6 @@ const AclBaseArticleResult: React.FC<BaseArticleResultProps> = ({
       }
     });
   }
-
-  // generating the venue
-  let venues = '';
-  if (article.venues.length > 0) {
-    article.venues.forEach((venue: String, idx: Number) => {
-      venues += idx === article.venues.length - 1 ? `${venue}.` : `${venue}, `; 
-    })
-  }
-
   return (
     <>
       <Title bold={boldTitle}>
@@ -48,8 +39,7 @@ const AclBaseArticleResult: React.FC<BaseArticleResultProps> = ({
       </Title>
       <Subtitle>
         {authorString && <Authors>{authorString}</Authors>}
-        {venues && <Journal>{venues}</Journal>}
-        {article.sigs && <Journal>{article.sigs}</Journal>}
+        {article.journal && <Journal>{article.journal}</Journal>}
         {article.year && <PublishTime>({article.year})</PublishTime>}
       </Subtitle>
     </>

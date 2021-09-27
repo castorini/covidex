@@ -1,15 +1,11 @@
 {
-    "publish_time": {
+    "year": {
         "type": "slider",
         "displayText": "Publish Time"
     },
-    "authors": {
+    "author": {
         "type": "selection",
         "displayText": "Authors"
-    },
-    "source": {
-        "type": "selection",
-        "displayText": "Source"
     },
     "journal": {
         "type": "selection",

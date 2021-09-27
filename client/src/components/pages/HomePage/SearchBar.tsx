@@ -16,8 +16,8 @@ import { BoxShadow } from '../../../shared/Styles';
 import Keycodes from '../../../shared/Keycodes';
 
 const CORD_EXAMPLES = [
-  'When to use transformers?',
-  'What is BERT?'
+  'Groundwater quality',
+  'Grand river'
 ];
 
 const TRIALSTREAMER_EXAMPLES = [
