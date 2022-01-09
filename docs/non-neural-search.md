@@ -22,7 +22,7 @@ This page documents the steps to create a [Cydex Instance](http://cydex.ai) for 
 
 The directory `/path/to/bib_files/` should be a directory containing `.bib` files that will be used for search and retrieval
 
-For additional details, see explanation of [common indexing options](common-indexing-options.md).
+For additional details, see explanation of [common indexing options](https://github.com/castorini/anserini/blob/master/docs/common-indexing-options.md).
 
 - Copy the indexed files from `/path/to/bibtex_indexes` folder into `api/index` folder in the covidex repository
 
