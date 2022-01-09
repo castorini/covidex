@@ -1,4 +1,4 @@
-# COVID-19 Open Research Dataset Search
+# BM25 Bibtex Search
 
 [![Build Status](https://api.travis-ci.com/castorini/covidex.svg?branch=master)](https://travis-ci.org/castorini/covidex)
 [![LICENSE](https://img.shields.io/badge/license-Apache-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
@@ -28,62 +28,80 @@ For additional details, see explanation of [common indexing options](common-inde
 
 ## Local Deployment
 
-#### API Server
+### API Server
 
 
-Install [Anaconda](https://docs.anaconda.com/anaconda/install) (currently version 2020.02)
+- Install [Anaconda](https://docs.anaconda.com/anaconda/install) (currently version 2020.02)
 
-Set up environment variables by copying over the defaults and modifying as needed
-```
-cp api/.env.sample api/.env
-```
-Open the `.env` file and change the `T5_DEVICE` environment variable from cuda to cpu since there is no neural re-ranking involved. 
+- Set up environment variables by copying over the defaults and modifying as needed
+  ```
+  cp api/.env.sample api/.env
+  ```
 
-Create an Anaconda environment for Python 3.7
-```
-conda create -n covidex python=3.7
-```
+#### Update Environment Variables
+Open the `.env` file and change the following environment variables according to your needs
 
-Activate the Anaconda environment
-```
-conda activate covidex
-```
+- Set the `T5_DEVICE` variable from cuda to cpu if you are not working on a GPU.
+- Set `NEURAL_RANKING` to false for BM25 search with no neural re-ranking. 
+- You can define a custom schema for your dataset using the fields in the bib files and update the `SCHEMA_PATH` variable. e.g [schema/acl.json](schema/acl.json)
+- Set `RELATED_SEARCH` variable to `False` for BM25 search
+- You can disable text span highlighter according to your needs by setting `HIGHLIGHT` to `False` or `True`
 
-Install Python dependencies
-```
-pip install -r api/requirements.txt
-```
+#### Run App
+- Create an Anaconda environment for Python 3.7
+  ```
+  conda create -n covidex python=3.7
+  ```
 
-Run the server (make sure you are in the `api/` folder)
-```
-uvicorn app.main:app --reload --port=8000
-```
+- Activate the Anaconda environment
+  ```
+  conda activate covidex
+  ```
 
-The server wil be running at [localhost:8000](http://localhost:8000) with API documentation at [/docs](http://localhost:8000/docs)
+- Install Python dependencies
+  ```
+  pip install -r api/requirements.txt
+  ```
+
+- Run the server (make sure you are in the `api/` folder)
+  ```
+  uvicorn app.main:app --reload --port=8000
+  ```
+
+- The server wil be running at [localhost:8000](http://localhost:8000) with API documentation at [/docs](http://localhost:8000/docs)
+you can test the api by running the command below;
+
+  ```
+  curl --request GET --url 'http://localhost:8000/api/search?query={query}'
+  ```
 
 
-#### UI Client
+### UI Client
 
-Install  [Node.js 12+](https://nodejs.org/en/download/) and [Yarn](https://classic.yarnpkg.com/en/docs/install/).
+- Start another terminal session and install  [Node.js 12+](https://nodejs.org/en/download/) and [Yarn](https://classic.yarnpkg.com/en/docs/install/).
 
-Install dependencies
-```
-yarn install
-```
+- Depending on the fields in your dataset, you can either write a custom UI renderer for the search results or use an existing one e.g [client/src/components/dataset/cord19](client/src/components/dataset/cord19)
 
-Start the server
-```
-yarn start
-```
+- Update the client config file `client/src/Configuration.tsx` with the name of the dataset.
 
-The client will be running at [localhost:3000](http://localhost:3000)
+- Install dependencies (make sure you are in the `client/` folder)
+  ```
+  yarn install
+  ```
+
+- Start the server
+  ```
+  yarn start
+  ```
+
+- The client will be running at [localhost:3000](http://localhost:3000)
 
 
 
 
 ## Testing
 
-To run all API tests
-```
-TESTING=true pytest api
-```
+- To run all API tests
+  ```
+  TESTING=true pytest api
+  ```
