@@ -4,12 +4,12 @@
     "default": "...",
     "fieldSize": "single"
   },
-  "abstract_html": {
+  "abstract": {
     "type": "str",
     "default": "None",
     "fieldSize": "single"
   },
-  "authors": {
+  "author": {
     "type": "List[str]",
     "default": "[]",
     "fieldSize": "multi"

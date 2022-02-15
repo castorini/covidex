@@ -7,7 +7,7 @@ const HomeText = () => {
     <HomeTextWrapper>
       <Paragraph>
         <Bold>Covidex</Bold> applies state-of-the-art neural network models and artificial
-        intelligence (AI) techniques to answer questions using the{' '}
+        intelligence (AI) techniques to answer questions using the {' '}
         <Link
           href="https://pages.semanticscholar.org/coronavirus-research"
           target="_blank"

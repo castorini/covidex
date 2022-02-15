@@ -38,7 +38,7 @@ const NavbarWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   position: relative;
-  background: linear-gradient(90deg, ${({ theme }) => `${theme.primary}, ${theme.secondary}`});
+  background: ${({ theme }) => theme.greenblue}; !important; 
 
   @media only screen and (max-width: ${TABLET_BREAKPOINT}px) {
     padding: 24px 16px;

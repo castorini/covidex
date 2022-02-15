@@ -10,7 +10,7 @@ import ArticleInfo from './ArticleInfo';
 
 const SearchResult = ({ article, position, queryId, queryTokens }: SearchResultProps) => {
   const fullTextRef = useRef(null);
-  const originalAbstract = article.abstract_html || '';
+  const originalAbstract = article.abstract || '';
   const abstract = parseAbstract(originalAbstract);
   const interactionRequestBody = { query_id: queryId, result_id: article.id, position };
 
