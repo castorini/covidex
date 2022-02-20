@@ -14,6 +14,8 @@ const Theme = {
   lightGrey: '#E8E8E8',
   darkGrey: '#555555',
 
+  greenblue: '#17a2b8',
+
   breakpoints: {
     singleColumn: 720,
   },

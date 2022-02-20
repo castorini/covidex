@@ -1,0 +1,8 @@
+
+name: docker
+channels:
+  - conda-forge
+  - pytorch
+dependencies:
+  - pytorch-cpu
+  - torchvision-cpu
