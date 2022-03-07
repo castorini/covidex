@@ -4,9 +4,9 @@ This describes how to build indexes for the ACL Anthology datasets. All indexes 
 
 - First, we need to index the Bibtex collection using [Pyserini](https://github.com/castorini/pyserini). [Follow these instructions](https://github.com/castorini/pyserini) to clone and install Pyserini.
 
-- Use this script to clean your bib files before indexing.
+- Use this script to clean your bib files before indexing. This script is located in the covidex repository.
     ```bash
-    python script/aclanthology/cleanup_bibcollection.py \
+    python scripts/aclanthology/cleanup_bibcollection.py \
     --input_path {/path/to/bib_file/}
     --output_path {/path/to/cleaned_bib_file/}
     ```
