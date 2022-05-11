@@ -1,29 +1,21 @@
 {
-  "title": "Cydex",
+  "title": "GWFDex",
   "description": "A neural search engine for research literature",
   "favicon": "acl.ico",
-  "dataset": "ACL Anthology",
+  "dataset": "GWF Publications",
   "searchPlaceholder": "something in the ACL anthology...",
   "searchExamples": [
-    "When should transformers be used?",
-    "What are biomedical applications of BERT?"
+    "streamflow prediction",
+    "Increasing wildfires threaten historic carbon sink of boreal forest soils"
   ],
   "filters": {
     "year": {
       "type": "year_slider",
       "displayText": "Year"
     },
-    "authors": {
+    "author": {
       "type": "selection",
       "displayText": "Authors"
-    },
-    "venues": {
-      "type": "selection",
-      "displayText": "Venues"
-    },
-    "sigs": {
-      "type": "selection",
-      "displayText": "SIGs"
     }
   }
 }

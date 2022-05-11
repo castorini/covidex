@@ -3,6 +3,7 @@
 __pycache__
 .pytest_cache/
 .DS_Store
+.idea/
 
 # Anserini index
 anserini/
@@ -22,3 +23,7 @@ variables/
 # client builds
 build/
 static/
+
+# virtual environments
+venv/
+env/

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import NYU from '../../img/nyu.png';
+import GWF from '../../img/gwf_logo.png';
 import UWaterloo from '../../img/uwaterloo.png';
 
 import { Link, PageContent } from '../../shared/Styles';
@@ -15,8 +15,8 @@ const Footer = () => {
           <Link href="https://uwaterloo.ca/" target="_blank" rel="noopener noreferrer">
             <SchoolImage src={UWaterloo} alt="University of Waterloo Logo" marginRight={24} />
           </Link>
-          <Link href="https://www.nyu.edu/" target="_blank" rel="noopener noreferrer">
-            <SchoolImage src={NYU} alt="NYU Logo" />
+          <Link href="https://uwaterloo.ca/global-water-futures/" target="_blank" rel="noopener noreferrer">
+            <SchoolImage src={GWF} alt="GWF Logo" />
           </Link>
         </Images>
       </PageContent>

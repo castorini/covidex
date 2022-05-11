@@ -11,10 +11,12 @@ const ArticleInfo: React.FC<ArticleInfoProps> = ({
   boldTitle = false,
 }) => {
   let authorString = '';
-  if (article.authors.length > 0) {
-    article.authors.forEach((author: string, idx: number) => {
+  var authors = article.author[0].split(", ");
+  //console.log(authors)
+  if (authors.length > 0) {
+    authors.forEach((author: string, idx: number) => {
       if (author !== '') {
-        authorString += idx === article.authors.length - 1 ? `${author}.` : `${author}, `;
+        authorString += idx === authors.length - 1 ? `${author}.` : `${author}, `;
       }
     });
   }

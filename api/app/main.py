@@ -7,7 +7,7 @@ from fastapi.staticfiles import StaticFiles
 from app.routers import related, search
 from app.services.highlighter import Highlighter
 from app.services.ranker import Ranker
-from app.services.related_searcher import RelatedSearcher
+# from app.services.related_searcher import RelatedSearcher
 from app.services.searcher import Searcher
 from app.settings import settings
 
@@ -21,8 +21,8 @@ if not settings.testing:
     if settings.neural_ranking:
         app.state.ranker = Ranker()
 
-    if settings.related_search:
-        app.state.related_searcher = RelatedSearcher()
+    # if settings.related_search:
+    #     app.state.related_searcher = RelatedSearcher()
 
     app.state.searcher = Searcher()
 
